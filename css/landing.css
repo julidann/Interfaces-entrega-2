@@ -2,11 +2,12 @@
 
 body {
     font-family: Inter;
-    
 }
+
 a {
     text-decoration: none;
 }
+
 header {
     background-color: #000000;
     align-content: center;
@@ -26,6 +27,8 @@ nav {
     align-content: space-between;
     flex-wrap: nowrap;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 nav button {
@@ -40,15 +43,51 @@ nav button a {
     color: #000000;
 }
 
-.landing-main {
+    
+/*.landing-main {
    height: 500px;
     color: white;
     background-color: #000000;
+    padding: 0 0 100px 50px;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}*/
+
+
+.landing-main {
+    height: 500px;
+    color: white;
+    background-color: #000000;
+    padding: 0 0 100px 50px;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    position: relative;
 }
 
+.landing-main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
 
-.cloudgame {
-    color: yellow;
+    background: linear-gradient(to right, black 50%, black 50%, transparent 250%)
+}
+
+.landing-main > * {
+    position: relative;
+}
+
+.cloud-div {
+    display: flex;
+}
+.cloud-p {
+    color: #FFD600;
+    text-transform: uppercase;
 }
 
 h1 {
@@ -74,6 +113,5 @@ section div {
 }
 .card-plan{
     display: flex;
-  
 
 }
