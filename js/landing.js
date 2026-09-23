@@ -10,6 +10,9 @@ const imagenes = [
 
 let posicion = 0;
 
+//para que ya cargue una img
+landing.style.backgroundImage = `url("${imagenes[posicion]}")`;
+
 setInterval(function () {
     posicion++;
 
