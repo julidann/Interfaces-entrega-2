@@ -42,14 +42,23 @@ nav button a {
     color: #000000;
 }
 
+    
 .landing-main {
    height: 500px;
     color: white;
     background-color: #000000;
+    padding: 0 0 100px 50px;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
 }
 
-
-.cloudgame {
+.cloud-div {
+    display: flex;
+}
+.cloud-p {
     color: #FFD600;
     text-transform: uppercase;
 }
