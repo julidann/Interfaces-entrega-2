@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    font-family: Inter;
+    
+}
+a {
+    text-decoration: none;
+}
+header {
+    background-color: #000000;
+    align-content: center;
+    height: 80px;  
+    padding: 0;
+    margin: 0;
+}
+
+header a {
+    color: white;
+    
+}
+
+nav {
+        display: flex;
+    justify-content: flex-end;
+    align-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+nav button {
+    color: #000000;
+    background-color: yellow;
+    border-radius: 10px;
+    height: 30px;
+    border-color: yellow;
+}
+
+nav button a {
+    color: #000000;
+}
+
+.landing-main {
+   height: 500px;
+    color: white;
+    background-color: #000000;
+}
+
+
+.cloudgame {
+    color: yellow;
+}
+
+h1 {
+    font-family: Inter;
+}
+
+section div {
+    display: flex;
+    gap: 20px;
+}
+
+.cards article{
+    display: flex;
+    width: 200px;
+    height: 100px;
+    background-color: grey;
+    border-radius: 10px;
+
+}
+
+.plan{
+    background-color: grey;
+}
+.card-plan{
+    display: flex;
+  
+
+}
