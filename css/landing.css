@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap');
 
+
 body {
     font-family: Inter;
     
@@ -26,6 +27,7 @@ nav {
     align-content: space-between;
     flex-wrap: nowrap;
     flex-direction: row;
+    justify-content: space-between
 }
 
 nav button {
