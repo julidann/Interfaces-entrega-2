@@ -6,30 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GAMEZONE | Iniciar sesión</title>
 
-    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/landing.css">
+    <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/login.css">
 </head>
 
 <body>
 
-    <header></header>
+    <header>
+        <nav>
+            <img src="../assets/logo/LOGOPAGE.png" alt="">
+            <img src="../assets/logo/GAMEZONE.png" alt="">
+            <a href="../index.html">Inicio</a>
+            <a href="../index.html#plans">Ver planes</a>
+            <button class="accent"><a href="login.html">Iniciar sesión</a></button>
+        </nav>
+    </header>
 
     <main>
-        <section>
+        <section class="landing-main login-main">
 
-            <div>U</div>
+            <form class="login-form" id="login-form">
+                <h1>Iniciar sesión</h1>
 
-            <h1>Iniciar sesión</h1>
+                <div class="form-field">
+                    <label for="login-user">Usuario o email</label>
+                    <input id="login-user" type="email">
+                </div>
 
-            <form id="login-form">
+                <div class="form-field">
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" type="password">
+                </div>
 
-                <label for="login-user">Usuario o email</label>
-                <input id="login-user" type="email">
-
-                <label for="login-password">Contraseña</label>
-                <input id="login-password" type="password">
-
-                <div>
+                <div class="login-options">
                     <label>
                         <input type="checkbox">
                         Recordarme
@@ -40,25 +50,25 @@
 
                 <p id="login-message"></p>
 
-                <button type="submit">Iniciar sesión</button>
+                <button class="primary"><a href="home.html" >Iniciar sesión</a></button>
 
+                <p class="signup-text">
+                    ¿No tenés cuenta?
+                    <a href="register.html">Registrate</a>
+                </p>
+
+                <button class="google-button">
+                    <img src="../assets/icons/google.svg" alt="Google">
+                    <a href="home.html" >Continuar con Google</a>
+                </button>
             </form>
-
-            <p>
-                ¿No tenés cuenta?
-                <a href="registro.html">Registrate</a>
-            </p>
-
-            <button id="google-login" type="button">
-                <span>G</span>
-                Continuar con Google
-            </button>
 
         </section>
     </main>
-  
+
+    
+    <script src="../js/login.js"></script>
+    <script src="../js/landing.js"></script>
+
 </body>
-
-<script src="../js/login.js"></script>
-
 </html>
