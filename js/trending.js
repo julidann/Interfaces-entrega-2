@@ -1,4 +1,5 @@
-const imageRoute = "../assets/img/";
+const isPage = window.location.pathname.includes("/pages/");
+const imageRoute = isPage ? "../assets/img/" : "assets/img/";
 
 const games = [
     {
