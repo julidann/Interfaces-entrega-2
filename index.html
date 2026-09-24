@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GAMEZONE | Cloud Gaming</title>
     <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/plans.css">
     <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/trending.css">
+
     <link rel="stylesheet" href="css/footer.css">
     
     
@@ -23,7 +26,7 @@
             <img src="assets/logo/GAMEZONE.png" alt="">
             </div>
             <a href="index.html">Inicio</a>
-            <a href="#planes">Ver planes</a>
+            <a href="#plans">Ver planes</a>
             <Button class = "accent"><a href="pages/login.html">Iniciar sesión</a></Button>
         </nav>
 
@@ -46,14 +49,14 @@
             </p>
             </div>
 
-           <button class = "primary"><a href="pages/registro.html">Crear cuenta</a></button>
-           <button class = "secondary"><a href="#planes">Descubre nuevos juegos</a></button>
+           <button class = "primary"><a href="pages/register.html">Crear cuenta</a></button>
+           <button class = "secondary"><a href="#plans">Descubre nuevos juegos</a></button>
         </section>
 
-        <section class = "plan">
+        <section id= "plans" class = "plans">
             <h2>¿Qué plan vas a elegir?</h2>
-            <div class = card-plan>
-            <article>
+            <div class = "plans-container">
+            <article class = "plan-card">
                 <h3>Free</h3>
 
                 <p>
@@ -66,7 +69,7 @@
                 <button class = "accent" >Seleccionar</button>
             </article>
 
-            <article>
+            <article  class = "plan-card pro">
                 <span>recomendado</span>
 
                 <h3>Pro Gamer</h3>
@@ -81,7 +84,7 @@
                 <button class = "accent" >Seleccionar</button>
             </article>
 
-            <article>
+            <article  class = "plan-card">
                 <h3>Basic</h3>
 
                 <p>
@@ -96,32 +99,14 @@
             </div>
         </section>
 
-        <section >
-            <h2>Tendencias actuales</h2>
-            <div class = "cards"> 
-            <article>
-                <span>Fortnite</span>
-            </article>
+        <section>
+    <h2>Tendencias actuales</h2>
 
-            <article>
-                <span>Grand Theft Auto V</span>
-            </article>
+    <div class="trending" id="trending">
+    </div>
 
-            <article>
-                <span>The Last of Us Part I</span>
-            </article>
-
-            <article>
-                <span>EA Sports FC 26</span>
-            </article>
-
-            <article>
-                <span>Ghost of Tsushima</span>
-            </article>
-            </div>
-
-            <button class = "secondary"><a href="pages/registro.html">Ver todos los juegos</a></button>
-        </section>
+    <button class = "secondary">Descubre más juegos</button>
+</section>
 
     </main>
 
@@ -177,7 +162,9 @@
         <img src=" assets/img/easports-logo.png" alt="" srcset="">
 
         <p>Seguinos en nuestras redes</p>
+      
         <div class="social-icons">
+            <img src="assets/icons/social-media.jpg" alt="redes">
             <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-discord"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
@@ -191,6 +178,8 @@
 
     <script src="js/index.js"></script>
     <script src="js/landing.js"></script>
+    <script src="js/trending.js"></script>
+
 
 </body>
 

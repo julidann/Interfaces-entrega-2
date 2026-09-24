@@ -115,12 +115,3 @@ article {
 
 }
 
-.plan{
-    background-color: grey;
-    height: 500px;
-    padding: 0% 10% 0% 10%;
-}
-.card-plan{
-    display: flex;
-
-}

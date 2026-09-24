@@ -1,0 +1,24 @@
+.trending {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.card {
+    width: 160px;
+}
+
+.card img {
+    width: 160px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.trending-section {
+    text-align: center;
+}
+
+.trending-section h2 {
+    font-size: 24px;
+}
