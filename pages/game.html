@@ -8,20 +8,30 @@
 
     <link rel="stylesheet" href="../css/landing.css">
     <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
 </head>
 
 <body>
 
     <header>
-        <nav>
-            <div>
-                <img src="../assets/logo/LOGOPAGE.png" alt="">
-                <img src="../assets/logo/GAMEZONE.png" alt="">
+        <nav class="nav-user">
+            <button class="menu-button" type="button">☰</button>
+
+            <a class="nav-logo" href="home.html">
+                <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
+                <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
+            </a>
+
+            <div class="nav-links">
+                <a href="home.html">Inicio</a>
+                <a href="home.html#juegos">Juegos</a>
+                <a href="#">Mi biblioteca</a>
             </div>
-            <a href="../index.html">Inicio</a>
-            <a href="../index.html#plans">Ver planes</a>
-            <button class="accent"><a href="login.html">Iniciar sesión</a></button>
+
+            <input type="search" placeholder="Buscar">
+
+            <button class="user-button" type="button">U</button>
         </nav>
     </header>
 
