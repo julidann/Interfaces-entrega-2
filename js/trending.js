@@ -1,26 +1,26 @@
-const isPage = window.location.pathname.includes("/pages/");
-const imageRoute = isPage ? "../assets/img/" : "assets/img/";
+const isTrendingPage = window.location.pathname.includes("/pages/");
+const trendingImageRoute = isTrendingPage ? "../assets/img/" : "assets/img/";
 
 const games = [
     {
         name: "Spiderman ",
-        image: imageRoute + "background-spiderman.jpg"
+        image: trendingImageRoute + "background-spiderman.jpg"
     },
     {
         name: "Grand Theft Auto VI",
-        image: imageRoute + "background-GTAVI.jpg"
+        image: trendingImageRoute + "background-GTAVI.jpg"
     },
     {
         name: "Grand Turismo 7",
-        image: imageRoute + "background-GT.jpg"
+        image: trendingImageRoute + "background-GT.jpg"
     },
     {
         name: "Horizon Zero Down",
-        image: imageRoute + "background-zerodown.jpg"
+        image: trendingImageRoute + "background-zerodown.jpg"
     },
     {
         name: "Ghost of Tsushima",
-        image: imageRoute + "background-ghost.jpg"
+        image: trendingImageRoute + "background-ghost.jpg"
     }
 ];
 
