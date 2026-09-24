@@ -1,23 +1,25 @@
+const imageRoute = "../assets/img/";
+
 const games = [
     {
         name: "Spiderman ",
-        image: "assets/img/background-spiderman.jpg"
+        image: imageRoute + "background-spiderman.jpg"
     },
     {
         name: "Grand Theft Auto VI",
-        image: "assets/img/background-GTAVI.jpg"
+        image: imageRoute + "background-GTAVI.jpg"
     },
     {
         name: "Grand Turismo 7",
-        image: "assets/img/background-GT.jpg"
+        image: imageRoute + "background-GT.jpg"
     },
     {
         name: "Horizon Zero Down",
-        image: "assets/img/background-zerodown.jpg"
+        image: imageRoute + "background-zerodown.jpg"
     },
     {
         name: "Ghost of Tsushima",
-        image: "assets/img/background-ghost.jpg"
+        image: imageRoute + "background-ghost.jpg"
     }
 ];
 
