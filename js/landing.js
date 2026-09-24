@@ -23,4 +23,4 @@ setInterval(function () {
     }
 
     landing.style.backgroundImage = `url("${images[position]}")`;
-}, 6000);
+}, 4000);

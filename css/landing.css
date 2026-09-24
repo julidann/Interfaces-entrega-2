@@ -60,8 +60,7 @@ nav {
     height: 300px;
     color: white;
     background-color: #000000;
-    padding: 0 0 100px 50px;
-
+    padding: 50px 0 100px 50px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -74,12 +73,15 @@ nav {
     position: absolute;
     inset: 0;
 
-    background: linear-gradient(to right, black 50%, black 50%, transparent 250%)
+    background: linear-gradient(to right, #000000 20%, #000000a6 100%, transparent 250%);
+   
 }
 
 .landing-main > * {
     position: relative;
 }
+
+
 
 .welcome-main {
     width: 30%;

@@ -4,98 +4,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>GAMEZONE | Crear cuenta</title>
 
     <link rel="stylesheet" href="../css/landing.css">
     <link rel="stylesheet" href="../css/buttons.css">
-    <link rel="stylesheet" href="../css/register.css">
+    <link rel="stylesheet" href="../css/auth.css">
 </head>
 
 <body>
 
     <header>
         <nav>
-            <img src="../assets/logo/LOGOPAGE.png" alt="">
-            <img src="../assets/logo/GAMEZONE.png" alt="">
+            <div>
+                <a href="../index.html">
+                    <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
+                    <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
+                </a>
+            </div>
             <a href="../index.html">Inicio</a>
             <a href="../index.html#plans">Ver planes</a>
-            <button class="accent"><a href="login.html">Iniciar sesión</a></button>
+            <Button class="accent"><a href="../pages/login.html">Iniciar sesión</a></Button>
         </nav>
+
+
     </header>
 
     <main>
-        <section class="landing-main register-main">
 
-            <form class="register-form" id="register-form">
+        <section class="landing-main auth-main">
+
+            <form class="auth-form" id="register-form">
+
                 <h1>Crear una cuenta</h1>
 
                 <div class="form-row">
                     <div class="form-field">
                         <label for="name">Nombre</label>
-                        <input id="name" type="text" >
+                        <input id="name" type="text">
                     </div>
 
                     <div class="form-field">
                         <label for="lastname">Apellido</label>
-                        <input id="lastname" type="text" >
+                        <input id="lastname" type="text">
                     </div>
                 </div>
 
                 <div class="form-field">
                     <label for="email">Correo electrónico</label>
-                    <input id="email" type="email" >
+                    <input id="email" type="email">
+                </div>
+
+                <div class="form-field">
+                    <label>Fecha de nacimiento</label>
+
+                    <div class="birthdate">
+                        <input id="birth-day" type="number" placeholder="Día">
+                        <input id="birth-month" type="number" placeholder="Mes">
+                        <input id="birth-year" type="number" placeholder="Año">
+                    </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-field">
-                        <label for="birthdate">Fecha de nacimiento</label>
-                        <input id="birthdate" type="date" >
-                    </div>
-
                     <div class="form-field">
                         <label for="username">Nombre de usuario</label>
-                        <input id="username" type="text" >
+                        <input id="username" type="text">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="password">Contraseña</label>
+                        <input id="password" type="password" placeholder="Mínimo 8 caracteres">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-field">
-                        <label for="password">Contraseña</label>
-                        <input id="password" type="password" >
-                    </div>
-
-                    <div class="form-field">
                         <label for="repeat-password">Repetir contraseña</label>
-                        <input id="repeat-password" type="password" >
+                        <input id="repeat-password" type="password">
                     </div>
-                </div>
 
-                <div class="captcha">
-                    <input type="checkbox">
-                    <span>I'm not a robot</span>
+                    <div class="captcha">
+                        <input type="checkbox">
+                        <span>I'm not a robot</span>
+                    </div>
                 </div>
 
                 <p id="register-message"></p>
 
-                <button class="primary"><a href="home.html" >Crear cuenta</a></button>
+                <a class="primary" href="home.html">
+                    Crear cuenta
+                </a>
 
-                <p class="signin-text">
+                <p class="auth-text">
                     ¿Ya tenés una cuenta?
                     <a href="login.html">Iniciar sesión</a>
                 </p>
 
-                <button class="google-button">
+                <a class="google-button" href="home.html">
                     <img src="../assets/icons/google.svg" alt="Google">
-                    <a href="home.html" >Continuar con Google</a>
-                </button>
+                    Continuar con Google
+                </a>
+
             </form>
 
         </section>
+
     </main>
 
-    
     <script src="../js/landing.js"></script>
-    <script src="../js/register.js"></script>
 
 </body>
+
 </html>
