@@ -19,10 +19,7 @@ header {
     margin: 0;
 }
 
-
-
 nav {
-    
     display: flex;
     justify-content: flex-end;
     align-content: space-between;
@@ -57,14 +54,13 @@ nav {
 
 
 .landing-main {
-    height: 300px;
+    height: 400px;
     color: white;
     background-color: #000000;
     padding: 50px 0 100px 50px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     position: relative;
 }
 
@@ -89,7 +85,7 @@ nav {
 }
 
 .welcome-main span {
-    color: #D6006A;
+    color: #06D606;
 }
 
 h1 {

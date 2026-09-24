@@ -11,43 +11,44 @@
 
 .nav-user .nav-logo {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-right: auto;
 }
 
-.nav-user .nav-logo img:first-child {
-    width: 45px;
-}
+/*.nav-user .nav-logo img:first-child {
+    
+}*/
 
 .nav-user .nav-logo img:last-child {
-    width: 120px;
+    width: 263px;
+    height: 68px;
+    margin-top: auto;
 }
 
 .nav-user .nav-links {
     display: flex;
     align-items: center;
     gap: 35px;
+    margin-right: 50px;
 }
 
 .nav-user a {
     color: white;
-    font-size: 14px;
 }
 
 .nav-user input {
-    width: 120px;
+    width: 150px;
     height: 25px;
     padding: 0 10px;
     border: none;
     border-radius: 15px;
+    margin-right: 10px;
 }
 
-.menu-button,
-.user-button {
+.menu-button,.user-button {
     color: white;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 30px;
     cursor: pointer;
 }
 

@@ -81,16 +81,9 @@ footer p {
 }
 
 /* Contenedor de redes sociales */
-.footer-socials {
+.footer-socials p{
   text-align: center;
-}
-
-.footer-socials p {
-  margin: 0 0 8px 0;
-  font-size: 14px;
-}
-footer p {
-    font-family: JetBrains mono;
+  margin: 0;
 }
 
 .social-icons {
