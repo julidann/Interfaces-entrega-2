@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GAMEZONE | Cloud Gaming</title>
     <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/footer.css">
     
     
@@ -17,11 +18,13 @@
         
 
         <nav>
+            <div>
             <img src="assets/logo/LOGOPAGE.png" alt="">
-        <img src="assets/logo/GAMEZONE.png" alt="">
+            <img src="assets/logo/GAMEZONE.png" alt="">
+            </div>
             <a href="index.html">Inicio</a>
             <a href="#planes">Ver planes</a>
-            <Button><a href="pages/login.html">Iniciar sesión</a></Button>
+            <Button class = "accent"><a href="pages/login.html">Iniciar sesión</a></Button>
         </nav>
 
         
@@ -32,19 +35,19 @@
         <section class = "landing-main">
             <div class = cloud-div> <img src="assets/icons/cloud.svg" alt="cloud">
             <p class = "cloud-p">coludgame</p>
-        </div>
-            
-
-            <h1>Over 1,000 games are waiting for you.</h1>
+            </div>
+            <div class = "welcome-main">
+            <h1>Over 1,000 games are waiting for <span>you.</span></h1>
 
             <p>
                 Entrá a GAMEZONE y empezá tu próxima aventura.
                 Descubrí nuevos juegos en la nube, guardá tus favoritos
                 y encontrá recomendaciones pensadas especialmente para vos.
             </p>
+            </div>
 
-           <button><a href="pages/registro.html">Registrarse</a></button>
-           <button><a href="#planes">Ver planes</a></button>
+           <button class = "primary"><a href="pages/registro.html">Crear cuenta</a></button>
+           <button class = "secondary"><a href="#planes">Descubre nuevos juegos</a></button>
         </section>
 
         <section class = "plan">
@@ -60,7 +63,7 @@
 
                 <p>$0 / mes</p>
 
-                <button>Elegir plan</button>
+                <button class = "accent" >Seleccionar</button>
             </article>
 
             <article>
@@ -75,7 +78,7 @@
 
                 <p>$12.999 / mes</p>
 
-                <button>Elegir plan</button>
+                <button class = "accent" >Seleccionar</button>
             </article>
 
             <article>
@@ -88,7 +91,7 @@
 
                 <p>$7.999 / mes</p>
 
-                <button>Elegir plan</button>
+                <button class = "accent">Seleccionar</button>
             </article>
             </div>
         </section>
@@ -117,7 +120,7 @@
             </article>
             </div>
 
-            <button><a href="pages/registro.html">Ver todos los juegos</a></button>
+            <button class = "secondary"><a href="pages/registro.html">Ver todos los juegos</a></button>
         </section>
 
     </main>

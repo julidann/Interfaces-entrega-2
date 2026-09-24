@@ -2,10 +2,12 @@
 
 body {
     font-family: Inter;
+   
 }
 
 a {
     text-decoration: none;
+    color: white;
 }
 
 header {
@@ -16,12 +18,10 @@ header {
     margin: 0;
 }
 
-header a {
-    color: white;
-    
-}
+
 
 nav {
+    
     display: flex;
     justify-content: flex-end;
     align-content: space-between;
@@ -29,19 +29,9 @@ nav {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding-right:20px;
 }
 
-nav button {
-    color: #000000;
-    background-color: yellow;
-    border-radius: 10px;
-    height: 30px;
-    border-color: yellow;
-}
-
-nav button a {
-    color: #000000;
-}
 
     
 /*.landing-main {
@@ -56,9 +46,17 @@ nav button a {
 
 }*/
 
+.cloud-div {
+    display: flex;
+}
+.cloud-p {
+    color: #FFD600;
+    text-transform: uppercase;
+}
+
 
 .landing-main {
-    height: 500px;
+    height: 300px;
     color: white;
     background-color: #000000;
     padding: 0 0 100px 50px;
@@ -82,12 +80,13 @@ nav button a {
     position: relative;
 }
 
-.cloud-div {
-    display: flex;
+.welcome-main {
+    width: 30%;
+    display: block;
 }
-.cloud-p {
-    color: #FFD600;
-    text-transform: uppercase;
+
+.welcome-main span {
+    color: #D6006A;
 }
 
 h1 {
@@ -108,8 +107,18 @@ section div {
 
 }
 
+
+article {
+    background-color: white;
+    height: 400px;
+    border-radius: 20px;
+
+}
+
 .plan{
     background-color: grey;
+    height: 500px;
+    padding: 0% 10% 0% 10%;
 }
 .card-plan{
     display: flex;

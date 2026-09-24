@@ -1,0 +1,126 @@
+/* =========================
+   ESTILO GENERAL DE BOTONES
+   ========================= */
+
+.primary,
+.secondary,
+.accent {
+   
+    height: 48px;
+
+    border: none;
+    border-radius: 8px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    padding: 5px;
+}
+
+
+/* =========================
+   PRIMARY
+   ========================= */
+
+/* Default */
+.primary {
+    background-color: #D6006A;
+    
+}
+
+.primary a{
+    color: white;
+}
+
+
+
+/* Hover */
+.primary:hover {
+    background-color: #FFB3D9;
+}
+
+/* Pressed */
+.primary:active {
+    background-color: #471D32;
+}
+
+/* Disabled */
+.primary:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   SECONDARY
+   ========================= */
+
+/* Default */
+.secondary {
+    background-color: #06D606;
+    
+    
+}
+
+.secondary a{
+    color: #1D471D;
+
+}
+
+/* Hover */
+.secondary:hover {
+    background-color: #B3FFB3;
+}
+
+/* Pressed */
+.secondary:active {
+    background-color: #1D471D;
+    color: #F5F5F5;
+}
+
+/* Disabled */
+.secondary:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   ACCENT
+   ========================= */
+
+/* Default */
+.accent {
+    background-color: #FFD600;
+    color: #121212;
+}
+
+.accent a {
+    color: black;
+}
+
+/* Hover */
+.accent:hover {
+    background-color: #FFE347;
+}
+
+/* Pressed */
+.accent:active {
+    background-color: #CCAB00;
+    color: #F5F5F5;
+}
+
+/* Disabled */
+.accent:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+
+    cursor: not-allowed;
+}
