@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap');
+.plans {
+    background-color: #c7c4c4;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.plans h2 {
+    font-size: 32px;
+    margin-bottom: 50px;
+}
+
+.plans-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.plan-card {
+    background-color: white;
+
+    width: 240px;
+    height: 420px;
+
+    padding: 25px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-shadow: 0 3px 4px #999;
+}
+
+.plan-card h3 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.plan-card p {
+    margin: 3px 0;
+}
+
+
+.plan-card.pro {
+    height: 450px;
+    border: 2px solid #FFD600;
+}

@@ -1,0 +1,102 @@
+/* =========================
+   ESTILO GENERAL DE BOTONES
+   ========================= */
+
+.primary,
+.secondary,
+.accent,
+.google-button {
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.google-button {
+    background-color: white;
+    
+}
+
+.primary {
+    background-color: #D6006A;
+    color: white;
+}
+
+.primary:hover {
+    background-color: #FFB3D9;
+}
+
+
+.primary:active {
+    background-color: #471D32;
+}
+
+.primary:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+    cursor: not-allowed;
+}
+
+.secondary {
+    background-color: #06D606; 
+}
+
+.secondary a{
+    color: #1D471D;
+}
+
+.secondary:hover {
+    background-color: #B3FFB3;
+}
+
+.secondary:active {
+    background-color: #1D471D;
+    color: #F5F5F5;
+}
+
+.secondary:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+
+    cursor: not-allowed;
+}
+
+.accent {
+    background-color: #FFD600;
+    color: #121212;
+}
+
+.accent a {
+    color: black;
+}
+
+.accent:hover {
+    background-color: #FFE347;
+}
+
+.accent:active {
+    background-color: #CCAB00;
+    color: #F5F5F5;
+}
+
+.accent:disabled {
+    background-color: #C7C4C4;
+    color: #F5F5F5;
+    cursor: not-allowed;
+}
+
+.google-button a{
+    color:black;
+}
+.google-button img {
+    width: 20px;
+    height: 20px;
+}

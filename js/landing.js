@@ -1,24 +1,26 @@
 const landing = document.querySelector(".landing-main");
 
-const imagenes = [
-    "assets/img/background-ghost.jpg",
-    "assets/img/background-GT.jpg",
-    "assets/img/background-GTAVI.jpg",
-    "assets/img/background-spiderman.jpg",
-    "assets/img/background-zerodown.jpg"
+const isPage = window.location.pathname.includes("/pages/");
+const path = isPage ? "../assets/img/" : "assets/img/";
+
+const images = [
+    path + "background-ghost.jpg",
+    path + "background-GT.jpg",
+    path + "background-GTAVI.jpg",
+    path + "background-spiderman.jpg",
+    path + "background-zerodown.jpg"
 ];
 
-let posicion = 0;
+let position = 0;
 
-//para que ya cargue una img
-landing.style.backgroundImage = `url("${imagenes[posicion]}")`;
+landing.style.backgroundImage = `url("${images[position]}")`;
 
 setInterval(function () {
-    posicion++;
+    position++;
 
-    if (posicion >= imagenes.length) {
-        posicion = 0;
+    if (position >= images.length) {
+        position = 0;
     }
 
-    landing.style.backgroundImage = `url("${imagenes[posicion]}")`;
-}, 6000);
+    landing.style.backgroundImage = `url("${images[position]}")`;
+}, 4000);
