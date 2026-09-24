@@ -7,6 +7,7 @@
     <title>GAMEZONE | Home</title>
     <link rel="stylesheet" href="../css/landing.css">
     <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/footer.css">
 </head>
@@ -19,44 +20,23 @@
     </div>
 
     <header>
-        <button type="button">☰</button>
+        <nav class="nav-user">
+            <button class="menu-button" type="button">☰</button>
 
-        <span>🎮</span>
+            <a class="nav-logo" href="home.html">
+                <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
+                <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
+            </a>
 
-        <a href="home.html">
-            <span>GAME</span>ZONE
-        </a>
+            <div class="nav-links">
+                <a href="home.html">Inicio</a>
+                <a href="home.html#juegos">Juegos</a>
+                <a href="#">Mi biblioteca</a>
+            </div>
 
-        <nav>
-            <a href="home.html">Inicio</a>
-            <a href="#juegos">Juegos</a>
-            <a href="#">Mi biblioteca</a>
-        </nav>
+            <input type="search" placeholder="Buscar">
 
-        <input type="search" placeholder="Buscar">
-        <button type="button">U</button>
-
-        <nav>
-            <a href="#tendencias">⌁ <strong>Tendencias</strong></a>
-            <a href="#juegos">🎮 <strong>Free to Play</strong></a>
-            <a href="#juegos">☁ <strong>Cloud Games</strong></a>
-            <a href="#juegos">◇ <strong>Categorías +</strong></a>
-
-            <a href="#juegos">Conducción</a>
-            <a href="#juegos">Estrategia</a>
-            <a href="#juegos">Deportes</a>
-            <a href="#juegos">Disparos</a>
-            <a href="#juegos">Simuladores</a>
-            <a href="#juegos">Ver más...</a>
-        </nav>
-
-        <nav>
-            <strong>U avatar_name</strong>
-            <a href="#">👤 Ver Perfil</a>
-            <a href="#">⚙ Configuración</a>
-            <a href="#">▣ Mis Suscripciones</a>
-            <a href="#">? Soporte</a>
-            <a href="login.html">Cerrar Sesión</a>
+            <button class="user-button" type="button">U</button>
         </nav>
     </header>
 
