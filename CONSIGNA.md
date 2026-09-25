@@ -42,8 +42,8 @@
 | CSS3 | ✅ | Sí |
 | JavaScript | ✅ | Sí |
 | Sin frameworks | ✅ | HTML/CSS/JS puro |
-| `transition` CSS | ✅ | Ya usamos |
-| `transform` CSS | ✅ | Ya usamos |
+| `transition` CSS | 🔴  | NO usamos |
+| `transform` CSS | 🔴  | NO usamos |
 | `@keyframes` | 🔴 Falta aprovechar | Permitido; ideal para loading/registro |
 | Spritesheet | ✅ No usamos | La consigna dice que no |
 | Footer | ✅ | Implementado |
