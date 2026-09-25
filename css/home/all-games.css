@@ -1,5 +1,5 @@
 .all-games-section {
-    padding: 40px;
+    padding: 30px 40px;
     background-color: #d9d9d9;
 }
 
@@ -12,13 +12,13 @@
 .all-games {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
 }
 
 .game-card {
     background-color: white;
     border-radius: 15px;
-    height: 280px;
+    height: 240px;
     overflow: hidden;
     color: black;
     cursor: pointer;
@@ -32,7 +32,7 @@
 
 .game-card img {
     width: 100%;
-    height: 180px;
+    height: 150px;
     object-fit: cover;
     display: block;
 }
@@ -40,8 +40,8 @@
 
 .game-info {
     display: block;
-    padding: 15px;
-    min-height: 80px;
+    padding: 12px;
+    min-height: 65px;
 }
 
 .game-info strong {
@@ -70,7 +70,7 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .pagination button {
