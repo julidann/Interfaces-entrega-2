@@ -13,7 +13,7 @@ a {
 header {
     background-color: #000000;
     align-content: center;
-    height: 80px;  
+    height: 70px;  
     padding: 0;
     margin: 0;
 }
@@ -26,5 +26,10 @@ nav {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-right:20px;
+    padding: 0 20px;
+}
+
+header nav img {
+    max-height: 55px;
+    width: auto;
 }
