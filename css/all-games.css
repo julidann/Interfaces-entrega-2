@@ -18,12 +18,16 @@
 .game-card {
     background-color: white;
     border-radius: 15px;
-    height: 300px;
-    
+    height: 280px;
     overflow: hidden;
     color: black;
     cursor: pointer;
-    
+
+    transition: transform 0.3s;
+}
+
+.game-card:hover {
+    transform: scale(1.01);
 }
 
 .game-card img {
@@ -70,4 +74,8 @@
     background: none;
     color: #D6006A;
     cursor: pointer;
+}
+
+pagination:hover{
+    background-color: #D6006A;
 }

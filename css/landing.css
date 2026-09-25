@@ -3,7 +3,6 @@
 body {
     font-family: Inter;
     margin: 0;
-   
 }
 
 a {
@@ -54,7 +53,7 @@ nav {
 
 
 .landing-main {
-    height: 400px;
+    height: 300px;
     color: white;
     background-color: #000000;
     padding: 50px 0 100px 50px;
@@ -78,14 +77,13 @@ nav {
 }
 
 
-
 .welcome-main {
     width: 30%;
     display: block;
 }
 
 .welcome-main span {
-    color: #06D606;
+    color: #D6006A;
 }
 
 h1 {
@@ -105,7 +103,6 @@ section div {
     border-radius: 10px;
 
 }
-
 
 article {
     background-color: white;
