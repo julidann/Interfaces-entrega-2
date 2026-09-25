@@ -1,9 +1,12 @@
 .all-games-section {
     padding: 40px;
+    background-color: #d9d9d9;
 }
 
 .all-games-section h2 {
     margin-bottom: 20px;
+    text-align: center;
+    color: black;
 }
 
 .all-games {
@@ -14,22 +17,29 @@
 
 .game-card {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 15px;
+    height: 300px;
+    
     overflow: hidden;
+    color: black;
 }
 
 .game-card img {
     width: 100%;
-    height: 150px;
+    height: 180px;
     object-fit: cover;
+    display: block;
 }
 
 .game-info {
-    padding: 10px;
+    display: block;
+    padding: 15px;
+    min-height: 80px;
 }
 
 .game-info strong {
-    font-size: 12px;
+    font-size: 11px;
+    color: #D6006A;
 }
 
 .game-info h3 {
@@ -38,7 +48,8 @@
 }
 
 .game-info p {
-    font-size: 14px;
+    font-size: 12px;
+    margin: 0;
 }
 
 #no-games {
@@ -55,5 +66,6 @@
 .pagination button {
     border: none;
     background: none;
+    color: #D6006A;
     cursor: pointer;
 }
