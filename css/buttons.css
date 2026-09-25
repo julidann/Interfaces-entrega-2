@@ -6,11 +6,11 @@
 .secondary,
 .accent,
 .google-button {
-    height: 48px;
+    height: 42px;
     border: none;
     border-radius: 8px;
     font-family: "Inter", sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 900;
     cursor: pointer;
     padding: 5px;
