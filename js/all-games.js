@@ -3,7 +3,8 @@ const allGames = [
         name: "Spider-Peg",
         plan: "GRATIS",
         category: "Puzzle / Estrategia",
-        image: "../assets/img/background-spiderman.jpg"
+        image: "../assets/img/background-spiderman.jpg",
+        link: "game.html"
     },
     {
         name: "Grand Theft Auto V",
@@ -79,10 +80,12 @@ allGames.forEach(function (game) {
     gamesContainer.innerHTML += `
         <article class="game-card" data-title="${game.name}">
             <img src="${game.image}" alt="${game.name}">
+
             <div class="game-info">
                 <strong>${game.plan}</strong>
                 <h3>${game.name}</h3>
                 <p>${game.category}</p>
+                ${game.link ? `<a class="primary" href="${game.link}">Jugar</a>` : ""}
             </div>
         </article>
     `;
