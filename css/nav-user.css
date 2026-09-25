@@ -52,12 +52,21 @@
 }
 
 .user-button {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     border: 2px solid #06D606;
     border-radius: 50%;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
 }
 
+.user-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 /* MENU HAMBURGUESA */
 .hamburger-menu {
@@ -155,6 +164,7 @@
 .profile-header img {
     width: 24px;
     height: 24px;
+    border-radius: 50%;
 }
 
 .profile-header span {
