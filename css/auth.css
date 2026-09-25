@@ -167,3 +167,11 @@
     color: #ff5a5a;
     text-align: center;
 }
+
+.landing-main {
+    height: 600px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+   
+}
