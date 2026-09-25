@@ -1,31 +1,67 @@
-
 .trending-section {
     width: 100%;
-    height: 300px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 30px 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.trending-carousel {
+    width: 100%;
+    position: relative;
     overflow: hidden;
 }
 
+.trending {
+    display: flex;
+    gap: 25px;
+    padding: 0 45px;
+    transition: transform 0.7s ease-in-out;
+}
+
 .card {
-    width: 260px;
-    height: 170px;
-    
+    min-width: 280px;
+    height: 210px;
+    flex-shrink: 0;
+    text-align: left;
+    background: none;
 }
 
 .trending .card img {
     width: 100%;
-    height: 170px;
+    height: 160px;
     object-fit: cover;
     border-radius: 10px;
-    transition: transform 0.3s ease;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .trending .card img:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
+.card p {
+    margin: 8px 0;
+    font-weight: 600;
+}
 
+.carousel-arrow {
+    position: absolute;
+    top: 58px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.carousel-prev {
+    left: 20px;
+}
+
+.carousel-next {
+    right: 20px;
+}
