@@ -2,28 +2,28 @@
 .plans {
     background-color: #c7c4c4;
     text-align: center;
-    padding: 20px 0;
+    padding: 25px 0;
 }
 
 .plans h2 {
-    font-size: 32px;
-    margin-bottom: 50px;
+    font-size: 28px;
+    margin-bottom: 30px;
 }
 
 .plans-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 20px;
 }
 
 .plan-card {
     background-color: white;
 
-    width: 240px;
-    height: 420px;
+    width: 220px;
+    height: 350px;
 
-    padding: 25px;
+    padding: 20px;
     border-radius: 10px;
 
     display: flex;
@@ -34,7 +34,7 @@
 }
 
 .plan-card h3 {
-    font-size: 24px;
+    font-size: 20px;
     margin: 0;
 }
 
@@ -44,6 +44,6 @@
 
 
 .plan-card.pro {
-    height: 450px;
+    height: 380px;
     border: 2px solid #FFD600;
 }
