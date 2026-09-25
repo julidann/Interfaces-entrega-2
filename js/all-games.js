@@ -1,76 +1,75 @@
 const allGames = [
     {
-        name: "Spider-Peg",
-        plan: "GRATIS",
-        category: "Puzzle / Estrategia",
-        image: "../assets/img/background-spiderman.jpg",
-        link: "game.html"
-    },
-    {
-        name: "Grand Theft Auto V",
+        name: "Alan Wake 2",
         plan: "PRO-GAMER",
         category: "Acción / Aventura",
-        image: "../assets/img/background-GTAVI.jpg"
+        image: "../assets/img/allgames-alanwake2.jpg"
     },
     {
-        name: "Red Dead Redemption 2",
+        name: "Assassin's Creed Valhalla",
         plan: "PRO-GAMER",
         category: "Acción / Aventura",
-        image: "../assets/img/background-GT.jpg"
+        image: "../assets/img/allgames-assassins.jpg"
     },
     {
-        name: "Fortnite",
+        name: "Batman Arkham Knight",
+        plan: "PRO-GAMER",
+        category: "Acción / Aventura",
+        image: "../assets/img/allgames-batman.jpg"
+    },
+    {
+        name: "Battlefield 6",
         plan: "PRO-GAMER",
         category: "Disparos",
-        image: "../assets/img/background-GOW.jpg"
+        image: "../assets/img/allgames-battlefield.jpg"
     },
     {
-        name: "Horizon Zero Dawn",
-        plan: "GRATIS",
-        category: "Acción / RPG",
-        image: "../assets/img/background-zerodown.jpg"
+        name: "Cities: Skylines 2",
+        plan: "PRO-GAMER",
+        category: "Simuladores",
+        image: "../assets/img/allgames-cities.jpg"
     },
     {
         name: "Cyberpunk 2077",
         plan: "PRO-GAMER",
         category: "RPG",
-        image: "../assets/img/background-spiderman.jpg"
+        image: "../assets/img/allgames-cyberpunk.jpg"
     },
     {
-        name: "God of War Ragnarök",
-        plan: "PRO-GAMER",
-        category: "Acción / Aventura",
-        image: "../assets/img/background-GOW.jpg"
-    },
-    {
-        name: "The Last of Us Part I",
-        plan: "PRO-GAMER",
-        category: "Acción / Aventura",
-        image: "../assets/img/background-ghost.jpg"
-    },
-    {
-        name: "EA Sports FC 26",
+        name: "Death Stranding",
         plan: "GRATIS",
-        category: "Deportes",
-        image: "../assets/img/background-GT.jpg"
+        category: "Acción / Aventura",
+        image: "../assets/img/allgames-deathstranding.jpg"
     },
     {
-        name: "Need for Speed Heat",
+        name: "DIRT 5",
         plan: "PRO-GAMER",
         category: "Conducción",
-        image: "../assets/img/background-GTAVI.jpg"
+        image: "../assets/img/allgames-dirt5.jpg"
     },
     {
-        name: "Rocket League",
+        name: "EA SPORTS FC 27",
         plan: "PRO-GAMER",
         category: "Deportes",
-        image: "../assets/img/background-ghost.jpg"
+        image: "../assets/img/allgames-fc27.jpg"
+    },
+    {
+        name: "Far Cry 6",
+        plan: "PRO-GAMER",
+        category: "Disparos",
+        image: "../assets/img/allgames-farcry6.jpg"
     },
     {
         name: "Hogwarts Legacy",
         plan: "PRO-GAMER",
         category: "RPG",
-        image: "../assets/img/background-zerodown.jpg"
+        image: "../assets/img/allgames-legacy.jpg"
+    },
+    {
+        name: "Little Nightmares III",
+        plan: "PRO-GAMER",
+        category: "Aventura",
+        image: "../assets/img/allgames-littlenightmares.jpg"
     }
 ];
 
@@ -79,14 +78,14 @@ const gamesContainer = document.querySelector("#all-games");
 allGames.forEach(function (game) {
     gamesContainer.innerHTML += `
         <article class="game-card" data-title="${game.name}">
+        
             <img src="${game.image}" alt="${game.name}">
-
+        
             <div class="game-info">
                 <strong>${game.plan}</strong>
                 <h3>${game.name}</h3>
                 <p>${game.category}</p>
-                ${game.link ? `<a class="primary" href="${game.link}">Jugar</a>` : ""}
-            </div>
+                </div>
         </article>
     `;
 });

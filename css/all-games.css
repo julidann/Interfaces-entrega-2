@@ -22,6 +22,8 @@
     
     overflow: hidden;
     color: black;
+    cursor: pointer;
+    
 }
 
 .game-card img {
