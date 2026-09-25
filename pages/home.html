@@ -18,7 +18,22 @@
 
     <header>
         <nav class="nav-user">
-            <button class="menu-button" type="button">☰</button>
+            <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
+
+            <aside class="hamburger-menu" id="hamburger-menu">
+                <a href="#trending"><span class="menu-icon">↗</span> Tendencias</a>
+                <a href="#juegos"><span class="menu-icon free-icon">🎮</span> Free to Play</a>
+                <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
+                <div class="menu-categories">
+                    <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
+                    <a href="#juegos">Conducción</a>
+                    <a href="#juegos">Estrategia</a>
+                    <a href="#juegos">Deportes</a>
+                    <a href="#juegos">Disparos</a>
+                    <a href="#juegos">Simuladores</a>
+                    <a href="#juegos">Ver más...</a>
+                </div>
+            </aside>
 
             <a class="nav-logo" href="home.html">
                 <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
@@ -105,7 +120,7 @@
 </section>
 
 
-        <section>
+        <section id="juegos">
             <h2>Todos los juegos</h2>
 
             <article data-title="Spider-Peg">
@@ -259,6 +274,7 @@
 
     <script src="../js/background-img.js"></script>
     <script src="../js/trending.js"></script>
+    <script src="../js/menu.js"></script>
 
 </body>
 
