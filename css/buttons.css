@@ -95,6 +95,12 @@
 
 .google-button a{
     color:black;
+    text-decoration: none;
+}
+
+.google-button {
+    color: black;
+    text-decoration: none;
 }
 .google-button img {
     width: 20px;
