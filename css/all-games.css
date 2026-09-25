@@ -46,7 +46,10 @@
 
 .game-info strong {
     font-size: 11px;
-    color: #D6006A;
+    color: #2D702D;
+    background-color: #06D606;
+    padding: 2px 6px;
+    border-radius: 5px;
 }
 
 .game-info h3 {
