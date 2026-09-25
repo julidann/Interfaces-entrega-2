@@ -1,7 +1,7 @@
 const allGames = [
     {
         name: "Alan Wake 2",
-        plan: "PRO-GAMER",
+        plan: "BASIC",
         category: "Acción / Aventura",
         image: "../assets/img/allgames-alanwake2.jpg"
     },
@@ -25,19 +25,19 @@ const allGames = [
     },
     {
         name: "Cities: Skylines 2",
-        plan: "PRO-GAMER",
+        plan: "BASIC",
         category: "Simuladores",
         image: "../assets/img/allgames-cities.jpg"
     },
     {
         name: "Cyberpunk 2077",
-        plan: "PRO-GAMER",
+        plan: "FREE",
         category: "RPG",
         image: "../assets/img/allgames-cyberpunk.jpg"
     },
     {
         name: "Death Stranding",
-        plan: "GRATIS",
+        plan: "FREE",
         category: "Acción / Aventura",
         image: "../assets/img/allgames-deathstranding.jpg"
     },
@@ -55,7 +55,7 @@ const allGames = [
     },
     {
         name: "Far Cry 6",
-        plan: "PRO-GAMER",
+        plan: "FREE",
         category: "Disparos",
         image: "../assets/img/allgames-farcry6.jpg"
     },
