@@ -58,3 +58,68 @@
     border: 2px solid #06D606;
     border-radius: 50%;
 }
+
+
+/* MENU HAMBURGUESA */
+.hamburger-menu {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 170px;
+    padding: 24px 22px 28px;
+    background-color: #000000;
+    border-radius: 0 0 10px 0;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 100;
+}
+
+.hamburger-menu.show {
+    display: flex;
+}
+
+.hamburger-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hamburger-menu .menu-icon {
+    width: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.hamburger-menu .free-icon {
+    color: #D6006A;
+}
+
+.hamburger-menu .cloud-link {
+    color: #FFD600;
+}
+
+.hamburger-menu img {
+    width: 20px;
+    height: 20px;
+}
+
+.menu-categories p {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.menu-categories a {
+    margin: 0 0 10px 32px;
+    font-size: 10px;
+    font-weight: 500;
+}
