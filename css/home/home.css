@@ -3,19 +3,19 @@
 }
 
 .adventure h2 {
-    margin-bottom: 25px;
+    margin-bottom: 18px;
 }
 
 .adventure-cards {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
 }
 
 .adventure-card {
-    width: 260px;
-    min-height: 600px;
+    width: 230px;
+    min-height: 430px;
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
@@ -26,25 +26,25 @@
 
 .adventure-card img {
     width: 100%;
-    height: 400px;
+    height: 270px;
     object-fit: cover;
 }
 
 .adventure-card h3 {
-    margin: 15px 20px 8px;
+    margin: 12px 15px 6px;
     text-align: left;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .adventure-card p {
-    margin: 0 20px 15px;
+    margin: 0 15px 12px;
     text-align: left;
     font-size: 14px;
 }
 
 .adventure-card .primary,
 .adventure-card .accent {
-    margin: auto 20px 20px;
+    margin: auto 15px 15px;
 }
 
 .adventure-card:not(.featured) {
@@ -52,9 +52,9 @@
 }
 
 .featured {
-    width: 630px;
+    width: 520px;
 }
 
 .featured img {
-    height: 405px;
+    height: 275px;
 }
