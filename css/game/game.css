@@ -156,6 +156,20 @@ main {
     gap: 15px;
 }
 
+.rating-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.rating-user img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .ratings h2 {
     width: 100%;
     text-align: center;
@@ -207,29 +221,24 @@ main {
     margin-bottom: 20px;
 }
 
-.comment-avatar {
-    width: 30px;
-    height: 30px;
+.comment-box img {
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background-color: #ff2d78;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+    object-fit: cover;
 }
 
-.comment-placeholder {
+.comment-input {
     flex: 1;
-    color: #a3a3a3;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-size: 14px;
 }
 
-.comment-box button {
-    border: none;
-    background-color: #7ed321;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    cursor: pointer;
+.comment-input::placeholder {
+    color: #a3a3a3;
 }
 
 .reviews article {
@@ -239,7 +248,6 @@ main {
 
 .reviews article small {
     color: #a3a3a3;
-    margin-left: 10px;
 }
 
 .reviews article p {
@@ -256,7 +264,7 @@ main {
 }
 .also-played article strong {
     font-size: 11px;
-    color: #2D702D;
+    color: #183e18;
     background-color: #06D606;
     padding: 2px 6px;
     border-radius: 5px;

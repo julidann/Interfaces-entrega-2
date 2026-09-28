@@ -1,27 +1,43 @@
 .trending-section {
     width: 100%;
-    height: 300px;
-    
+    padding: 24px 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.trending-section h2 {
+    padding: 0 16px;
 }
 
 .trending-section button {
-    margin-top: 80px;
+    margin-top: 20px;
     padding: 5px 20px;
 }
 
-.card {
-    width: 280px;
-    height: 170px;
-    
+/* en mobile se desliza horizontal */
+.trending {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.trending .card {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    width: 220px;
+    height: 140px;
 }
 
 .trending .card img {
     width: 100%;
-    height: 170px;
+    height: 140px;
     object-fit: cover;
     border-radius: 10px;
     transition: transform 0.3s ease;
@@ -32,4 +48,22 @@
     transform: scale(1.05);
 }
 
+/* MOBILE FIRST */
+@media (min-width: 768px) {
+    .trending-section {
+        padding: 40px 0;
+    }
 
+    .trending {
+        padding: 0 40px;
+    }
+
+    .trending .card {
+        width: 280px;
+        height: 170px;
+    }
+
+    .trending .card img {
+        height: 170px;
+    }
+}
