@@ -22,10 +22,6 @@
     display: flex;
     gap: 10px;
     width: 100%;
-    padding: 0 16px;
-    box-sizing: border-box;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
 }
 
 .trending .card {
@@ -51,7 +47,7 @@
 /* MOBILE FIRST */
 @media (min-width: 768px) {
     .trending-section {
-        padding: 40px 0;
+        padding: 0 0 60px 0;
     }
 
     .trending {

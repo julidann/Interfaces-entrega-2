@@ -4,21 +4,21 @@
 }
 
 .welcome-home h1 {
-    font-size: 28px;
-    line-height: 1.15;
-    margin: 0 0 16px 0;
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 10px 0;
 }
 
 .welcome-home h3 {
     font-family: Inter;
-    font-size: 18px;
-    margin: 0 0 10px 0;
+    font-size: 16px;
+    margin: 0 0 8px 0;
 }
 
 .welcome-home p {
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0 0 16px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 14px 0;
     opacity: 0.85;
     max-width: 100%;
 }
@@ -43,13 +43,14 @@
     font-size: 22px;
 }
 
-/* carrusel — las cards van en fila y se desliza horizontal*/
+/* Mobile: carrusel — las tarjetas van en fila y se desliza horizontal (swipe) */
 .adventure-cards {
     display: flex;
     gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-bottom: 8px;
+    /* el padding lateral de .adventure ya separa la primera/última tarjeta del borde */
 }
 
 .adventure-card {
@@ -87,6 +88,7 @@
     margin: auto 15px 15px;
 }
 
+/* En mobile todas las tarjetas se ven igual de nítidas (el efecto "apagado" es un recurso de desktop) */
 .adventure-card:not(.featured) {
     opacity: 1;
 }
@@ -101,7 +103,7 @@
 
 /* --------- Desktop: volvemos al layout en fila con la tarjeta destacada más grande --------- */
 @media (min-width: 1024px) {
-    .welcome-home {
+    .welcome-home{
         width:fit-content;
     }
     .welcome-home h1 {

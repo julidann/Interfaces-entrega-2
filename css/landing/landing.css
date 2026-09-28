@@ -16,7 +16,7 @@
 
 /* --------- Hero (landing-main) --------- */
 .landing-main {
-    min-height: calc(100vh - 70px);
+    min-height: 60vh;
     box-sizing: border-box;
     color: white;
     background-color: #000000;
@@ -77,37 +77,11 @@ h1 {
     font-family: Inter;
 }
 
-/*
-    OJO: acá tenías reglas sueltas (.trending-section div, .cards article,
-    y un "article" global) que pisaban estilos de otras páginas —
-    por ejemplo le ponían fondo blanco y 400px de alto a TODOS los
-    <article> del sitio, incluidas las tarjetas de reseñas del juego.
-    Las dejo comentadas por si las necesitabas en algo puntual,
-    pero lo más seguro es no usarlas así de generales.
-
-.trending-section div {
-    display: flex;
-    gap: 10px;
-}
-
-.cards article {
-    display: flex;
-    width: 200px;
-    height: 100px;
-    background-color: grey;
-    border-radius: 10px;
-}
-
-article {
-    background-color: white;
-    height: 400px;
-    border-radius: 20px;
-}
-*/
 
 /* --------- A partir de tablet/desktop --------- */
 @media (min-width: 768px) {
     .landing-main {
+        min-height: calc(100vh - 70px);
         padding: 0 60px;
         gap: 20px;
     }
@@ -135,6 +109,3 @@ article {
         font-size: 15px;
     }
 }
-
-
-
