@@ -1,54 +1,61 @@
+/* --------- Bienvenida --------- */
 .welcome-home {
-    max-width: 400px;
-    display: block;
+    max-width: 100%;
 }
 
 .welcome-home h1 {
-  font-size: 44px;
-  line-height: 1.15;
-  margin: 0 0 30px 0;
+    font-size: 28px;
+    line-height: 1.15;
+    margin: 0 0 16px 0;
+}
+
+.welcome-home h3 {
+    font-family: Inter;
+    font-size: 18px;
+    margin: 0 0 10px 0;
 }
 
 .welcome-home p {
-  font-size: 17px;
-  line-height: 1.6;
-  margin: 0 0 20px 0;
-  opacity: 0.85;
-  max-width: 480px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+    opacity: 0.85;
+    max-width: 100%;
 }
 
 .welcome-home span {
     color: #06D606;
 }
 
-.welcome-home h3 {
-    font-family: Inter;
-    font-size: 25px;
+.welcome-home a {
+    width: 100%;
 }
 
-.welcome-home a{
-    width: 80%;
-}
-
+/* --------- Sección "Tu próxima aventura" --------- */
 .adventure {
     text-align: center;
+    padding: 0 16px;
     margin: 0 0 20px 0;
 }
 
 .adventure h2 {
     margin-bottom: 18px;
+    font-size: 22px;
 }
 
+/* carrusel — las cards van en fila y se desliza horizontal*/
 .adventure-cards {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
 }
 
 .adventure-card {
-    width: 230px;
-    min-height: 430px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    width: 260px;
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
@@ -59,7 +66,7 @@
 
 .adventure-card img {
     width: 100%;
-    height: 270px;
+    height: 240px;
     object-fit: cover;
 }
 
@@ -75,18 +82,69 @@
     font-size: 14px;
 }
 
-.adventure-card .primary,.adventure-card .accent {
+.adventure-card .primary,
+.adventure-card .accent {
     margin: auto 15px 15px;
 }
 
 .adventure-card:not(.featured) {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .featured {
-    width: 520px;
+    width: 260px;
 }
 
 .featured img {
-    height: 275px;
+    height: 240px;
+}
+
+/* --------- Desktop: volvemos al layout en fila con la tarjeta destacada más grande --------- */
+@media (min-width: 1024px) {
+    .welcome-home {
+        width:fit-content;
+    }
+    .welcome-home h1 {
+        font-size: 44px;
+        margin: 0 0 30px 0;
+    }
+
+    .welcome-home h3 {
+        font-size: 25px;
+    }
+
+    .welcome-home p {
+        font-size: 17px;
+        max-width: 480px;
+    }
+
+    .welcome-home a {
+        width: 80%;
+    }
+
+    .adventure-cards {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .adventure-card {
+        width: 230px;
+        min-height: 430px;
+    }
+
+    .adventure-card img {
+        height: 270px;
+    }
+
+    .adventure-card:not(.featured) {
+        opacity: 0.5;
+    }
+
+    .featured {
+        width: 520px;
+    }
+
+    .featured img {
+        height: 275px;
+    }
 }
