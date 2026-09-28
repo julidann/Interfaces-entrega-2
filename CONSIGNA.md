@@ -1,3 +1,10 @@
+# COSAS PARA ARREGLAR
+
+* Animar tendencias actuales
+* Agregar efectito agrandar plans cards
+* Animar botones
+* Agregar hover nav-bar
+
 # Checklist — Entregable Nº2 Interfaces
 
 | Requisito del TP | Estado | Qué tenemos / qué falta |
