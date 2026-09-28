@@ -2,16 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
 body {
-    margin: 0;
-    min-height: 100vh;
+  margin: 0;
+  min-height: 100vh;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 
 footer p {
-    font-family: JetBrains mono;
+  font-family: JetBrains mono;
 }
 
 .site-footer {
@@ -66,30 +66,33 @@ footer p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  
 }
 
-/* Contenedor de marcas */
-.footer-brands {
+/* Contenedor de redes sociales */
+.footer-socials {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.footer-brands img {
-  height: 30px;
+.footer-socials img{
+  height: 50px;
 }
 
-/* Contenedor de redes sociales */
-.footer-socials p{
+.footer-bottom p{
   text-align: center;
-  margin: 0;
+  margin-top: 20px;
 }
 
 .social-icons {
   display: flex;
   gap: 15px;
   justify-content: center;
+}
+
+.social-icons img{
+  width: 30px;
 }
 
 .social-icons a {

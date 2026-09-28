@@ -1,0 +1,291 @@
+main {
+    background-color: #0e0e0e;
+    color: #ffffff;
+}
+
+.landing-main {
+    background-color: #0e0e0e;
+    text-align: center;
+    padding: 60px 20px 0px;
+}
+
+.landing-main p {
+    color: white;
+    letter-spacing: 2px;
+    font-size: 14px;
+    margin:0 0 10px 0;
+    text-align: justify;
+}
+
+.landing-main h1 {
+    font-size: 60px;
+    font-style: italic;
+    color: #e63946;
+    margin-bottom: 20px;
+}
+
+/* ---------- Barra de navegación del juego (Información / Cómo jugar / Compartir / Jugar) ---------- */
+.game-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: black;
+    padding: 15px 30px;
+}
+
+.game-nav a {
+    color: #a3a3a3;
+    text-decoration: none;
+}
+
+.game-nav button {
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+.game-nav .secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #444444;
+    margin-left: auto;
+}
+
+.game-nav .primary {
+    background-color: #7ed321;
+    color: #000000;
+}
+
+/* ---------- Galería (miniaturas + imagen grande) ---------- */
+.gallery {
+    padding: 20px;
+}
+
+.gallery-thumbs {
+    display: flex;
+    gap: 10px;
+}
+
+.gallery-thumbs article {
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+
+}
+
+#gallery-main {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background-color: #161616;
+    border-radius: 10px;
+}
+
+#gallery-caption {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ---------- Sección de información ---------- */
+.info {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.about,
+.specs,
+.how-to-play {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 25px;
+    flex: 1;
+    min-width: 280px;
+}
+
+.about p {
+    color: #a3a3a3;
+    line-height: 1.6;
+}
+
+.specs dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 20px;
+}
+
+.specs dt {
+    color: #a3a3a3;
+}
+
+.specs dd {
+    margin: 0;
+    font-weight: bold;
+}
+
+.how-to-play {
+    width: 100%;
+}
+
+.how-to-play ol {
+    color: #a3a3a3;
+    line-height: 1.8;
+}
+
+/* Etiquetas (tags) debajo de la info */
+.tags {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0 0 10px;
+}
+
+/* ---------- Calificaciones (tarjetas en fila) ---------- */
+.ratings {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.ratings h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin:auto
+}
+
+.ratings article {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.ratings article p:first-of-type {
+    color: #7ed321;
+    letter-spacing: 2px;
+}
+
+.ratings article p:last-of-type {
+    color: #a3a3a3;
+    font-size: 14px;
+}
+
+.ratings article small {
+    color: #a3a3a3;
+    font-size: 12px;
+}
+
+/* ---------- Reseñas de usuarios ---------- */
+.reviews {
+    padding: 20px;
+}
+
+.reviews h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.comment-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ff2d78;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.comment-placeholder {
+    flex: 1;
+    color: #a3a3a3;
+}
+
+.comment-box button {
+    border: none;
+    background-color: #7ed321;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.reviews article {
+    border-top: 1px solid #2a2a2a;
+    padding: 15px;
+}
+
+.reviews article small {
+    color: #a3a3a3;
+    margin-left: 10px;
+}
+
+.reviews article p {
+    color: #a3a3a3;
+    margin-top: 5px;
+}
+
+/* ---------- Los usuarios también jugaron ---------- */
+.also-played {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.also-played article strong {
+    font-size: 11px;
+    color: #2D702D;
+    background-color: #06D606;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+.also-played h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin:auto;
+}
+
+.also-played article {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 200px;   /* si no entran, pasan a la fila de abajo */
+    height: 500px;
+    width: 270px;
+    justify-content: center;
+}
+
+.also-played article img {
+    width: 100%;        
+    height: 350px;      
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.also-played .accent{
+    margin-top: 10px;
+}

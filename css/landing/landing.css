@@ -1,38 +1,33 @@
-
-
-
-    
-/*.landing-main {
-   height: 500px;
-    color: white;
-    background-color: #000000;
-    padding: 0 0 100px 50px;
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-}*/
-
 .cloud-div {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 24px;
+    height: 24px;
 }
 .cloud-p {
     color: #FFD600;
     text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
 }
-
 
 .landing-main {
     min-height: calc(100vh - 70px);
     box-sizing: border-box;
     color: white;
     background-color: #000000;
-    padding: 60px 40px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px; 
+    gap: 20px;
 }
 
 .landing-main::before {
@@ -41,30 +36,49 @@
     inset: 0;
 
     background: linear-gradient(to right, #000000 20%, #000000a6 100%, transparent 250%);
-   
 }
 
 .landing-main > * {
     position: relative;
 }
 
+.landing-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 10px;
+}
 
 .welcome-main {
-    width: 30%;
+    max-width: 550px;
     display: block;
 }
 
+.welcome-main h1 {
+  font-size: 44px;
+  line-height: 1.15;
+  margin: 0 0 14px 0;
+}
+
+.welcome-main p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  opacity: 0.85;
+  max-width: 480px;
+}
+
 .welcome-main span {
-    color: #D6006A;
+    color: #06D606;
 }
 
 h1 {
     font-family: Inter;
 }
 
-section div {
+.trending-section div{
     display: flex;
-    gap: 20px;
+    gap: 10px;
 }
 
 .cards article{

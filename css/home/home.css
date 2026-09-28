@@ -1,5 +1,38 @@
+.welcome-home {
+    max-width: 400px;
+    display: block;
+}
+
+.welcome-home h1 {
+  font-size: 44px;
+  line-height: 1.15;
+  margin: 0 0 30px 0;
+}
+
+.welcome-home p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  opacity: 0.85;
+  max-width: 480px;
+}
+
+.welcome-home span {
+    color: #06D606;
+}
+
+.welcome-home h3 {
+    font-family: Inter;
+    font-size: 25px;
+}
+
+.welcome-home a{
+    width: 80%;
+}
+
 .adventure {
     text-align: center;
+    margin: 0 0 20px 0;
 }
 
 .adventure h2 {
@@ -42,8 +75,7 @@
     font-size: 14px;
 }
 
-.adventure-card .primary,
-.adventure-card .accent {
+.adventure-card .primary,.adventure-card .accent {
     margin: auto 15px 15px;
 }
 
