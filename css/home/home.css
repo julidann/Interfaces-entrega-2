@@ -22,6 +22,31 @@
     justify-content: center;
     gap: 12px;
     overflow: hidden;
+    position: relative;
+}
+
+.adventure-cards.moving-next .left {
+    transform: translateX(80px) scale(1);
+}
+
+.adventure-cards.moving-next .center {
+    transform: translateX(80px) scale(0.9);
+}
+
+.adventure-cards.moving-next .right {
+    transform: translateX(-80px) scale(0.9);
+}
+
+.adventure-cards.moving-prev .left {
+    transform: translateX(80px) scale(0.9);
+}
+
+.adventure-cards.moving-prev .center {
+    transform: translateX(-80px) scale(0.9);
+}
+
+.adventure-cards.moving-prev .right {
+    transform: translateX(-80px) scale(1);
 }
 
 
@@ -38,7 +63,7 @@
     display: flex;
     flex-direction: column;
     opacity: 0.5;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s ease-in-out;
 }
 
 .adventure-card.center {
@@ -120,6 +145,14 @@
     .adventure-card.left,
     .adventure-card.right {
         display: none;
+    }
+
+    .adventure-cards.moving-next .center {
+        transform: translateX(-45px) scale(0.96);
+    }
+
+    .adventure-cards.moving-prev .center {
+        transform: translateX(45px) scale(0.96);
     }
 
     .adventure-card.center {
