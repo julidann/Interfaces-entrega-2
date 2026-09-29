@@ -74,15 +74,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (direction === "next") {
-            track.classList.add("moving-next");
-            currentIndex = (currentIndex + 1) % featuredGames.length;
-        } else {
-            track.classList.add("moving-prev");
-            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-        }
+        track.classList.add(direction === "next" ? "moving-next" : "moving-prev");
 
         setTimeout(() => {
+            if (direction === "next") {
+                currentIndex = (currentIndex + 1) % featuredGames.length;
+            } else {
+                currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+            }
+
             renderCards();
             track.classList.remove("moving-next", "moving-prev");
         }, 500);
