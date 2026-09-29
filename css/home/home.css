@@ -67,7 +67,16 @@
     will-change: transform;
 }
 
+.adventure-card.left {
+    order: 1;
+}
+
+.adventure .carousel-btn.prev {
+    order: 2;
+}
+
 .adventure-card.center {
+    order: 3;
     opacity: 1;
     transform: scale(1);
     z-index: 2;
@@ -97,7 +106,7 @@
 }
 
 .adventure-card button {
-    width: calc(100% - 30px);
+    width: 230px;
     height: 32px;
     min-height: 32px;
     margin: auto 15px 15px;
@@ -124,6 +133,14 @@
     cursor: pointer;
     z-index: 5;
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.adventure .carousel-btn.next {
+    order: 4;
+}
+
+.adventure-card.right {
+    order: 5;
 }
 
 .adventure .carousel-btn:hover {
