@@ -5,17 +5,17 @@ body {
     margin: 0;
 }
 
-a {
-    text-decoration: none;
-    color: white;
-}
-
 header {
     background-color: #000000;
     align-content: center;
     height: 70px;
     padding: 0;
     margin: 0;
+}
+
+a{
+    text-decoration: none;
+    color: white;
 }
 
 nav {
@@ -35,6 +35,8 @@ header nav img {
     max-height: 50px;
     width: 50px;
 }
+
+
 
 /* MOBILE FIRST */
 @media (min-width: 768px) {/*a partir de tablet*/
