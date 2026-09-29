@@ -145,21 +145,35 @@
 
     .adventure-card.left,
     .adventure-card.right {
-        display: none;
-    }
-
-    .adventure-cards.moving-next .center {
-        transform: translateX(-70px) scale(0.96);
+        position: absolute;
         opacity: 0;
-    }
-
-    .adventure-cards.moving-prev .center {
-        transform: translateX(70px) scale(0.96);
-        opacity: 0;
+        pointer-events: none;
     }
 
     .adventure-card.center {
         flex: 0 0 240px;
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+
+    .adventure-cards.moving-next .center {
+        transform: translateX(120px) scale(0.96);
+        opacity: 0;
+    }
+
+    .adventure-cards.moving-next .right {
+        transform: translateX(120px) scale(1);
+        opacity: 1;
+    }
+
+    .adventure-cards.moving-prev .center {
+        transform: translateX(-120px) scale(0.96);
+        opacity: 0;
+    }
+
+    .adventure-cards.moving-prev .left {
+        transform: translateX(-120px) scale(1);
+        opacity: 1;
     }
 
     .adventure-card img {
