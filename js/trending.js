@@ -21,6 +21,38 @@ const games = [
     {
         name: "Ghost of Tsushima",
         image: trendingImageRoute + "background-ghost.jpg"
+    },
+    {
+        name: "Alan Wake 2",
+        image: trendingImageRoute + "allgames-alanwake2.jpg"
+    },
+    {
+        name: "Assassin's Creed Valhalla",
+        image: trendingImageRoute + "allgames-assassins.jpg"
+    },
+    {
+        name: "Batman Arkham Knight",
+        image: trendingImageRoute + "allgames-batman.jpg"
+    },
+    {
+        name: "Battlefield 6",
+        image: trendingImageRoute + "allgames-battlefield.jpg"
+    },
+    {
+        name: "Cyberpunk 2077",
+        image: trendingImageRoute + "allgames-cyberpunk.jpg"
+    },
+    {
+        name: "Death Stranding",
+        image: trendingImageRoute + "allgames-deathstranding.jpg"
+    },
+    {
+        name: "Hogwarts Legacy",
+        image: trendingImageRoute + "allgames-legacy.jpg"
+    },
+    {
+        name: "Little Nightmares III",
+        image: trendingImageRoute + "allgames-littlenightmares.jpg"
     }
 ];
 
@@ -37,3 +69,41 @@ games.forEach(function (game) {
 
 });
 
+
+
+const next = document.querySelector(".carousel-next");
+const prev = document.querySelector(".carousel-prev");
+
+let position = 0;
+let direction = -1;
+const movement = 305;
+
+function moveTrending() {
+    const limit = Math.max(0, trending.scrollWidth - trending.parentElement.clientWidth + 90);
+
+    position += movement * direction;
+
+    if (Math.abs(position) >= limit) {
+        position = -limit;
+        direction = 1;
+    }
+
+    if (position >= 0) {
+        position = 0;
+        direction = -1;
+    }
+
+    trending.style.transform = `translateX(${position}px)`;
+}
+
+let carouselTimer = setInterval(moveTrending, 2500);
+
+next.addEventListener("click", function () {
+    direction = -1;
+    moveTrending();
+});
+
+prev.addEventListener("click", function () {
+    direction = 1;
+    moveTrending();
+});
