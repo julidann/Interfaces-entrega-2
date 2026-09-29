@@ -64,30 +64,38 @@ document.addEventListener("DOMContentLoaded", () => {
         fillCard(rightCard, featuredGames[rightIndex], "accent");
     }
 
+    function changePositions(direction) {
+        if (direction === "next") {
+            leftCard.className = "adventure-card center";
+            centerCard.className = "adventure-card right";
+            rightCard.className = "adventure-card left";
+            currentIndex = (currentIndex + 1) % featuredGames.length;
+        } else {
+            leftCard.className = "adventure-card right";
+            centerCard.className = "adventure-card left";
+            rightCard.className = "adventure-card center";
+            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+        }
+
+        const leftIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+        const rightIndex = (currentIndex + 1) % featuredGames.length;
+
+        leftCard.querySelector("button").className =
+            leftCard.classList.contains("center") ? "primary" : "accent";
+        centerCard.querySelector("button").className =
+            centerCard.classList.contains("center") ? "primary" : "accent";
+        rightCard.querySelector("button").className =
+            rightCard.classList.contains("center") ? "primary" : "accent";
+    }
+
     function moveCarousel(direction) {
         if (isMoving) return;
 
         isMoving = true;
-
-        const leftContent = leftCard.innerHTML;
-        const centerContent = centerCard.innerHTML;
-        const rightContent = rightCard.innerHTML;
-
         track.classList.add(direction === "next" ? "moving-next" : "moving-prev");
 
         setTimeout(() => {
-            if (direction === "next") {
-                leftCard.innerHTML = rightContent;
-                centerCard.innerHTML = leftContent;
-                rightCard.innerHTML = centerContent;
-                currentIndex = (currentIndex + 1) % featuredGames.length;
-            } else {
-                leftCard.innerHTML = centerContent;
-                centerCard.innerHTML = rightContent;
-                rightCard.innerHTML = leftContent;
-                currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-            }
-
+            changePositions(direction);
             track.classList.remove("moving-next", "moving-prev");
             isMoving = false;
         }, 500);
