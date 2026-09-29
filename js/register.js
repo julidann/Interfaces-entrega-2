@@ -2,11 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const registerForm = document.querySelector("#register-form");
     if (!registerForm) return;
 
-    // Seleccionamos los inputs típicos de un registro (ajustá los IDs si usás otros en tu HTML)
-    const nameInput = document.querySelector("#register-name") || document.querySelector("#name");
-    const userInput = document.querySelector("#register-user") || document.querySelector("#email");
-    const passInput = document.querySelector("#register-password") || document.querySelector("#password");
-    
+    const passInput = document.querySelector("#password");
+    const repeatPassInput = document.querySelector("#repeat-password");
+
     const submitBtn = registerForm.querySelector("button[type='submit']");
     const messageP = document.querySelector("#register-message");
 
@@ -14,59 +12,41 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); // Evita que se recargue la página ya que no hay backend
         let isValid = true;
 
-        // 1. Validar Nombre (si existe en el form)
-        if (nameInput) {
-            const nameField = nameInput.closest(".form-field");
-            if (nameInput.value.trim() === "") {
-                if (nameField) nameField.classList.add("error");
+        // Validamos los campos obligatorios
+        const fields = registerForm.querySelectorAll(".form-field input");
+
+        fields.forEach((input) => {
+            const field = input.closest(".form-field");
+
+            if (input.value.trim() === "") {
+                field.classList.add("error");
                 isValid = false;
             } else {
-                if (nameField) nameField.classList.remove("error");
+                field.classList.remove("error");
             }
+        });
+
+        // Verificamos que las contraseñas coincidan
+        if (passInput.value !== repeatPassInput.value) {
+            repeatPassInput.closest(".form-field").classList.add("error");
+            isValid = false;
         }
 
-        // 2. Validar Usuario / Email
-        if (userInput) {
-            const userField = userInput.closest(".form-field");
-            if (userInput.value.trim() === "") {
-                if (userField) userField.classList.add("error");
-                isValid = false;
-            } else {
-                if (userField) userField.classList.remove("error");
-            }
-        }
-
-        // 3. Validar Contraseña
-        if (passInput) {
-            const passField = passInput.closest(".form-field");
-            if (passInput.value.trim() === "") {
-                if (passField) passField.classList.add("error");
-                isValid = false;
-            } else {
-                if (passField) passField.classList.remove("error");
-            }
-        }
-
-        // Si hay errores, mostramos mensaje general y cortamos
+        // Si hay errores, mostramos mensaje y cortamos
         if (!isValid) {
-            if (messageP) {
-                messageP.textContent = "Por favor, completá todos los campos obligatorios.";
-                messageP.style.color = "#D6006A";
-            }
+            messageP.textContent = "Por favor, revisá los campos obligatorios.";
+            messageP.style.color = "#D6006A";
             return;
         }
 
         // Si todo está correcto, limpiamos mensaje y aplicamos animación de éxito
-        if (messageP) messageP.textContent = "";
-        
-        if (submitBtn) {
-            submitBtn.classList.add("success");
-            submitBtn.textContent = "Registrando...";
-        }
+        messageP.textContent = "";
+        submitBtn.classList.add("success");
+        submitBtn.textContent = "Registrando...";
 
         // Redirigimos después de 1 segundo para que se luzca la animación
         setTimeout(() => {
-            window.location.href = "home.html"; // O "login.html" según prefieras
+            window.location.href = "home.html";
         }, 1000);
     });
 });
