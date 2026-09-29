@@ -68,16 +68,26 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isMoving) return;
 
         isMoving = true;
+
+        const leftContent = leftCard.innerHTML;
+        const centerContent = centerCard.innerHTML;
+        const rightContent = rightCard.innerHTML;
+
         track.classList.add(direction === "next" ? "moving-next" : "moving-prev");
 
         setTimeout(() => {
             if (direction === "next") {
+                leftCard.innerHTML = rightContent;
+                centerCard.innerHTML = leftContent;
+                rightCard.innerHTML = centerContent;
                 currentIndex = (currentIndex + 1) % featuredGames.length;
             } else {
+                leftCard.innerHTML = centerContent;
+                centerCard.innerHTML = rightContent;
+                rightCard.innerHTML = leftContent;
                 currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
             }
 
-            renderCards();
             track.classList.remove("moving-next", "moving-prev");
             isMoving = false;
         }, 500);
