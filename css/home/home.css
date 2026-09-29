@@ -25,30 +25,6 @@
     position: relative;
 }
 
-.adventure-cards.moving-next .left {
-    transform: translateX(332px) scale(1);
-}
-
-.adventure-cards.moving-next .center {
-    transform: translateX(332px) scale(0.9);
-}
-
-.adventure-cards.moving-next .right {
-    transform: translateX(-664px) scale(0.9);
-}
-
-.adventure-cards.moving-prev .left {
-    transform: translateX(664px) scale(0.9);
-}
-
-.adventure-cards.moving-prev .center {
-    transform: translateX(-332px) scale(0.9);
-}
-
-.adventure-cards.moving-prev .right {
-    transform: translateX(-332px) scale(1);
-}
-
 
 /* =========================
    CARDS
@@ -63,12 +39,17 @@
     display: flex;
     flex-direction: column;
     opacity: 0.5;
-    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s ease-in-out;
+
+    transition:
+        transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.5s ease-in-out;
+
     will-change: transform;
 }
 
 .adventure-card.left {
     order: 1;
+    transform: translateX(0) scale(0.9);
 }
 
 .adventure .carousel-btn.prev {
@@ -78,14 +59,19 @@
 .adventure-card.center {
     order: 3;
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(0) scale(1);
     z-index: 2;
 }
 
-.adventure-card.left,
 .adventure-card.right {
-    transform: scale(0.9);
+    order: 5;
+    transform: translateX(0) scale(0.9);
 }
+
+
+/* =========================
+   IMAGEN
+========================= */
 
 .adventure-card img {
     width: 100%;
@@ -139,10 +125,6 @@
     order: 4;
 }
 
-.adventure-card.right {
-    order: 5;
-}
-
 .adventure .carousel-btn:hover {
     opacity: 0.9;
     transform: scale(1.05);
@@ -154,6 +136,7 @@
 ========================= */
 
 @media (max-width: 1023px) {
+
     .adventure-cards {
         min-height: 380px;
         gap: 8px;
@@ -171,26 +154,6 @@
         flex: 0 0 240px;
         opacity: 1;
         transform: translateX(0) scale(1);
-    }
-
-    .adventure-cards.moving-next .center {
-        transform: translateX(120px) scale(0.96);
-        opacity: 0;
-    }
-
-    .adventure-cards.moving-next .right {
-        transform: translateX(120px) scale(1);
-        opacity: 1;
-    }
-
-    .adventure-cards.moving-prev .center {
-        transform: translateX(-120px) scale(0.96);
-        opacity: 0;
-    }
-
-    .adventure-cards.moving-prev .left {
-        transform: translateX(-120px) scale(1);
-        opacity: 1;
     }
 
     .adventure-card img {
@@ -222,10 +185,12 @@
 ========================= */
 
 @media (min-width: 1024px) {
+
     .adventure-cards {
         max-width: 1000px;
         min-height: 430px;
         margin: 0 auto;
         gap: 12px;
     }
+
 }
