@@ -17,7 +17,6 @@
     box-sizing: border-box;
 }
 
-/* El track de tarjetas: ahora se mueve con transform (lo maneja carousel.js) */
 .trending {
     display: flex;
     gap: 10px;
@@ -43,7 +42,7 @@
     transform: scale(1.05);
 }
 
-/* A partir de tablet, tarjetas un poco más grandes */
+
 @media (min-width: 768px) {
     .trending-section {
         padding: 60px 0;

@@ -78,8 +78,13 @@
     cursor: pointer;
 }
 
-.pagination:hover{
-    background-color: #D6006A;
+button.current-page  {
+    width: 30px;
+    height: 30px;
+    background: #D6006A;
+    color: white;
+    border-radius: 50%;
+    
 }
 
 @media (min-width: 600px) {
@@ -88,7 +93,6 @@
     }
 }
  
-/* Desktop: 3 columnas, como estaba originalmente */
 @media (min-width: 1024px) {
     .all-games-section {
         padding: 10px 40px;

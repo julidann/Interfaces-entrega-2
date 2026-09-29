@@ -14,7 +14,6 @@
     margin: 0;
 }
 
-/* --------- Hero (landing-main) --------- */
 .landing-main {
     min-height: 60vh;
     box-sizing: border-box;
@@ -24,7 +23,6 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,14 +34,18 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, #000000 20%, #000000a6 100%, transparent 250%);
+    background: linear-gradient(
+        to right,
+        #000000 20%,
+        #000000a6 100%,
+        transparent 250%
+    );
 }
 
-.landing-main>* {
+.landing-main > * {
     position: relative;
 }
 
-/* Botones apilados en mobile */
 .landing-buttons {
     display: flex;
     flex-direction: column;
@@ -77,9 +79,8 @@ h1 {
     font-family: Inter;
 }
 
-
-/* --------- A partir de tablet/desktop --------- */
 @media (min-width: 768px) {
+
     .landing-main {
         min-height: calc(100vh - 70px);
         padding: 0 60px;

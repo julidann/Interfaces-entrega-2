@@ -1,30 +1,12 @@
+/* --------- General --------- */
+
 main {
     background-color: #0e0e0e;
     color: #ffffff;
 }
 
-.landing-main {
-    background-color: #0e0e0e;
-    text-align: center;
-    padding: 60px 20px 0px;
-}
+/* --------- Navegación del juego --------- */
 
-.landing-main p {
-    color: white;
-    letter-spacing: 2px;
-    font-size: 14px;
-    margin:0 0 10px 0;
-    text-align: justify;
-}
-
-.landing-main h1 {
-    font-size: 60px;
-    font-style: italic;
-    color: #e63946;
-    margin-bottom: 20px;
-}
-
-/* ---------- Barra de navegación del juego (Información / Cómo jugar / Compartir / Jugar) ---------- */
 .game-nav {
     display: flex;
     align-items: center;
@@ -57,7 +39,8 @@ main {
     color: #000000;
 }
 
-/* ---------- Galería (miniaturas + imagen grande) ---------- */
+/* --------- Galería --------- */
+
 .gallery {
     padding: 20px;
 }
@@ -71,7 +54,6 @@ main {
     border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
-
 }
 
 #gallery-main {
@@ -92,7 +74,8 @@ main {
     font-size: 14px;
 }
 
-/* ---------- Sección de información ---------- */
+/* --------- Información --------- */
+
 .info {
     padding: 20px;
     display: flex;
@@ -139,7 +122,8 @@ main {
     line-height: 1.8;
 }
 
-/* Etiquetas (tags) debajo de la info */
+/* --------- Tags --------- */
+
 .tags {
     width: 100%;
     display: flex;
@@ -148,12 +132,28 @@ main {
     margin: 15px 0 0 10px;
 }
 
-/* ---------- Calificaciones (tarjetas en fila) ---------- */
+/* --------- Ratings --------- */
+
 .ratings {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+}
+
+.ratings h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin: auto;
+}
+
+.ratings article {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;
+    min-width: 200px;
 }
 
 .rating-user {
@@ -168,21 +168,6 @@ main {
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-}
-
-.ratings h2 {
-    width: 100%;
-    text-align: center;
-    font-size: 30px;
-    margin:auto
-}
-
-.ratings article {
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    padding: 20px;
-    flex: 1;
-    min-width: 200px;
 }
 
 .ratings article p:first-of-type {
@@ -200,7 +185,7 @@ main {
     font-size: 12px;
 }
 
-/* ---------- Reseñas de usuarios ---------- */
+/* --------- Reviews --------- */
 
 .reviews {
     padding: 20px;
@@ -242,10 +227,11 @@ main {
     color: #a3a3a3;
 }
 
-button img {
+.comment-box button img {
     width: 100%;
     height: 100%;
 }
+
 .reviews article {
     border-top: 1px solid #2a2a2a;
     padding: 15px;
@@ -260,7 +246,8 @@ button img {
     margin-top: 5px;
 }
 
-/* ---------- Los usuarios también jugaron ---------- */
+/* --------- También jugaron --------- */
+
 .also-played {
     padding: 20px;
     display: flex;
@@ -268,6 +255,14 @@ button img {
     justify-content: center;
     gap: 15px;
 }
+
+.also-played h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin: auto;
+}
+
 .also-played article strong {
     font-size: 11px;
     color: #183e18;
@@ -276,30 +271,23 @@ button img {
     border-radius: 5px;
 }
 
-.also-played h2 {
-    width: 100%;
-    text-align: center;
-    font-size: 30px;
-    margin:auto;
-}
-
 .also-played-card {
     background-color: #1a1a1a;
     border-radius: 15px;
     padding: 20px;
-    min-width: 200px;   /* si no entran, pasan a la fila de abajo */
+    min-width: 200px;
     height: 500px;
     width: 270px;
     justify-content: center;
 }
 
 .also-played-card img {
-    width: 100%;        
-    height: 350px;      
+    width: 100%;
+    height: 350px;
     object-fit: cover;
     border-radius: 15px 15px 0 0;
 }
 
-.also-played .accent{
+.also-played .accent {
     margin-top: 10px;
 }
