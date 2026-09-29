@@ -43,19 +43,16 @@
     font-size: 22px;
 }
 
-/* Mobile: carrusel — las tarjetas van en fila y se desliza horizontal (swipe) */
+/* Mobile: carrusel — las tarjetas van en fila, las mueve carousel.js con transform */
 .adventure-cards {
     display: flex;
     gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    transition: transform 0.4s ease;
     padding-bottom: 8px;
-    /* el padding lateral de .adventure ya separa la primera/última tarjeta del borde */
 }
 
 .adventure-card {
     flex: 0 0 auto;
-    scroll-snap-align: start;
     width: 260px;
     background-color: white;
     border-radius: 15px;
@@ -104,7 +101,7 @@
 /* --------- Desktop: volvemos al layout en fila con la tarjeta destacada más grande --------- */
 @media (min-width: 1024px) {
     .welcome-home{
-        width:fit-content;
+        width: fit-content;
     }
     .welcome-home h1 {
         font-size: 44px;

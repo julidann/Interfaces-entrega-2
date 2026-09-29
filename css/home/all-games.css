@@ -1,5 +1,5 @@
 .all-games-section {
-    padding: 10px 40px;
+    padding: 10px 20px;
     background-color: #d9d9d9;
 }
 
@@ -20,7 +20,7 @@
     overflow: hidden;
     color: black;
     cursor: pointer;
-
+    margin: 0 0 10px;
     transition: transform 0.3s;
 }
 
