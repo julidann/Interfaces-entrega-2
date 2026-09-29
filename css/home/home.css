@@ -69,7 +69,13 @@
 }
 
 .adventure-card button {
+    width: calc(100% - 30px);
+    height: 32px;
+    min-height: 32px;
     margin: auto 15px 15px;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 6px;
     transition: background-color 0.4s ease, color 0.4s ease;
 }
 
@@ -98,11 +104,79 @@
 
 
 /* =========================
-   BOTONES (Ocultos en mobile, fijos prolijos en desktop)
+   BOTONES DEL CARRUSEL
 ========================= */
 
 .adventure .carousel-btn {
-    display: none; /* En celular no se ven, se usa el touch/arrastre si lo agregas, o queda limpio */
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .adventure-cards {
+        height: 380px;
+    }
+
+    .adventure .carousel-viewport {
+        overflow: visible;
+    }
+
+    .adventure-card {
+        width: 240px;
+        border-radius: 12px;
+    }
+
+    .adventure-card img {
+        height: 170px;
+    }
+
+    .adventure-card h3 {
+        margin: 10px 12px 5px;
+        font-size: 14px;
+    }
+
+    .adventure-card p {
+        margin: 0 12px 10px;
+        font-size: 11px;
+        line-height: 1.35;
+    }
+
+    .adventure-card.left,
+    .adventure-card.right {
+        visibility: hidden;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .adventure-card.center {
+        transform: translateX(0) scale(1);
+    }
+
+    .adventure .carousel-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background-color: #D6006A;
+        color: #F5F5F5;
+        font-size: 22px;
+        z-index: 20;
+        cursor: pointer;
+    }
+
+    .adventure .carousel-btn.prev {
+        left: 0;
+    }
+
+    .adventure .carousel-btn.next {
+        right: 0;
+    }
 }
 
 @media (min-width: 1024px) {
