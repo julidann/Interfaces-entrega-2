@@ -10,28 +10,25 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Horizon Zero Dawn",
             image: imgRoute + "background-zerodown.jpg",
             description: "Explorá un mundo dominado por máquinas y descubrí los secretos del pasado de Aloy.",
-            buttonClass: "accent",
             alt: "Horizon Zero Dawn"
         },
         {
             title: "God of War - Ragnarok",
             image: imgRoute + "background-GOW.jpg",
             description: "Embárcate en un viaje épico por los Nueve Reinos mientras Kratos y Atreus se enfrentan a dioses y monstruos.",
-            buttonClass: "primary",
             alt: "God of War Ragnarok"
         },
         {
             title: "Ghost of Tsushima",
             image: imgRoute + "background-ghost.jpg",
             description: "Recorré la isla de Tsushima y luchá como samurái para defender tu hogar de la invasión.",
-            buttonClass: "accent",
             alt: "Ghost of Tsushima"
         }
     ];
 
     let currentIndex = 1; // Empieza en God of War (al centro)
 
-    // Inyectamos la estructura base dentro del carrusel
+    // 1. Inyectamos la estructura fija UNA SOLA VEZ
     carouselContainer.innerHTML = `
         <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
         <div class="carousel-viewport">
@@ -44,46 +41,53 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevBtn = carouselContainer.querySelector(".carousel-btn.prev");
     const nextBtn = carouselContainer.querySelector(".carousel-btn.next");
 
-    function renderCarousel() {
-        track.innerHTML = "";
+    // 2. Creamos y guardamos las tarjetas en el DOM de una vez
+    track.innerHTML = featuredGames.map((game, index) => {
+        return `
+            <article class="adventure-card" data-index="${index}">
+                <img src="${game.image}" alt="${game.alt}">
+                <h3>${game.title}</h3>
+                <p>${game.description}</p>
+                <button type="button">Jugar ahora</button>
+            </article>
+        `;
+    }).join("");
 
-        featuredGames.forEach((game, index) => {
+    const cards = track.querySelectorAll(".adventure-card");
+
+    // 3. Función para actualizar las clases de forma fluida sin destruir el DOM
+    function updateCarouselClasses() {
+        cards.forEach((card, index) => {
             let position = (index - currentIndex + featuredGames.length) % featuredGames.length;
             
-            let cardClass = "adventure-card";
-            if (position === 0) {
-                cardClass += " center featured";
-                game.buttonClass = "primary"; // Botón destacado para el juego central
-            } else if (position === 1) {
-                cardClass += " right";
-                game.buttonClass = "accent"; // Botón secundario para el juego a la derecha
-            } else {
-                // Cualquier otro caso (en un array de 3, será el índice 2) pasa a ser la izquierda
-                cardClass += " left";
-                game.buttonClass = "accent"; // Botón secundario para el juego a la izquierda
-            }
+            // Limpiamos clases previas
+            card.classList.remove("left", "center", "right", "hidden", "featured");
+            const btn = card.querySelector("button");
+            btn.className = ""; // Limpiamos clases del botón
 
-            track.innerHTML += `
-                <article class="${cardClass}">
-                    <img src="${game.image}" alt="${game.alt}">
-                    <h3>${game.title}</h3>
-                    <p>${game.description}</p>
-                    <button class="${game.buttonClass}" type="button">Jugar ahora</button>
-                </article>
-            `;
+            if (position === 0) {
+                card.classList.add("center", "featured");
+                btn.classList.add("primary");
+            } else if (position === 1) {
+                card.classList.add("right");
+                btn.classList.add("accent");
+            } else {
+                card.classList.add("left");
+                btn.classList.add("accent");
+            }
         });
     }
 
     nextBtn.addEventListener("click", () => {
         currentIndex = (currentIndex + 1) % featuredGames.length;
-        renderCarousel();
+        updateCarouselClasses();
     });
 
     prevBtn.addEventListener("click", () => {
         currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-        renderCarousel();
+        updateCarouselClasses();
     });
 
-    // Render inicial
-    renderCarousel();
+    // Aplicamos el estado inicial
+    updateCarouselClasses();
 });
