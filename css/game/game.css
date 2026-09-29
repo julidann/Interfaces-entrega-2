@@ -5,6 +5,9 @@ main {
     color: #ffffff;
 }
 
+.game-image{
+    cursor: pointer;
+}
 
 .game-nav {
     display: flex;
@@ -145,7 +148,14 @@ main {
     padding: 20px;
     flex: 1;
     min-width: 200px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
+
+.ratings article:hover {
+    transform: scale(1.01);
+}
+
 
 .rating-user {
     display: flex;
