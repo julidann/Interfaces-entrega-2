@@ -15,28 +15,22 @@
 }
 
 .adventure-cards {
-    position: relative;
-    height: 430px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.adventure .carousel-viewport {
     width: 100%;
-    height: 100%;
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     overflow: hidden;
-    position: relative;
 }
 
 
 /* =========================
-   CARDS (Base)
+   CARDS
 ========================= */
 
 .adventure-card {
-    position: absolute;
-    width: 260px;
+    flex: 0 0 260px;
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
@@ -44,10 +38,18 @@
     display: flex;
     flex-direction: column;
     opacity: 0.5;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
 
-    /* Transición fluida suave */
-    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                opacity 0.5s ease-in-out;
+.adventure-card.center {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+.adventure-card.left,
+.adventure-card.right {
+    transform: scale(0.9);
 }
 
 .adventure-card img {
@@ -76,30 +78,6 @@
     padding: 4px 8px;
     font-size: 11px;
     border-radius: 6px;
-    transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-
-/* =========================
-   POSICIONES DEL CARRUSEL
-========================= */
-
-.adventure-card.left {
-    transform: translateX(-320px) scale(0.9);
-    opacity: 0.5;
-    z-index: 1;
-}
-
-.adventure-card.center {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-    z-index: 10; /* Siempre al frente */
-}
-
-.adventure-card.right {
-    transform: translateX(320px) scale(0.9);
-    opacity: 0.5;
-    z-index: 1;
 }
 
 
@@ -108,21 +86,44 @@
 ========================= */
 
 .adventure .carousel-btn {
-    display: none;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: #D6006A;
+    color: #F5F5F5;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 5;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+.adventure .carousel-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 1023px) {
     .adventure-cards {
-        height: 380px;
+        min-height: 380px;
+        gap: 8px;
+        overflow: hidden;
     }
 
-    .adventure .carousel-viewport {
-        overflow: visible;
+    .adventure-card.left,
+    .adventure-card.right {
+        display: none;
     }
 
-    .adventure-card {
-        width: 240px;
-        border-radius: 12px;
+    .adventure-card.center {
+        flex: 0 0 240px;
     }
 
     .adventure-card img {
@@ -140,83 +141,24 @@
         line-height: 1.35;
     }
 
-    .adventure-card.left,
-    .adventure-card.right {
-        visibility: hidden;
-        pointer-events: none;
-        opacity: 0;
-    }
-
-    .adventure-card.center {
-        transform: translateX(0) scale(1);
-    }
-
     .adventure .carousel-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        flex: 0 0 36px;
         width: 36px;
         height: 36px;
-        padding: 0;
-        border: none;
-        border-radius: 50%;
-        background-color: #D6006A;
-        color: #F5F5F5;
         font-size: 22px;
-        z-index: 20;
-        cursor: pointer;
-    }
-
-    .adventure .carousel-btn.prev {
-        left: 0;
-    }
-
-    .adventure .carousel-btn.next {
-        right: 0;
     }
 }
 
+
+/* =========================
+   DESKTOP
+========================= */
+
 @media (min-width: 1024px) {
     .adventure-cards {
-        width: 1216px;
-        max-width: 100%;
-        height: 642px;
+        max-width: 1000px;
+        min-height: 430px;
         margin: 0 auto;
-    }
-
-    .adventure .carousel-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 48px;
-        height: 48px;
-        border: none;
-        border-radius: 50%;
-        background-color: #D6006A;
-        color: #F5F5F5;
-        font-size: 28px;
-        z-index: 20;
-        cursor: pointer;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    /* Ubicación fija limpia respecto al centro del contenedor de tarjetas */
-    .adventure .carousel-btn.prev {
-        left: calc(50% - 370px);
-    }
-
-    .adventure .carousel-btn.next {
-        right: calc(50% - 370px);
-    }
-
-    .adventure .carousel-btn:hover {
-        opacity: 0.9;
-        transform: translateY(-50%) scale(1.05);
+        gap: 12px;
     }
 }
