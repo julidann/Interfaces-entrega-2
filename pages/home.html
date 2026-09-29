@@ -24,8 +24,8 @@
                 <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
 
                 <aside class="hamburger-menu" id="hamburger-menu">
-                    <a href="#trending"><span class="menu-icon"><img src="../assets/icons/trending.svg" alt=""></span> Tendencias</a>
-                    <a href="#juegos"><span class="menu-icon free-icon"><img src="../assets/icons/freetoplay.svg" alt=""></span> Free to Play</a>
+                    <a href="#trending"><span class="menu-icon">↗</span> Tendencias</a>
+                    <a href="#juegos"><span class="menu-icon free-icon">🎮</span> Free to Play</a>
                     <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
                     <div class="menu-categories">
                         <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
@@ -61,10 +61,10 @@
                         <span>avatar_name</span>
                     </div>
 
-                    <a href="#"><span><img src="../assets/icons/user.svg" alt=""></span> Ver Perfil</a>
-                    <a href="#"><span><img src="../assets/icons/settings.svg" alt=""></span> Configuración</a>
-                    <a href="#"><span><img src="../assets/icons/suscriptions.svg" alt=""></span> Mis Suscripciones</a>
-                    <a href="#"><span><img src="../assets/icons/suport.png" alt=""></span> Soporte</a>
+                    <a href="#"><span>♙</span> Ver Perfil</a>
+                    <a href="#"><span>⚙</span> Configuración</a>
+                    <a href="#"><span>▰</span> Mis Suscripciones</a>
+                    <a href="#"><span>?</span> Soporte</a>
 
                     <a class="logout-link" href="../index.html">Cerrar Sesión</a>
                 </aside>
@@ -92,6 +92,7 @@
                 </div>
             </section>
 
+            <!-- ========== Sección "Tu próxima aventura" ========== -->
             <section class="adventure">
                 <h2>Tu próxima aventura está a un clic.</h2>
 
@@ -137,6 +138,7 @@
                 </div>
             </section>
 
+            <!-- ========== Sección "Tendencias actuales" ========== -->
             <section class="trending-section">
                 <h2>Tendencias actuales</h2>
 
@@ -144,6 +146,7 @@
                     <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
 
                     <div class="carousel-viewport">
+                        <!-- trending.js sigue llenando este div con las tarjetas como antes -->
                         <div class="trending carousel-track" id="trending"></div>
                     </div>
 
@@ -151,6 +154,8 @@
                 </div>
             </section>
             
+
+
             <section class="all-games-section" id="juegos">
                 <h2>Todos los juegos</h2>
 
@@ -160,7 +165,7 @@
 
                 <nav class="pagination">
                     <button>‹</button>
-                    <button class = "current-page">1</button>
+                    <button>1</button>
                     <button>2</button>
                     <button>3</button>
                     <button>4</button>
