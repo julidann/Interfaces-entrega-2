@@ -33,7 +33,7 @@ nav {
 
 header nav img {
     max-height: 50px;
-    width: auto;
+    width: 50px;
 }
 
 /* MOBILE FIRST */
@@ -44,5 +44,6 @@ header nav img {
 
     header nav img {
         max-height: 55px;
+        width: auto;
     }
 }

@@ -1,0 +1,36 @@
+.carousel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+/* recorta lo que sobra */
+.carousel-viewport{
+    overflow: hidden;
+}
+
+.carousel-viewport .card{
+    overflow: hidden;
+    height: 250px;
+}
+
+/* flechas prev/next */
+.carousel-btn {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: #1a1a1a;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background-color: #333333;
+}
