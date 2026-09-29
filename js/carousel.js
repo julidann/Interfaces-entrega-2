@@ -1,37 +1,49 @@
 function initCarousel(carousel) {
-    const viewport = carousel.querySelector('.carousel-viewport');
-    const track = viewport.querySelector('.carousel-track');
+    const cards = carousel.querySelectorAll('.adventure-card');
     const prevBtn = carousel.querySelector('.carousel-btn.prev');
     const nextBtn = carousel.querySelector('.carousel-btn.next');
 
-    let position = 0; // cuántos px nos movimos hacia la derecha
+    let current = 1;
 
-    // Ancho de una tarjeta + el gap entre tarjetas
-    function cardStep() {
-        const firstCard = track.firstElementChild;
-        if (!firstCard) return 0;
+    function updateCarousel() {
+        cards.forEach(function (card, index) {
+            card.classList.remove('left', 'center', 'right', 'hidden', 'featured');
 
-        const trackStyle = getComputedStyle(track);
-        const gap = parseFloat(trackStyle.gap) || 0;
+            let position = (index - current + cards.length) % cards.length;
 
-        return firstCard.getBoundingClientRect().width + gap;
+            if (position === 0) {
+                card.classList.add('center');
+            } else if (position === 1) {
+                card.classList.add('right');
+            } else if (position === cards.length - 1) {
+                card.classList.add('left');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
     }
 
-    function move(direction) {
-        // direction: -1 (izquierda) o 1 (derecha)
-        const maxScroll = track.scrollWidth - viewport.clientWidth;
+    nextBtn.addEventListener('click', function () {
+        current++;
 
-        position += direction * cardStep();
+        if (current >= cards.length) {
+            current = 0;
+        }
 
-        if (position < 0) position = 0;
-        if (position > maxScroll) position = maxScroll;
+        updateCarousel();
+    });
 
-        track.style.transform = `translateX(${-position}px)`;
-    }
+    prevBtn.addEventListener('click', function () {
+        current--;
 
-    prevBtn.addEventListener('click', () => move(-1));
-    nextBtn.addEventListener('click', () => move(1));
+        if (current < 0) {
+            current = cards.length - 1;
+        }
+
+        updateCarousel();
+    });
+
+    updateCarousel();
 }
 
-// Inicializa TODOS los carruseles que haya en la página
 document.querySelectorAll('.carousel').forEach(initCarousel);
