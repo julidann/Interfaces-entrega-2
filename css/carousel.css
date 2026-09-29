@@ -1,4 +1,4 @@
-/*.carousel {
+.carousel {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -30,9 +30,8 @@
 }
 
 .carousel-btn:hover {
-    background-color: #333333;
+    background-color: #FFB3D9;
 }
 
-*/
 
 

@@ -253,9 +253,11 @@ main {
 
 .also-played {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 15px;
+    padding: 50px;
+    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .also-played h2 {

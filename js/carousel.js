@@ -1,49 +1,52 @@
-function initCarousel(carousel) {
-    const cards = carousel.querySelectorAll('.adventure-card');
-    const prevBtn = carousel.querySelector('.carousel-btn.prev');
-    const nextBtn = carousel.querySelector('.carousel-btn.next');
+/*document.addEventListener("DOMContentLoaded", () => {
+    const carousel = document.querySelector("#adventure-carousel");
+    if (!carousel) return;
 
-    let current = 1;
+    const track = carousel.querySelector("#adventure-track");
+    const prevBtn = carousel.querySelector(".carousel-btn.prev");
+    const nextBtn = carousel.querySelector(".carousel-btn.next");
+
+    let currentIndex = 1; // Empieza en God of War (índice 1)
 
     function updateCarousel() {
-        cards.forEach(function (card, index) {
-            card.classList.remove('left', 'center', 'right', 'hidden', 'featured');
+        const cards = track.querySelectorAll(".adventure-card");
+        if (!cards.length) return;
 
-            let position = (index - current + cards.length) % cards.length;
+        cards.forEach((card, index) => {
+            // Limpiamos clases previas
+            card.classList.remove("left", "center", "right", "hidden", "featured");
+
+            // Calculamos la posición relativa respecto al índice actual
+            let position = (index - currentIndex + cards.length) % cards.length;
 
             if (position === 0) {
-                card.classList.add('center');
+                card.classList.add("center", "featured");
             } else if (position === 1) {
-                card.classList.add('right');
+                card.classList.add("right");
             } else if (position === cards.length - 1) {
-                card.classList.add('left');
+                card.classList.add("left");
             } else {
-                card.classList.add('hidden');
+                card.classList.add("hidden");
             }
         });
     }
 
-    nextBtn.addEventListener('click', function () {
-        current++;
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            const cards = track.querySelectorAll(".adventure-card");
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCarousel();
+        });
+    }
 
-        if (current >= cards.length) {
-            current = 0;
-        }
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            const cards = track.querySelectorAll(".adventure-card");
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            updateCarousel();
+        });
+    }
 
-        updateCarousel();
-    });
-
-    prevBtn.addEventListener('click', function () {
-        current--;
-
-        if (current < 0) {
-            current = cards.length - 1;
-        }
-
-        updateCarousel();
-    });
-
-    updateCarousel();
-}
-
-document.querySelectorAll('.carousel').forEach(initCarousel);
+    // Le damos un pequeño respiro para asegurarnos de que el script de featured-games ya haya inyectado las cards
+    setTimeout(updateCarousel, 50);
+});*/

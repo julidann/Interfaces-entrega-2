@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>GAMEZONE | Home</title>
-        <link rel="stylesheet" href="../css/carousel.css">
-        <link rel="stylesheet" href="../css/general.css">
-        <link rel="stylesheet" href="../css/landing/landing.css">
-        <link rel="stylesheet" href="../css/buttons.css">
-        <link rel="stylesheet" href="../css/trending.css">
-        <link rel="stylesheet" href="../css/home/all-games.css">
-        <link rel="stylesheet" href="../css/nav-user.css">
-        <link rel="stylesheet" href="../css/home/home.css">
-        <link rel="stylesheet" href="../css/footer.css">
-        
-        
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GAMEZONE | Home</title>
+    <link rel="stylesheet" href="../css/carousel.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/landing/landing.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/trending.css">
+    <link rel="stylesheet" href="../css/home/all-games.css">
+    <link rel="stylesheet" href="../css/nav-user.css">
+    <link rel="stylesheet" href="../css/home/home.css">
+    <link rel="stylesheet" href="../css/footer.css">
+</head>
 
-    <body>
+<body>
 
-        <header>
+    <header>
             <nav class="nav-user">
                 <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
 
                 <aside class="hamburger-menu" id="hamburger-menu">
-                    <a href="#trending"><span class="menu-icon">↗</span> Tendencias</a>
-                    <a href="#juegos"><span class="menu-icon free-icon">🎮</span> Free to Play</a>
+                    <a href="#trending"><span class="menu-icon"><img src="../assets/icons/trending.svg" alt=""></span> Tendencias</a>
+                    <a href="#juegos"><span class="menu-icon free-icon"><img src="../assets/icons/freetoplay.svg" alt=""></span> Free to Play</a>
                     <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
                     <div class="menu-categories">
                         <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
@@ -62,193 +60,93 @@
                         <span>avatar_name</span>
                     </div>
 
-                    <a href="#"><span>♙</span> Ver Perfil</a>
-                    <a href="#"><span>⚙</span> Configuración</a>
-                    <a href="#"><span>▰</span> Mis Suscripciones</a>
-                    <a href="#"><span>?</span> Soporte</a>
+                    <a href="#"><span><img src="../assets/icons/user.svg" alt=""></span> Ver Perfil</a>
+                    <a href="#"><span><img src="../assets/icons/settings.svg" alt=""></span> Configuración</a>
+                    <a href="#"><span><img src="../assets/icons/suscriptions.svg" alt=""></span> Mis Suscripciones</a>
+                    <a href="#"><span><img src="../assets/icons/suport.png" alt=""></span> Soporte</a>
 
                     <a class="logout-link" href="../index.html">Cerrar Sesión</a>
                 </aside>
             </nav>
         </header>
 
-        <main>
-            <!--<div>
-            <p>Cargando GAMEZONE...</p>
-            <strong>0%</strong>
-        </div>-->
-            <section class="landing-main">
-                <div class="welcome-home">
-                    <h1>Bienvenido de <span>nuevo.</span></h1>
+    <main>
+        <section class="landing-main">
+            <div class="welcome-home">
+                <h1>Bienvenido de <span>nuevo.</span></h1>
 
-                    <h3>Spider-Peg. Un nuevo juego te está esperando</h3>
+                <h3>Spider-Peg. Un nuevo juego te está esperando</h3>
 
-                    <p>
-                        El peligro acecha en cada rincón de la cuadrícula.
-                        Cada salto sobre el enemigo significa su eliminación
-                        instantánea y un paso más hacia la victoria absoluta.
-                    </p>
+                <p>
+                    El peligro acecha en cada rincón de la cuadrícula.
+                    Cada salto sobre el enemigo significa su eliminación
+                    instantánea y un paso más hacia la victoria absoluta.
+                </p>
 
-                    <a class="primary" href="game.html">Jugar ahora</a>
-                </div>
-            </section>
+                <a class="primary" href="game.html">Jugar ahora</a>
+            </div>
+        </section>
 
+        <!-- Sección "Tu próxima aventura" -->
+        <section class="adventure">
+            <h2>Tu próxima aventura está a un clic.</h2>
 
-            <section class="adventure">
-                <h2>Tu próxima aventura está a un clic.</h2>
-
-                <div class="carousel">
-                    
-                    <div class="carousel-viewport">
-                        <div class="adventure-cards carousel-track">
-                            <article class="adventure-card">
-                                <img src="../assets/img/background-zerodown.jpg" alt="Horizon Zero Dawn">
-                                <h3>Horizon Zero Dawn</h3>
-                                <p>
-                                    Explorá un mundo dominado por máquinas y descubrí
-                                    los secretos del pasado de Aloy.
-                                </p>
-                                <button class="accent" type="button">Jugar ahora</button>
-                            </article>
-
-                            <div>
-                                <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
-                            </div>
-
-                            <article class="adventure-card featured">
-                                <img src="../assets/img/background-GOW.jpg" alt="God of War Ragnarok">
-                                <h3>God of War - Ragnarok</h3>
-                                <p>
-                                    Embárcate en un viaje épico por los Nueve Reinos mientras
-                                    Kratos y Atreus se enfrentan a dioses, monstruos y desafíos
-                                    que marcarán la llegada del Ragnarök.
-                                </p>
-                                <button class="primary" type="button">Jugar ahora</button>
-                            </article>
-                            <div>  <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
-                            </div>
-                           
-
-                            <article class="adventure-card">
-                                <img src="../assets/img/background-ghost.jpg" alt="Ghost of Tsushima">
-                                <h3>Ghost of Tsushima</h3>
-                                <p>
-                                    Recorré la isla de Tsushima y luchá como samurái
-                                    para defender tu hogar de la invasión.
-                                </p>
-                                <button class="accent" type="button">Jugar ahora</button>
-                            </article>
-                        </div>
-                    </div>
-
-                    
-                    
-                </div>
-                 
-            </section>
-
-            <!-- ========== Sección "Tendencias actuales" ========== -->
-            <section class="trending-section">
-                <h2>Tendencias actuales</h2>
-
-                <div class="carousel">
-                    <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
-
-                    <div class="carousel-viewport">
-                        <!-- trending.js sigue llenando este div con las tarjetas como antes -->
-                        <div class="trending carousel-track" id="trending"></div>
-                    </div>
-
-                    <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
-                </div>
-            </section>
-            
-
-
-            <section class="all-games-section" id="juegos">
-                <h2>Todos los juegos</h2>
-
-                <div class="all-games" id="all-games"></div>
-
-                <p id="no-games">No se encontraron juegos.</p>
-
-                <nav class="pagination">
-                    <button>‹</button>
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-                    <button>›</button>
-                </nav>
-            </section>
-
-        </main>
-
-        <footer class="site-footer">
-            <div class="footer-top">
-                <div class="footer-column">
-                    <h3>About</h3>
-                    <ul>
-                        <li><a href="#">Premium Memberships</a></li>
-                        <li><a href="#">Games</a></li>
-                        <li><a href="#">Release Highlights</a></li>
-                        <li><a href="#">Terms of Use</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#">Forums</a></li>
-                        <li><a href="#">Recommended Products</a></li>
-                        <li><a href="#">Quick Start Guide</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="#">Service Status</a></li>
-                        <li><a href="#">Download</a></li>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">System Requirements</a></li>
-                        <li><a href="#">Technical Support</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Cookies Settings</a></li>
-                        <li><a href="#">Refund Policy</a></li>
-                    </ul>
+            <div class="carousel" id="adventure-carousel">
+                <!-- Botón Izquierdo -->
+                
+                <div class="carousel-viewport">
+                    <!-- El id="adventure-track" es donde el script inyectará las tarjetas -->
+                    <div class="adventure-cards carousel-track" id="adventure-track"></div>
                 </div>
             </div>
+        </section>
 
-            <div class="footer-bottom">
-                <div class="footer-socials">
-                    <img src="../assets/logo/GAMEZONE.png" alt="logo">
-                    <img src="../assets/img/marvel-logo.png" alt="marvel" srcset="">
-                    <img src="../assets/img/easports-logo.png" alt="easports" srcset="">
+        <!-- Sección "Tendencias actuales" -->
+        <section class="trending-section">
+            <h2>Tendencias actuales</h2>
+
+            <div class="carousel">
+                <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
+
+                <div class="carousel-viewport">
+                    <!-- trending.js llena este div con tarjetas dinámicamente -->
+                    <div class="trending carousel-track" id="trending"></div>
                 </div>
-                <p>Seguinos en nuestras redes</p>
-                <div class="social-icons">
-                    <img src="../assets/icons/facebook.svg" alt="facebook">
-                    <img src="../assets/icons/instagram.svg" alt="instagram">
-                    <img src="../assets/icons/discord.svg" alt="discord">
-                    <img src="../assets/icons/x-twitter.png" alt="x-twitter">
-                </div>
-                <p class="copyright">2026 - todos los derechos reservados</p>
+
+                <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
             </div>
-        </footer>
+        </section>
 
-        <script src="../js/background-img.js"></script>
-        <script src="../js/trending.js"></script>
-        <script src="../js/all-games.js"></script>
-        <script src="../js/carousel.js"></script>
-        <script src="../js/menu.js"></script>
+        <!-- Sección "Todos los juegos" -->
+        <section class="all-games-section" id="juegos">
+            <h2>Todos los juegos</h2>
 
-    </body>
+            <div class="all-games" id="all-games"></div>
+
+            <p id="no-games">No se encontraron juegos.</p>
+
+            <nav class="pagination">
+                <button>‹</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>4</button>
+                <button>›</button>
+            </nav>
+        </section>
+
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script src="../js/background-img.js"></script>
+    <script src="../js/trending.js"></script>
+    <script src="../js/all-games.js"></script>
+    <script src="../js/carousel.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/featured-games.js"></script>
+    <script src="../js/footer.js"></script>
+
+</body>
 
 </html>
