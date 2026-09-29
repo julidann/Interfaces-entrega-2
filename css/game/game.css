@@ -1,11 +1,10 @@
-/* --------- General --------- */
+
 
 main {
     background-color: #0e0e0e;
     color: #ffffff;
 }
 
-/* --------- Navegación del juego --------- */
 
 .game-nav {
     display: flex;
@@ -39,8 +38,6 @@ main {
     color: #000000;
 }
 
-/* --------- Galería --------- */
-
 .gallery {
     padding: 20px;
 }
@@ -73,8 +70,6 @@ main {
     border-radius: 5px;
     font-size: 14px;
 }
-
-/* --------- Información --------- */
 
 .info {
     padding: 20px;
@@ -122,8 +117,6 @@ main {
     line-height: 1.8;
 }
 
-/* --------- Tags --------- */
-
 .tags {
     width: 100%;
     display: flex;
@@ -131,8 +124,6 @@ main {
     gap: 10px;
     margin: 15px 0 0 10px;
 }
-
-/* --------- Ratings --------- */
 
 .ratings {
     padding: 20px;
@@ -185,7 +176,6 @@ main {
     font-size: 12px;
 }
 
-/* --------- Reviews --------- */
 
 .reviews {
     padding: 20px;
@@ -246,7 +236,6 @@ main {
     margin-top: 5px;
 }
 
-/* --------- También jugaron --------- */
 
 .also-played {
     padding: 20px;
