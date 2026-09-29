@@ -27,75 +27,98 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     let currentIndex = 1;
-    let isMoving = false;
 
     carouselContainer.innerHTML = `
         <div class="adventure-cards" id="adventure-track">
-            <article class="adventure-card left"></article>
-            <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
-            <article class="adventure-card center"></article>
-            <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
-            <article class="adventure-card right"></article>
+            <article class="adventure-card" data-index="0"></article>
+
+            <button class="carousel-btn prev" type="button" aria-label="Anterior">
+                ‹
+            </button>
+
+            <article class="adventure-card" data-index="1"></article>
+
+            <button class="carousel-btn next" type="button" aria-label="Siguiente">
+                ›
+            </button>
+
+            <article class="adventure-card" data-index="2"></article>
         </div>
     `;
 
     const track = carouselContainer.querySelector("#adventure-track");
-    const leftCard = track.querySelector(".left");
-    const centerCard = track.querySelector(".center");
-    const rightCard = track.querySelector(".right");
     const prevBtn = track.querySelector(".prev");
     const nextBtn = track.querySelector(".next");
+    const cards = track.querySelectorAll(".adventure-card");
 
     function fillCard(card, game, buttonClass) {
         card.innerHTML = `
             <img src="${game.image}" alt="${game.alt}">
             <h3>${game.title}</h3>
             <p>${game.description}</p>
-            <button type="button" class="${buttonClass}">Jugar ahora</button>
+            <button type="button" class="${buttonClass}">
+                Jugar ahora
+            </button>
         `;
     }
 
+    function updateCarouselClasses() {
+        cards.forEach((card, index) => {
+            let position =
+                (index - currentIndex + featuredGames.length) %
+                featuredGames.length;
+
+            card.classList.remove(
+                "left",
+                "center",
+                "right",
+                "hidden",
+                "featured"
+            );
+
+            const btn = card.querySelector("button");
+            btn.className = "";
+
+            if (position === 0) {
+                card.classList.add("center", "featured");
+                btn.classList.add("primary");
+            } else if (position === 1) {
+                card.classList.add("right");
+                btn.classList.add("accent");
+            } else {
+                card.classList.add("left");
+                btn.classList.add("accent");
+            }
+        });
+    }
+
     function renderCards() {
-        const leftIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-        const rightIndex = (currentIndex + 1) % featuredGames.length;
+        cards.forEach((card, index) => {
+            fillCard(
+                card,
+                featuredGames[index],
+                "accent"
+            );
+        });
 
-        fillCard(leftCard, featuredGames[leftIndex], "accent");
-        fillCard(centerCard, featuredGames[currentIndex], "primary");
-        fillCard(rightCard, featuredGames[rightIndex], "accent");
+        updateCarouselClasses();
     }
 
-    function changePositions(direction) {
-        const leftContent = leftCard.innerHTML;
-        const rightContent = rightCard.innerHTML;
+    nextBtn.addEventListener("click", () => {
+        currentIndex =
+            (currentIndex - 1 + featuredGames.length) %
+            featuredGames.length;
 
-        if (direction === "next") {
-            leftCard.innerHTML = rightContent;
-            rightCard.innerHTML = leftContent;
-        } else {
-            leftCard.innerHTML = rightContent;
-            rightCard.innerHTML = leftContent;
-        }
+        updateCarouselClasses();
+    });
 
-        leftCard.querySelector("button").className = "accent";
-        centerCard.querySelector("button").className = "primary";
-        rightCard.querySelector("button").className = "accent";
-    }
+    prevBtn.addEventListener("click", () => {
+        currentIndex =
+            (currentIndex + 1) %
+            featuredGames.length;
 
-    function moveCarousel(direction) {
-        if (isMoving) return;
-
-        isMoving = true;
-        track.classList.add(direction === "next" ? "moving-next" : "moving-prev");
-
-        setTimeout(() => {
-            changePositions(direction);
-            track.classList.remove("moving-next", "moving-prev");
-            isMoving = false;
-        }, 500);
-    }
-
-    nextBtn.addEventListener("click", () => moveCarousel("next"));
-    prevBtn.addEventListener("click", () => moveCarousel("prev"));
+        updateCarouselClasses();
+    });
 
     renderCards();
 });
