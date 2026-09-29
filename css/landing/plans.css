@@ -31,8 +31,13 @@
     justify-content: space-between;
 
     box-shadow: 0 3px 4px #999;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
-
+.plan-card:hover {
+    transform: scale(1.01); 
+    
+}
 .plan-card h3 {
     font-size: 20px;
     margin: 0;
@@ -40,10 +45,20 @@
 
 .plan-card p {
     margin: 3px 0;
+    font-weight: bold;
 }
 
 
 .plan-card.pro {
     height: 345px;
     border: 2px solid #FFD600;
+}
+
+.plan-card.pro span {
+    background-color: #FFD600;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 2px 6px;
 }

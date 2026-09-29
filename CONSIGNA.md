@@ -1,3 +1,15 @@
+# COSAS PARA ARREGLAR
+
+* Animar tendencias actuales
+* Agregar efectito agrandar plans cards
+* Agregar animacion cards principales del home.html con el botón para moverse
+* Animar botones
+* Agregar hover nav-bar
+* Cambiar icons de menu hamburguesa y perfil
+* Agergar img comentarios usuarios en game.html
+* Poner en blanco cards game.hmtl
+
+
 # Checklist — Entregable Nº2 Interfaces
 
 | Requisito del TP | Estado | Qué tenemos / qué falta |
