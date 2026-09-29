@@ -43,22 +43,16 @@
     font-size: 22px;
 }
 
-/* --------- Carrusel de aventuras --------- */
+/* Mobile: carrusel — las tarjetas van en fila, las mueve carousel.js con transform */
 .adventure-cards {
-    position: relative;
-    height: 430px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.carousel-viewport {
-    width: 100%;
-    overflow: hidden;
+    gap: 16px;
+    transition: transform 0.4s ease;
+    padding-bottom: 8px;
 }
 
 .adventure-card {
-    position: absolute;
+    flex: 0 0 auto;
     width: 260px;
     background-color: white;
     border-radius: 15px;
@@ -66,9 +60,6 @@
     box-shadow: 0 4px 4px #00000040;
     display: flex;
     flex-direction: column;
-    opacity: 0.5;
-    transform: translateX(0) scale(0.9);
-    transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .adventure-card img {
@@ -94,36 +85,24 @@
     margin: auto 15px 15px;
 }
 
-.adventure-card.left {
-    transform: translateX(-300px) scale(0.9);
-    opacity: 0.5;
-    z-index: 1;
-}
-
-.adventure-card.center {
-    transform: translateX(0) scale(1);
+/* En mobile todas las tarjetas se ven igual de nítidas (el efecto "apagado" es un recurso de desktop) */
+.adventure-card:not(.featured) {
     opacity: 1;
-    z-index: 2;
 }
 
-.adventure-card.right {
-    transform: translateX(300px) scale(0.9);
-    opacity: 0.5;
-    z-index: 1;
+.featured {
+    width: 260px;
 }
 
-.adventure-card.hidden {
-    opacity: 0;
-    transform: scale(0.7);
-    z-index: 0;
+.featured img {
+    height: 240px;
 }
 
-/* --------- Desktop: carrusel como en Figma --------- */
+/* --------- Desktop: volvemos al layout en fila con la tarjeta destacada más grande --------- */
 @media (min-width: 1024px) {
-    .welcome-home {
+    .welcome-home{
         width: fit-content;
     }
-
     .welcome-home h1 {
         font-size: 44px;
         margin: 0 0 30px 0;
@@ -142,169 +121,29 @@
         width: 80%;
     }
 
-    .adventure {
-        padding: 0;
-    }
-
     .adventure-cards {
-        width: 1216px;
-        max-width: 100%;
-        height: 642px;
-        margin: 0 auto;
-        display: block;
-    }
-
-    .carousel-viewport {
-        width: 100%;
-        height: 642px;
-        overflow: hidden;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .adventure-card {
-        top: 0;
-        left: 50%;
-        width: 259px;
-        height: 602px;
-        min-height: 0;
-        border-radius: 15px;
-        box-shadow: 0 4px 2px #00000040;
-        transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease, height 0.5s ease;
+        width: 230px;
+        min-height: 430px;
     }
 
     .adventure-card img {
-        width: 100%;
-        height: 405px;
-        object-fit: cover;
+        height: 270px;
     }
 
-    .adventure-card h3 {
-        margin: 12px 15px 6px;
-        font-family: Roboto, sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        line-height: 1;
-    }
-
-    .adventure-card p {
-        margin: 0 35px 12px;
-        font-family: Inter, sans-serif;
-        font-size: 16px;
-        line-height: 1.2;
-        color: #313131;
-    }
-
-    .adventure-card .primary,
-    .adventure-card .accent {
-        height: 48px;
-        border-radius: 8px;
-        font-family: Inter, sans-serif;
-        font-size: 16px;
-        font-weight: 900;
-    }
-
-    .adventure-card.left {
-        top: 20px;
-        transform: translateX(-478.5px);
-        opacity: 0.5;
-        z-index: 1;
-    }
-
-    .adventure-card.center {
-        width: 632px;
-        height: 642px;
-        transform: translateX(-50%);
-        opacity: 1;
-        z-index: 2;
-    }
-
-    .adventure-card.center img {
-        height: 405px;
-    }
-
-    .adventure-card.center h3 {
-        margin: 14px 35px 10px;
-    }
-
-    .adventure-card.center p {
-        margin: 0 35px;
-        max-width: 555px;
-    }
-
-    .adventure-card.center .primary,
-    .adventure-card.center .accent {
-        position: absolute;
-        right: 31px;
-        bottom: 57px;
-        width: 167px;
-        margin: 0;
-        background-color: #D6006A;
-        color: #F5F5F5;
-    }
-
-    .adventure-card.left p,
-    .adventure-card.right p {
-        display: none;
-    }
-
-    .adventure-card.left h3,
-    .adventure-card.right h3 {
-        margin: 12px 15px 0;
+    .adventure-card:not(.featured) {
         opacity: 0.5;
     }
 
-    .adventure-card.left .primary,
-    .adventure-card.left .accent,
-    .adventure-card.right .primary,
-    .adventure-card.right .accent {
-        position: absolute;
-        left: 50%;
-        bottom: 34px;
-        width: 190px;
-        height: 48px;
-        margin: 0;
-        transform: translateX(-50%);
-        background-color: #FFD600;
-        color: #121212;
-        opacity: 0.5;
+    .featured {
+        width: 520px;
     }
 
-    .adventure-card.right {
-        top: 20px;
-        transform: translateX(478.5px);
-        opacity: 0.5;
-        z-index: 1;
-    }
-
-    .adventure-card.hidden {
-        opacity: 0;
-        transform: translateX(-50%) scale(0.8);
-        z-index: 0;
-    }
-
-    .carousel-btn {
-        position: absolute;
-        top: 246px;
-        width: 48px;
-        height: 48px;
-        border: none;
-        border-radius: 50%;
-        background-color: #D6006A;
-        color: #F5F5F5;
-        font-size: 32px;
-        line-height: 1;
-        z-index: 5;
-        cursor: pointer;
-    }
-
-    .carousel-btn.prev {
-        left: calc(50% - 340px);
-    }
-
-    .carousel-btn.next {
-        right: calc(50% - 340px);
-    }
-
-    .carousel-btn:hover {
-        opacity: 0.9;
+    .featured img {
+        height: 275px;
     }
 }
