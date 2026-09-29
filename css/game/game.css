@@ -246,9 +246,12 @@ main {
     margin-top: 5px;
 }
 
+.also-played-info{
+    padding: 0 20px 20px 20px;
+    color: black;
+}
 
 .also-played {
-    padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -271,14 +274,19 @@ main {
 }
 
 .also-played-card {
-    background-color: #1a1a1a;
+    background-color: white;
     border-radius: 15px;
-    padding: 20px;
     min-width: 200px;
     height: 500px;
     width: 270px;
     justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease;
 }
+.also-played-card:hover {
+    transform: scale(1.01);
+}
+
 
 .also-played-card img {
     width: 100%;
