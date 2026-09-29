@@ -31,7 +31,7 @@
     width: 100%;
 }
 
-/* --------- Sección "Tu próxima aventura" --------- */
+
 .adventure {
     text-align: center;
     padding: 0 16px;
@@ -43,7 +43,7 @@
     font-size: 22px;
 }
 
-/* Mobile: carrusel — las tarjetas van en fila, las mueve carousel.js con transform */
+
 .adventure-cards {
     display: flex;
     gap: 16px;
@@ -85,7 +85,6 @@
     margin: auto 15px 15px;
 }
 
-/* En mobile todas las tarjetas se ven igual de nítidas (el efecto "apagado" es un recurso de desktop) */
 .adventure-card:not(.featured) {
     opacity: 1;
 }
