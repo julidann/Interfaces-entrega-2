@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GAMEZONE | Spider-Peg</title>
     <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="../css/landing/landing.css">
+    <!-- <link rel="stylesheet" href="../css/landing/landing.css"> -->
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/game/game.css">
 </head>
 
 <body>
@@ -47,8 +48,8 @@
             <input type="search" placeholder="Buscar">
 
             <button class="user-button" type="button" aria-label="Abrir perfil">
-    <img src="../assets/img/avatar.jpg" alt="Avatar">
-</button>
+                <img src="../assets/img/avatar.jpg" alt="Avatar">
+            </button>
 
             <aside class="profile-menu" id="profile-menu">
                 <div class="profile-header">
@@ -69,41 +70,35 @@
     <main>
 
         <section class="landing-main">
-            <p>GAMEZONE ORIGINAL</p>
-            <h1>SPIDER-PEG</h1>
-            <button class="primary" id="play-button" type="button">▶</button>
-        </section>
-
-        <nav>
-            <a href="#info">Información</a>
-            <a href="#como-jugar">Cómo jugar</a>
-            <button class="secondary" type="button">Compartir</button>
-            <button class="primary" type="button">Jugar</button>
-        </nav>
-
-        <section>
-            <div>
-                <button data-index="0">
-                    <span>Spider-Peg</span>
-                </button>
-                <button data-index="1">
-                    <span>Spider-Peg</span>
-                </button>
-                <button data-index="2">
-                    <span>Spider-Peg</span>
-                </button>
-                <button data-index="3">
-                    <span>Spider-Peg</span>
-                </button>
-            </div>
-
-            <div id="gallery-main">
-                <span id="gallery-caption">Spider-Peg - tablero principal</span>
+            <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
+            <a href="http://">
+                <img src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
+            </a>
+        
+            <div class="tags">
+                <button class="secondary">Añadir a la lista de favoritos</button>
+                <button class="secondary">Jugar Online</button>
+                <button class="secondary">Descargar</button>
+                <button class="secondary">Compartir</button>
             </div>
         </section>
 
-        <section id="info">
-            <article>
+        <section class="gallery">
+            <div class="gallery-thumbs">
+                <article>
+                    <img src="../assets/img/Spidergame-1.png" alt="">
+                </article>
+                <article>
+                    <img src="../assets/img/Spidergame-2.png" alt="">
+                </article>
+                <article>
+                    <img src="../assets/img/Spidergame-3.png" alt="">
+                </article>
+            </div>
+        </section>
+
+        <section id="info" class="info">
+            <article class="about">
                 <h2>Acerca de Spider-Peg:</h2>
                 <p>
                     Sumergite en una aventura de estrategia y precisión.
@@ -115,7 +110,7 @@
                 </p>
             </article>
 
-            <article>
+            <article class="specs">
                 <h2>Información:</h2>
                 <dl>
                     <dt>Género</dt>
@@ -133,7 +128,7 @@
                 </dl>
             </article>
 
-            <article id="como-jugar">
+            <article id="como-jugar" class="how-to-play">
                 <h2>¿Cómo jugar?</h2>
                 <p>
                     El objetivo es eliminar la mayor cantidad de bolitas
@@ -147,95 +142,114 @@
                     <li>¡Ganás si lográs terminar con una única bolita!</li>
                 </ol>
             </article>
-
-            <div>
-                <span>Puzzle estrategia</span>
-                <span>Se puede jugar con mouse</span>
-                <span>Single player</span>
-                <span>Keyboard player</span>
-                <span>Logro de PlayZone</span>
-            </div>
         </section>
 
-        <section>
+        <section class="ratings">
             <h2>Mejores calificaciones</h2>
 
             <article>
-                <strong>M Martina</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 1.jpeg" alt="Avatar">
+                    <strong>Martina</strong>
+                </div>
                 <p>★★★★</p>
                 <p>Muy sencillo en lo jugable, divertido y entretenido.</p>
                 <small>September, 2026</small>
             </article>
 
             <article>
-                <strong>L Lucas</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 8.jpeg" alt="Avatar">
+                    <strong>Lucas</strong>
+                </div>
                 <p>★★★★</p>
                 <p>Un puzzle rápido y entretenido.</p>
                 <small>September, 2026</small>
             </article>
 
             <article>
-                <strong>S Sofía</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 3.jpeg" alt="Avatar">
+                    <strong>Sofía</strong>
+                </div>
                 <p>★★★★</p>
                 <p>Muy buena estética y buena dificultad.</p>
                 <small>September, 2026</small>
             </article>
 
             <article>
-                <strong>T Tomás</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 5.jpeg" alt="Avatar">
+                    <strong>Tomás</strong>
+                </div>
                 <p>★★★★</p>
                 <p>Ideal para partidas cortas.</p>
                 <small>September, 2026</small>
             </article>
         </section>
 
-        <section>
+        <section class="reviews">
             <h2>Reseña de usuarios</h2>
 
-            <div>
-                <span>U</span>
-                <span>Agregar un comentario...</span>
-                <button type="button">➤</button>
+            <div class="comment-box">
+                <img src="../assets/img/avatar.jpg" alt="Avatar">
+                <input class="comment-input" type="text" placeholder="Agregar un comentario...">
+                <button class="accent">></button>
             </div>
 
             <article>
-                <strong>C Camila</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 6.jpg" alt="Avatar">
+                    <strong>Camila</strong>
+                </div>
                 <small>21/09/2026</small>
                 <p>Simple de aprender pero obliga a pensar cada movimiento.</p>
             </article>
 
             <article>
-                <strong>A Agustina</strong>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 2.jpg" alt="Avatar">
+                    <strong>Agustina</strong>
+                </div>
                 <small>20/09/2026</small>
                 <p>Está bueno para intentar superar tu propia partida.</p>
             </article>
         </section>
 
-        <section>
+        <section class="also-played">
             <h2>Los usuarios también jugaron</h2>
 
-            <article>
-                <h3>Fortnite</h3>
-                <p>Gratis</p>
-                <a href="#">Jugar ahora</a>
+            <article class="also-played-card">
+                <div class="also-played-card-img">
+                <img src="../assets/img/allgames-fc27.jpg" alt="">
+                <h3>EA Sports FC 27</h3>
+                <strong>GRATIS</strong>
+                <button class="accent"><a href="#">Jugar ahora</a></button>
+                </div>
             </article>
 
-            <article>
-                <h3>EA Sports FC 26</h3>
-                <p>Pro-Gamer</p>
-                <a href="#">Jugar ahora</a>
-            </article>
-
-            <article>
-                <h3>Need for Speed Heat</h3>
-                <p>Gratis</p>
-                <a href="#">Jugar ahora</a>
-            </article>
-
-            <article>
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-legacy.jpg" alt="">
                 <h3>Hogwarts Legacy</h3>
-                <p>Pro-Gamer</p>
-                <a href="#">Jugar ahora</a>
+                <strong>PRO-GAMER</strong>
+                <button class="accent"><a href="#">Jugar ahora</a></button>
+                </div>
+            </article>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-littlenightmares.jpg" alt="">
+                <h3>Little Nightmares III</h3>
+                <strong>GRATIS</strong>
+                <button class="accent"><a href="#">Jugar ahora</a></button>
+                </div>
+            </article>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-battlefield.jpg" alt="">
+                <h3>Battlefield 6</h3>
+                <strong>PRO-GAMER</strong>
+                <button class="accent"><a href="#">Jugar ahora</a></button>
+                </div>
             </article>
         </section>
 
@@ -285,20 +299,17 @@
 
         <div class="footer-bottom">
             <div class="footer-socials">
-                <img src="../assets/logo/GAMEZONE.png" alt="">
-                <img src="../assets/img/marvel-logo.png" alt="">
-                <img src="../assets/img/easports-logo.png" alt="">
-
-                <p>Seguinos en nuestras redes</p>
-
-                <div class="social-icons">
-                    <img src="../assets/icons/facebook.svg" alt="facebook">
-                    <img src="../assets/icons/instagram.svg" alt="instagram">
-                    <img src="../assets/icons/discord.svg" alt="discord">
-                    <img src="../assets/icons/x-twitter.png" alt="x-twitter">
-                </div>
+                <img src="../assets/logo/GAMEZONE.png" alt="logo">
+                <img src="../assets/img/marvel-logo.png" alt="marvel" srcset="">
+                <img src="../assets/img/easports-logo.png" alt="easports" srcset="">
             </div>
-
+            <p>Seguinos en nuestras redes</p>
+            <div class="social-icons">
+                <img src="../assets/icons/facebook.svg" alt="facebook">
+                <img src="../assets/icons/instagram.svg" alt="instagram">
+                <img src="../assets/icons/discord.svg" alt="discord">
+                <img src="../assets/icons/x-twitter.png" alt="x-twitter">
+            </div>
             <p class="copyright">2026 - todos los derechos reservados</p>
         </div>
     </footer>

@@ -1,85 +1,111 @@
-
-
-
-    
-/*.landing-main {
-   height: 500px;
-    color: white;
-    background-color: #000000;
-    padding: 0 0 100px 50px;
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-}*/
-
 .cloud-div {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 24px;
+    height: 24px;
 }
+
 .cloud-p {
     color: #FFD600;
     text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
 }
 
-
+/* --------- Hero (landing-main) --------- */
 .landing-main {
-    min-height: calc(100vh - 70px);
+    min-height: 60vh;
     box-sizing: border-box;
     color: white;
     background-color: #000000;
-    padding: 60px 40px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20px;
+    gap: 16px;
 }
 
 .landing-main::before {
     content: "";
     position: absolute;
     inset: 0;
-
     background: linear-gradient(to right, #000000 20%, #000000a6 100%, transparent 250%);
-   
 }
 
-.landing-main > * {
+.landing-main>* {
     position: relative;
 }
 
+/* Botones apilados en mobile */
+.landing-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
 
 .welcome-main {
-    width: 30%;
-    display: block;
+    max-width: 100%;
+}
+
+.welcome-main h1 {
+    font-size: 28px;
+    line-height: 1.15;
+    margin: 0 0 12px 0;
+}
+
+.welcome-main p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+    opacity: 0.85;
+    max-width: 100%;
 }
 
 .welcome-main span {
-    color: #D6006A;
+    color: #06D606;
 }
 
 h1 {
     font-family: Inter;
 }
 
-section div {
-    display: flex;
-    gap: 20px;
+
+/* --------- A partir de tablet/desktop --------- */
+@media (min-width: 768px) {
+    .landing-main {
+        min-height: calc(100vh - 70px);
+        padding: 0 60px;
+        gap: 20px;
+    }
+
+    .landing-buttons {
+        flex-direction: row;
+    }
+
+    .welcome-main {
+        max-width: 550px;
+    }
+
+    .welcome-main h1 {
+        font-size: 44px;
+        margin: 0 0 14px 0;
+    }
+
+    .welcome-main p {
+        font-size: 17px;
+        margin: 0 0 20px 0;
+        max-width: 480px;
+    }
+
+    .cloud-p {
+        font-size: 15px;
+    }
 }
-
-.cards article{
-    display: flex;
-    width: 200px;
-    height: 100px;
-    background-color: grey;
-    border-radius: 10px;
-
-}
-
-article {
-    background-color: white;
-    height: 400px;
-    border-radius: 20px;
-
-}
-

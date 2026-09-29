@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GAMEZONE | Cloud Gaming</title>
+    <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/landing/landing.css">
     <link rel="stylesheet" href="css/landing/plans.css">
-    <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/trending.css">
     <link rel="stylesheet" href="css/footer.css">
 
@@ -18,18 +18,19 @@
 
     <header>
         <nav>
-            <div>
+            <div class="logo">
                 <a href="index.html">
                     <img src="assets/logo/LOGOPAGE.png" alt="GAMEZONE">
                     <img src="assets/logo/GAMEZONE.png" alt="GAMEZONE">
                 </a>
             </div>
-            <a href="index.html">Inicio</a>
-            <a href="#plans">Ver planes</a>
-            <Button class="accent"><a href="pages/login.html">Iniciar sesión</a></Button>
+
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="#plans">Ver planes</a>
+                <a class="accent" href="pages/login.html">Iniciar sesión</a>
+            </div>
         </nav>
-
-
     </header>
 
     <main>
@@ -47,9 +48,9 @@
                     y encontrá recomendaciones pensadas especialmente para vos.
                 </p>
             </div>
-            <div>
-                <button class="primary"><a href="pages/register.html">Crear cuenta</a></button>
-                <button class="secondary"><a href="#plans">Descubre nuevos juegos</a></button>
+            <div class="landing-buttons">
+                <a class="primary" href="pages/register.html">Crear cuenta</a>
+                <a class="secondary" href="#plans">Descubre nuevos juegos</a>
             </div>
 
         </section>
@@ -66,8 +67,8 @@
                     </p>
 
                     <p>$0 / mes</p>
-
                     <button class="accent">Seleccionar</button>
+                    
                 </article>
 
                 <article class="plan-card pro">
@@ -106,8 +107,8 @@
             <div class="trending" id="trending">
             </div>
            
+            <button class="secondary">Descubre más juegos</button>
         </section>
-        <button class="secondary">Descubre más juegos</button>
 
     </main>
 
@@ -155,9 +156,9 @@
 
         <div class="footer-bottom">
             <div class="footer-socials">
-                <img src="assets/logo/GAMEZONE.png" alt="">
-                <img src=" assets/img/marvel-logo.png" alt="" srcset="">
-                <img src=" assets/img/easports-logo.png" alt="" srcset="">
+                <img src="assets/logo/GAMEZONE.png" alt="logo">
+                <img src="assets/img/marvel-logo.png" alt="marvel" srcset="">
+                <img src="assets/img/easports-logo.png" alt="easports" srcset="">
             </div>
             <p>Seguinos en nuestras redes</p>
             <div class="social-icons">

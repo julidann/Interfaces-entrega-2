@@ -1,5 +1,5 @@
 .all-games-section {
-    padding: 30px 40px;
+    padding: 10px 40px;
     background-color: #d9d9d9;
 }
 
@@ -10,8 +10,6 @@
 }
 
 .all-games {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
@@ -80,6 +78,24 @@
     cursor: pointer;
 }
 
-pagination:hover{
+.pagination:hover{
     background-color: #D6006A;
+}
+
+@media (min-width: 600px) {
+    .all-games {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+ 
+/* Desktop: 3 columnas, como estaba originalmente */
+@media (min-width: 1024px) {
+    .all-games-section {
+        padding: 10px 40px;
+    }
+ 
+    .all-games {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
 }

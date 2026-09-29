@@ -13,23 +13,36 @@ a {
 header {
     background-color: #000000;
     align-content: center;
-    height: 70px;  
+    height: 70px;
     padding: 0;
     margin: 0;
 }
 
 nav {
     display: flex;
-    justify-content: flex-end;
-    align-content: space-between;
-    flex-wrap: nowrap;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 16px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
 }
 
 header nav img {
-    max-height: 55px;
+    max-height: 50px;
     width: auto;
+}
+
+/* MOBILE FIRST */
+@media (min-width: 768px) {/*a partir de tablet*/
+    nav {
+        padding: 0 20px;
+    }
+
+    header nav img {
+        max-height: 55px;
+    }
 }
