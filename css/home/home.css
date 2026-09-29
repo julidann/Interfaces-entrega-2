@@ -1,4 +1,7 @@
-/* --------- Bienvenida --------- */
+/* =========================
+   BIENVENIDA
+========================= */
+
 .welcome-home {
     max-width: 100%;
 }
@@ -10,7 +13,7 @@
 }
 
 .welcome-home h3 {
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-size: 16px;
     margin: 0 0 8px 0;
 }
@@ -31,6 +34,11 @@
     width: 100%;
 }
 
+
+/* =========================
+   AVENTURA
+========================= */
+
 .adventure {
     text-align: center;
     padding: 0 16px;
@@ -42,31 +50,47 @@
     font-size: 22px;
 }
 
-
 .adventure-cards {
     position: relative;
     height: 430px;
+
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.carousel-viewport {
+.adventure .carousel-viewport {
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
+
+/* =========================
+   CARDS
+========================= */
+
 .adventure-card {
     position: absolute;
+
     width: 260px;
+
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
+
     box-shadow: 0 4px 4px #00000040;
+
     display: flex;
     flex-direction: column;
+
     opacity: 0.5;
-    transition: transform 0.5s ease, opacity 0.5s ease, width 0.5s ease, height 0.5s ease;
+
+    transition:
+        transform 0.5s ease,
+        opacity 0.5s ease,
+        width 0.5s ease,
+        height 0.5s ease;
 }
 
 .adventure-card img {
@@ -93,6 +117,10 @@
 }
 
 
+/* =========================
+   POSICIONES DEL CARRUSEL
+========================= */
+
 .adventure-card.left {
     transform: translateX(-280px) scale(0.9);
     opacity: 0.5;
@@ -118,7 +146,14 @@
 }
 
 
+/* =========================
+   DESKTOP
+========================= */
+
 @media (min-width: 1024px) {
+
+    /* Bienvenida */
+
     .welcome-home {
         width: fit-content;
     }
@@ -141,6 +176,9 @@
         width: 80%;
     }
 
+
+    /* Aventura */
+
     .adventure {
         padding: 0;
     }
@@ -150,32 +188,36 @@
         max-width: 100%;
         height: 642px;
         margin: 0 auto;
-        position: relative;
     }
 
-    .carousel-viewport {
+    .adventure .carousel-viewport {
         width: 100%;
         height: 642px;
         overflow: visible;
     }
 
+
+    /* Cards */
+
     .adventure-card {
         top: 20px;
         left: 50%;
+
         width: 259px;
         height: 602px;
-        margin-left: -130px; 
+
+        margin-left: -130px;
+
         box-shadow: 0 4px 10px #00000020;
     }
 
     .adventure-card img {
-        width: 100%;
         height: 405px;
-        object-fit: cover;
     }
 
     .adventure-card h3 {
         margin: 12px 15px 6px;
+
         font-family: Roboto, sans-serif;
         font-size: 20px;
         font-weight: 700;
@@ -184,9 +226,11 @@
 
     .adventure-card p {
         margin: 0 35px 12px;
+
         font-family: Inter, sans-serif;
         font-size: 16px;
         line-height: 1.2;
+
         color: #313131;
     }
 
@@ -194,13 +238,17 @@
     .adventure-card .accent {
         height: 48px;
         border-radius: 8px;
+
         font-family: Inter, sans-serif;
         font-size: 16px;
         font-weight: 900;
     }
 
-    /* --- Posiciones Desktop ajustadas y limpias --- */
-    
+
+    /* =========================
+       POSICIONES DESKTOP
+    ========================= */
+
     .adventure-card.left {
         transform: translateX(-380px) scale(0.95);
         opacity: 0.6;
@@ -211,7 +259,9 @@
         width: 632px;
         height: 642px;
         top: 0;
+
         transform: translateX(0) scale(1);
+
         opacity: 1;
         z-index: 2;
     }
@@ -222,7 +272,9 @@
         z-index: 1;
     }
 
-   
+
+    /* Card central */
+
     .adventure-card.center img {
         height: 405px;
     }
@@ -239,13 +291,19 @@
     .adventure-card.center .primary,
     .adventure-card.center .accent {
         position: absolute;
+
         right: 31px;
         bottom: 57px;
+
         width: 167px;
         margin: 0;
+
         background-color: #D6006A;
         color: #F5F5F5;
     }
+
+
+    /* Cards laterales */
 
     .adventure-card.left p,
     .adventure-card.right p {
@@ -263,15 +321,23 @@
     .adventure-card.right .primary,
     .adventure-card.right .accent {
         position: absolute;
+
         left: 50%;
         bottom: 34px;
+
         width: 190px;
         height: 48px;
+
         margin: 0;
+
         transform: translateX(-50%);
+
         background-color: #FFD600;
         color: #121212;
     }
+
+
+    /* Ocultas */
 
     .adventure-card.hidden {
         opacity: 0;
@@ -279,32 +345,42 @@
         z-index: 0;
     }
 
-    /* Botones de navegación desktop */
-    .carousel-btn {
+
+    /* =========================
+       BOTONES DESKTOP
+    ========================= */
+
+    .adventure .carousel-btn {
         position: absolute;
+
         top: 50%;
         transform: translateY(-50%);
+
         width: 48px;
         height: 48px;
+
         border: none;
         border-radius: 50%;
+
         background-color: #D6006A;
         color: #F5F5F5;
+
         font-size: 32px;
         line-height: 1;
+
         z-index: 5;
         cursor: pointer;
     }
 
-    .carousel-btn.prev {
+    .adventure .carousel-btn.prev {
         left: calc(50% - 400px);
     }
 
-    .carousel-btn.next {
+    .adventure .carousel-btn.next {
         right: calc(50% - 400px);
     }
 
-    .carousel-btn:hover {
+    .adventure .carousel-btn:hover {
         opacity: 0.9;
     }
 }
