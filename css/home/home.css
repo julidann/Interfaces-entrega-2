@@ -1,41 +1,4 @@
 /* =========================
-   BIENVENIDA
-========================= */
-
-.welcome-home {
-    max-width: 100%;
-}
-
-.welcome-home h1 {
-    font-size: 24px;
-    line-height: 1.2;
-    margin: 0 0 10px 0;
-}
-
-.welcome-home h3 {
-    font-family: Inter, sans-serif;
-    font-size: 16px;
-    margin: 0 0 8px 0;
-}
-
-.welcome-home p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 0 14px 0;
-    opacity: 0.85;
-    max-width: 100%;
-}
-
-.welcome-home span {
-    color: #06D606;
-}
-
-.welcome-home a {
-    width: 100%;
-}
-
-
-/* =========================
    AVENTURA
 ========================= */
 
