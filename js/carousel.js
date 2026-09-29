@@ -7,7 +7,7 @@ function initCarousel(carousel) {
 
     function updateCarousel() {
         cards.forEach(function (card, index) {
-            card.classList.remove('left', 'center', 'right', 'hidden');
+            card.classList.remove('left', 'center', 'right', 'hidden', 'featured');
 
             let position = (index - current + cards.length) % cards.length;
 
