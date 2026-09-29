@@ -65,27 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function changePositions(direction) {
+        const leftContent = leftCard.innerHTML;
+        const rightContent = rightCard.innerHTML;
+
         if (direction === "next") {
-            leftCard.className = "adventure-card center";
-            centerCard.className = "adventure-card right";
-            rightCard.className = "adventure-card left";
-            currentIndex = (currentIndex + 1) % featuredGames.length;
+            leftCard.innerHTML = rightContent;
+            rightCard.innerHTML = leftContent;
         } else {
-            leftCard.className = "adventure-card right";
-            centerCard.className = "adventure-card left";
-            rightCard.className = "adventure-card center";
-            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+            leftCard.innerHTML = rightContent;
+            rightCard.innerHTML = leftContent;
         }
 
-        const leftIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-        const rightIndex = (currentIndex + 1) % featuredGames.length;
-
-        leftCard.querySelector("button").className =
-            leftCard.classList.contains("center") ? "primary" : "accent";
-        centerCard.querySelector("button").className =
-            centerCard.classList.contains("center") ? "primary" : "accent";
-        rightCard.querySelector("button").className =
-            rightCard.classList.contains("center") ? "primary" : "accent";
+        leftCard.querySelector("button").className = "accent";
+        centerCard.querySelector("button").className = "primary";
+        rightCard.querySelector("button").className = "accent";
     }
 
     function moveCarousel(direction) {
