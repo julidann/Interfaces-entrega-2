@@ -22,76 +22,28 @@
     text-align: center;
     color: #fff;
     font-family: 'Inter', sans-serif;
+    perspective: 600px;
 }
 
-/* Spinner circular animado con @keyframes (nada de GIFs) */
-.spinner-box {
-    width: 60px;
-    height: 60px;
-    border: 5px solid rgba(255, 255, 255, 0.1);
-    border-top: 5px solid #06D606; /* Color verde secundario tuyo */
-    border-radius: 50%;
-    margin: 0 auto 20px auto;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loader-content h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-#loader-percentage {
-    font-size: 24px;
-    font-weight: bold;
-    color: #D6006A; /* Color fuchsia primario tuyo */
-}
-
-.loader-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #0d0d0d; /* Fondo oscuro gamer */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.loader-overlay.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.loader-content {
-    text-align: center;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-}
-
-/* Estilo y animación de giro para tu logo */
+/* Animación de giro para el logo */
 .loader-logo {
-    width: 90px; /* Ajustá el tamaño a lo que prefieras */
+    width: 90px;
     height: auto;
     margin: 0 auto 20px auto;
     display: block;
-    animation: spinLogo 2s linear infinite; /* Gira de forma continua durante los 5 segundos */
+    transform-style: preserve-3d;
+    animation: rotate3D 2s ease-in-out infinite;
 }
 
-@keyframes spinLogo {
+@keyframes rotate3D {
     0% {
-        transform: rotate(0deg);
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(90deg);
     }
     100% {
-        transform: rotate(360deg);
+        transform: rotateY(360deg);
     }
 }
 
@@ -104,59 +56,4 @@
     font-size: 24px;
     font-weight: bold;
     color: #D6006A; /* Tu fuchsia institucional */
-}
-
-/* Estilo y animación de balanceo (vaivén) para tu logo */
-.loader-logo {
-    width: 90px;
-    height: auto;
-    margin: 0 auto 20px auto;
-    display: block;
-    /* Rota entre -15° y 15° de forma infinita y fluida */
-    animation: swingLogo 1.5s ease-in-out infinite;
-}
-
-@keyframes swingLogo {
-    0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(-15deg); /* Gira un poco hacia la izquierda */
-    }
-    75% {
-        transform: rotate(15deg);  /* Gira un poco hacia la derecha */
-    }
-    100% {
-        transform: rotate(0deg);   /* Vuelve al centro */
-    }
-}
-
-/* Contenedor opcional para darle profundidad 3D al entorno */
-.loader-content {
-    perspective: 600px; /* Crea el espacio 3D */
-}
-
-.loader-logo {
-    width: 90px;
-    height: auto;
-    margin: 0 auto 20px auto;
-    display: block;
-    
-    /* Indicamos que respete el espacio 3D */
-    transform-style: preserve-3d;
-    
-    /* Animación de rotación sobre el eje Y (efecto objeto girando) */
-    animation: rotate3D 2s ease-in-out infinite;
-}
-
-@keyframes rotate3D {
-    0% {
-        transform: rotateY(0deg);
-    }
-    50% {
-        transform: rotateY(90deg); /* Se pone de perfil (se ve el lateral derecho/izquierdo) */
-    }
-    100% {
-        transform: rotateY(360deg); /* Da la vuelta completa sobre su propio eje */
-    }
 }
