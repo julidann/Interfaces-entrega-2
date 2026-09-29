@@ -28,63 +28,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentIndex = 1;
 
-    // Inyectamos la estructura base limpia
     carouselContainer.innerHTML = `
-        <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
-        <div class="carousel-viewport">
-            <div class="adventure-cards carousel-track" id="adventure-track"></div>
-        </div>
-        <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
+        <div class="adventure-cards" id="adventure-track"></div>
     `;
 
     const track = carouselContainer.querySelector("#adventure-track");
-    const prevBtn = carouselContainer.querySelector(".carousel-btn.prev");
-    const nextBtn = carouselContainer.querySelector(".carousel-btn.next");
 
-    track.innerHTML = featuredGames.map((game, index) => {
-        return `
-            <article class="adventure-card" data-index="${index}">
-                <img src="${game.image}" alt="${game.alt}">
-                <h3>${game.title}</h3>
-                <p>${game.description}</p>
-                <button type="button">Jugar ahora</button>
-            </article>
+    function createCard(game, type) {
+        const card = document.createElement("article");
+        card.className = `adventure-card ${type}`;
+
+        const buttonClass = type === "center" ? "primary" : "accent";
+
+        card.innerHTML = `
+            <img src="${game.image}" alt="${game.alt}">
+            <h3>${game.title}</h3>
+            <p>${game.description}</p>
+            <button type="button" class="${buttonClass}">Jugar ahora</button>
         `;
-    }).join("");
 
-    const cards = track.querySelectorAll(".adventure-card");
+        return card;
+    }
 
-    function updateCarouselClasses() {
-        cards.forEach((card, index) => {
-            let position = (index - currentIndex + featuredGames.length) % featuredGames.length;
-            
-            card.classList.remove("left", "center", "right", "hidden", "featured");
-            const btn = card.querySelector("button");
-            btn.className = "";
+    function renderCarousel() {
+        const leftIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+        const rightIndex = (currentIndex + 1) % featuredGames.length;
 
-            if (position === 0) {
-                card.classList.add("center", "featured");
-                btn.classList.add("primary");
-            } else if (position === 1) {
-                card.classList.add("right");
-                btn.classList.add("accent");
-            } else {
-                card.classList.add("left");
-                btn.classList.add("accent");
-            }
+        track.innerHTML = "";
+
+        track.appendChild(createCard(featuredGames[leftIndex], "left"));
+
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "carousel-btn prev";
+        prevBtn.type = "button";
+        prevBtn.setAttribute("aria-label", "Anterior");
+        prevBtn.textContent = "‹";
+
+        const centerCard = createCard(featuredGames[currentIndex], "center");
+
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "carousel-btn next";
+        nextBtn.type = "button";
+        nextBtn.setAttribute("aria-label", "Siguiente");
+        nextBtn.textContent = "›";
+
+        track.appendChild(prevBtn);
+        track.appendChild(centerCard);
+        track.appendChild(nextBtn);
+        track.appendChild(createCard(featuredGames[rightIndex], "right"));
+
+        prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+            renderCarousel();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % featuredGames.length;
+            renderCarousel();
         });
     }
 
-    // Botones con la dirección correcta corregida
-    nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
-        updateCarouselClasses();
-    });
-
-    prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1 + featuredGames.length) % featuredGames.length;
-        updateCarouselClasses();
-    });
-
-    updateCarouselClasses();
+    renderCarousel();
 });
