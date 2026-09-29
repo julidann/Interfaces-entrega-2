@@ -123,7 +123,8 @@
 
     .adventure-cards {
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
+        align-items: center;
     }
 
     .adventure-card {
@@ -137,10 +138,18 @@
 
     .adventure-card:not(.featured) {
         opacity: 0.5;
+        transform: scale(0.9);
+    }
+
+    .adventure-card {
+        transform: scale(0.9);
+        transition: all 0.4s ease;
     }
 
     .featured {
         width: 520px;
+        opacity: 1;
+        transform: scale(1);
     }
 
     .featured img {
