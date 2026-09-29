@@ -27,17 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     let currentIndex = 1;
+    let isMoving = false;
 
     carouselContainer.innerHTML = `
         <div class="adventure-cards" id="adventure-track">
             <article class="adventure-card left"></article>
-
             <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
-
             <article class="adventure-card center"></article>
-
             <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
-
             <article class="adventure-card right"></article>
         </div>
     `;
@@ -48,8 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const rightCard = track.querySelector(".right");
     const prevBtn = track.querySelector(".prev");
     const nextBtn = track.querySelector(".next");
-
-    const cards = [leftCard, centerCard, rightCard];
 
     function fillCard(card, game, buttonClass) {
         card.innerHTML = `
@@ -70,10 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function moveCarousel(direction) {
-        if (track.classList.contains("moving-next") || track.classList.contains("moving-prev")) {
-            return;
-        }
+        if (isMoving) return;
 
+        isMoving = true;
         track.classList.add(direction === "next" ? "moving-next" : "moving-prev");
 
         setTimeout(() => {
@@ -85,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             renderCards();
             track.classList.remove("moving-next", "moving-prev");
+            isMoving = false;
         }, 500);
     }
 
