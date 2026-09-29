@@ -43,16 +43,22 @@
     font-size: 22px;
 }
 
-/* Mobile: carrusel — las tarjetas van en fila, las mueve carousel.js con transform */
+/* --------- Carrusel de aventuras --------- */
 .adventure-cards {
+    position: relative;
+    height: 430px;
     display: flex;
-    gap: 16px;
-    transition: transform 0.4s ease;
-    padding-bottom: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-viewport {
+    width: 100%;
+    overflow: hidden;
 }
 
 .adventure-card {
-    flex: 0 0 auto;
+    position: absolute;
     width: 260px;
     background-color: white;
     border-radius: 15px;
@@ -60,6 +66,9 @@
     box-shadow: 0 4px 4px #00000040;
     display: flex;
     flex-direction: column;
+    opacity: 0.5;
+    transform: translateX(0) scale(0.9);
+    transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .adventure-card img {
@@ -85,17 +94,28 @@
     margin: auto 15px 15px;
 }
 
-/* En mobile todas las tarjetas se ven igual de nítidas (el efecto "apagado" es un recurso de desktop) */
-.adventure-card:not(.featured) {
+.adventure-card.left {
+    transform: translateX(-300px) scale(0.9);
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.adventure-card.center {
+    transform: translateX(0) scale(1);
     opacity: 1;
+    z-index: 2;
 }
 
-.featured {
-    width: 260px;
+.adventure-card.right {
+    transform: translateX(300px) scale(0.9);
+    opacity: 0.5;
+    z-index: 1;
 }
 
-.featured img {
-    height: 240px;
+.adventure-card.hidden {
+    opacity: 0;
+    transform: scale(0.7);
+    z-index: 0;
 }
 
 /* --------- Desktop: volvemos al layout en fila con la tarjeta destacada más grande --------- */
