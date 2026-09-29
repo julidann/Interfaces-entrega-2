@@ -70,29 +70,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function moveCarousel(direction) {
-        const oldLeft = featuredGames[(currentIndex - 1 + featuredGames.length) % featuredGames.length];
-        const oldCenter = featuredGames[currentIndex];
-        const oldRight = featuredGames[(currentIndex + 1) % featuredGames.length];
-
-        cards.forEach(card => {
-            card.classList.remove("slide-left", "slide-right");
-        });
+        if (track.classList.contains("moving-next") || track.classList.contains("moving-prev")) {
+            return;
+        }
 
         if (direction === "next") {
-            currentIndex = (currentIndex + 1) % featuredGames.length;
             track.classList.add("moving-next");
+            currentIndex = (currentIndex + 1) % featuredGames.length;
         } else {
-            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
             track.classList.add("moving-prev");
+            currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
         }
 
         setTimeout(() => {
             renderCards();
-
-            requestAnimationFrame(() => {
-                track.classList.remove("moving-next", "moving-prev");
-            });
-        }, 250);
+            track.classList.remove("moving-next", "moving-prev");
+        }, 500);
     }
 
     nextBtn.addEventListener("click", () => moveCarousel("next"));
