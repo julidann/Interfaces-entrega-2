@@ -28,42 +28,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentIndex = 1; // Empieza en God of War (al centro)
 
-    // 1. Inyectamos la estructura fija UNA SOLA VEZ
+    // Inyectamos el viewport y el track base
     carouselContainer.innerHTML = `
-        <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
         <div class="carousel-viewport">
             <div class="adventure-cards carousel-track" id="adventure-track"></div>
         </div>
-        <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
     `;
 
     const track = carouselContainer.querySelector("#adventure-track");
-    const prevBtn = carouselContainer.querySelector(".carousel-btn.prev");
-    const nextBtn = carouselContainer.querySelector(".carousel-btn.next");
 
-    // 2. Creamos y guardamos las tarjetas en el DOM de una vez
-    track.innerHTML = featuredGames.map((game, index) => {
-        return `
-            <article class="adventure-card" data-index="${index}">
-                <img src="${game.image}" alt="${game.alt}">
-                <h3>${game.title}</h3>
-                <p>${game.description}</p>
-                <button type="button">Jugar ahora</button>
-            </article>
+    // Inyectamos las tarjetas y los botones de forma intercalada directamente desde JS
+    function renderCarouselStructure() {
+        track.innerHTML = `
+            <button class="carousel-btn prev" type="button" aria-label="Anterior">‹</button>
+            ${featuredGames.map((game, index) => `
+                <article class="adventure-card" data-index="${index}">
+                    <img src="${game.image}" alt="${game.alt}">
+                    <h3>${game.title}</h3>
+                    <p>${game.description}</p>
+                    <button type="button">Jugar ahora</button>
+                </article>
+            `).join("")}
+            <button class="carousel-btn next" type="button" aria-label="Siguiente">›</button>
         `;
-    }).join("");
+    }
+
+    renderCarouselStructure();
 
     const cards = track.querySelectorAll(".adventure-card");
+    const prevBtn = track.querySelector(".carousel-btn.prev");
+    const nextBtn = track.querySelector(".carousel-btn.next");
 
-    // 3. Función para actualizar las clases de forma fluida sin destruir el DOM
     function updateCarouselClasses() {
         cards.forEach((card, index) => {
             let position = (index - currentIndex + featuredGames.length) % featuredGames.length;
             
-            // Limpiamos clases previas
             card.classList.remove("left", "center", "right", "hidden", "featured");
             const btn = card.querySelector("button");
-            btn.className = ""; // Limpiamos clases del botón
+            btn.className = "";
 
             if (position === 0) {
                 card.classList.add("center", "featured");
@@ -78,13 +80,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+   // Invertimos los eventos para que el botón haga el movimiento correcto
     nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % featuredGames.length;
+        currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
         updateCarouselClasses();
     });
 
     prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + featuredGames.length) % featuredGames.length;
+        currentIndex = (currentIndex + 1) % featuredGames.length;
         updateCarouselClasses();
     });
 
