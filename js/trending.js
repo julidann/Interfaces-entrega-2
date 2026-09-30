@@ -1,71 +1,76 @@
-const isTrendingPage = window.location.pathname.includes("/pages/");
-const trendingImageRoute = isTrendingPage ? "../assets/img/" : "assets/img/";
+(function () {
 
-const games = [
-    {
-        name: "Spiderman ",
-        image: trendingImageRoute + "background-spiderman.jpg"
-    },
-    {
-        name: "Grand Theft Auto VI",
-        image: trendingImageRoute + "background-GTAVI.jpg"
-    },
-    {
-        name: "Gran Turismo 7",
-        image: trendingImageRoute + "background-GT.jpg"
-    },
-    {
-        name: "Horizon Zero Dawn",
-        image: trendingImageRoute + "background-zerodown.jpg"
-    },
-    {
-        name: "Ghost of Tsushima",
-        image: trendingImageRoute + "background-ghost.jpg"
-    }
-];
+    const isTrendingPage = window.location.pathname.includes("/pages/");
+    const trendingImageRoute = isTrendingPage ? "../assets/img/" : "assets/img/";
 
-const trending = document.querySelector("#trending");
+    const games = [
+        {
+            name: "Spiderman ",
+            image: trendingImageRoute + "background-spiderman.jpg"
+        },
+        {
+            name: "Grand Theft Auto VI",
+            image: trendingImageRoute + "background-GTAVI.jpg"
+        },
+        {
+            name: "Gran Turismo 7",
+            image: trendingImageRoute + "background-GT.jpg"
+        },
+        {
+            name: "Horizon Zero Dawn",
+            image: trendingImageRoute + "background-zerodown.jpg"
+        },
+        {
+            name: "Ghost of Tsushima",
+            image: trendingImageRoute + "background-ghost.jpg"
+        }
+    ];
 
-games.forEach(function (game) {
+    const trending = document.querySelector("#trending");
 
-    trending.innerHTML += `
-        <article class="card">
-            <img src="${game.image}" alt="${game.name}">
-            <p>${game.name}</p>
-        </article>
-    `;
+    games.forEach(function (game) {
 
-});
-/*  tendencias actuales */
+        trending.innerHTML += `
+            <article class="card">
+                <img src="${game.image}" alt="${game.name}">
+                <p>${game.name}</p>
+            </article>
+        `;
 
-const INTERVALO_MS = 3000;
+    });
 
-const viewport = document.querySelector(".trending-section .carousel-viewport");
-const track = document.querySelector("#trending");
+    /* ---------- Carrusel automático de "Tendencias actuales" ---------- */
 
-let posicion = 0;
+    const INTERVALO_MS = 3000;
 
-function anchoDeUnaTarjeta() {
-    const primeraTarjeta = track.firstElementChild;
-    if (!primeraTarjeta) return 0;
+    const viewport = document.querySelector(".trending-section .carousel-viewport");
+    const track = document.querySelector("#trending");
 
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    return primeraTarjeta.getBoundingClientRect().width + gap;
-}
+    let posicion = 0;
 
-function avanzar() {
-    const maximoScroll = track.scrollWidth - viewport.clientWidth;
+    function anchoDeUnaTarjeta() {
+        const primeraTarjeta = track.firstElementChild;
+        if (!primeraTarjeta) return 0;
 
-    posicion += anchoDeUnaTarjeta();
-
-    // Si no hay más tarjetas para mostrar, volvemos al principio
-    if (posicion > maximoScroll) {
-        posicion = 0;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        return primeraTarjeta.getBoundingClientRect().width + gap;
     }
 
-    track.style.transform = `translateX(${-posicion}px)`;
-}
+    function avanzar() {
+        const maximoScroll = track.scrollWidth - viewport.clientWidth;
 
-if (track && viewport) {
-    setInterval(avanzar, INTERVALO_MS);
-}
+        posicion += anchoDeUnaTarjeta();
+
+        // Si no hay más tarjetas para mostrar, volvemos al principio
+        if (posicion > maximoScroll) {
+            posicion = 0;
+        }
+
+        track.style.transform = `translateX(${-posicion}px)`;
+    }
+
+    if (track && viewport) {
+        setInterval(avanzar, INTERVALO_MS);
+    }
+
+})();
