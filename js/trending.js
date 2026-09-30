@@ -69,7 +69,7 @@
         return primeraTarjeta.getBoundingClientRect().width + gap;
     }
 
-    function avanzar() {
+    /*function avanzar() {
         const maximoScroll = track.scrollWidth - viewport.clientWidth;
 
         posicion += anchoDeUnaTarjeta();
@@ -80,7 +80,21 @@
         }
 
         track.style.transform = `translateX(${-posicion}px)`;
-    }
+    }*/
+
+        function avanzar() { const ancho = anchoDeUnaTarjeta(); 
+            // Movemos una tarjeta hacia la izquierda 
+            track.style.transition = "transform 0.5s ease"; 
+            track.style.transform = `translateX(-${ancho}px)`; 
+            // Cuando termina el movimiento 
+            track.addEventListener("transitionend", function moverTarjeta() { 
+            // La primera tarjeta pasa al final 
+            track.appendChild(track.firstElementChild); 
+            //Reiniciamos la posición sin animación 
+            track.style.transition = "none"; 
+            track.style.transform = "translateX(0)"; 
+            // Evitamos acumular eventos
+            track.removeEventListener("transitionend", moverTarjeta); }); }
 
     if (track && viewport) {
         setInterval(avanzar, INTERVALO_MS);
