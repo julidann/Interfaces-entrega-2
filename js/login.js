@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Si todo está correcto, limpiamos mensaje y aplicamos animación de éxito
         if (messageP) messageP.textContent = "";
         
-        submitBtn.classList.add("success");
-        submitBtn.textContent = "Loading";
+        submitBtn.classList.add("loading");
+        //submitBtn.textContent = "Loading";
 
         // Redirigimos a la home después de 1 segundo para que se luzca la animación
         setTimeout(() => {

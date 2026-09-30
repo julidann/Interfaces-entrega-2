@@ -189,22 +189,26 @@
 
 /* Animación de carga del botón de login */
 
-.login-button {
+.login-button,
+.register-button {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.login-button.loading {
+.login-button.loading,
+.register-button.loading {
     pointer-events: none;
 }
 
-.login-button.loading .button-text {
+.login-button.loading .button-text,
+.register-button.loading .button-text {
     display: none;
 }
 
-.login-button .spinner {
+.login-button .spinner,
+.register-button .spinner {
     display: none;
     width: 16px;
     height: 16px;
@@ -213,7 +217,8 @@
     border-radius: 50%;
 }
 
-.login-button.loading .spinner {
+.login-button.loading .spinner,
+.register-button.loading .spinner {
     display: inline-block;
     animation: spin 0.7s linear infinite;
 }
