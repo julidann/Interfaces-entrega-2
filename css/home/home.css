@@ -31,7 +31,7 @@
 ========================= */
 
 .adventure-card {
-    flex: 0 0 260px;
+    flex: 0 290px 260px;
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
@@ -92,11 +92,9 @@
 }
 
 .adventure-card button {
-    width: 230px;
     height: 32px;
     min-height: 32px;
-    margin: auto 15px 15px;
-    padding: 4px 8px;
+    margin: auto 20px 15px;
     font-size: 11px;
     border-radius: 6px;
 }
@@ -143,6 +141,11 @@
         overflow: hidden;
     }
 
+    .adventure-card {
+        flex: 0 0 240px;
+        width: 240px;
+    }
+
     .adventure-card.left,
     .adventure-card.right {
         position: absolute;
@@ -151,7 +154,6 @@
     }
 
     .adventure-card.center {
-        flex: 0 0 240px;
         opacity: 1;
         transform: translateX(0) scale(1);
     }
@@ -191,6 +193,14 @@
         min-height: 430px;
         margin: 0 auto;
         gap: 12px;
+    }
+
+    .adventure-card button{
+        margin: auto 30px 15px;
+    }
+
+    .adventure-card.center {
+        width: 1500px;
     }
 
 }

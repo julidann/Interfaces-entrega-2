@@ -36,4 +36,36 @@ games.forEach(function (game) {
     `;
 
 });
+/*  tendencias actuales */
 
+const INTERVALO_MS = 3000;
+
+const viewport = document.querySelector(".trending-section .carousel-viewport");
+const track = document.querySelector("#trending");
+
+let posicion = 0;
+
+function anchoDeUnaTarjeta() {
+    const primeraTarjeta = track.firstElementChild;
+    if (!primeraTarjeta) return 0;
+
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    return primeraTarjeta.getBoundingClientRect().width + gap;
+}
+
+function avanzar() {
+    const maximoScroll = track.scrollWidth - viewport.clientWidth;
+
+    posicion += anchoDeUnaTarjeta();
+
+    // Si no hay más tarjetas para mostrar, volvemos al principio
+    if (posicion > maximoScroll) {
+        posicion = 0;
+    }
+
+    track.style.transform = `translateX(${-posicion}px)`;
+}
+
+if (track && viewport) {
+    setInterval(avanzar, INTERVALO_MS);
+}
