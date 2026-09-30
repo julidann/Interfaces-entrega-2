@@ -16,7 +16,7 @@
 
 .adventure-cards {
     width: 100%;
-    min-height: 430px;
+    min-height: 800px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,7 +49,7 @@
 
 .adventure-card.left {
     order: 1;
-    transform: translateX(0) scale(0.9);
+    transform: translateY(0) scale(0.9);
 }
 
 .adventure .carousel-btn.prev {
@@ -59,13 +59,17 @@
 .adventure-card.center {
     order: 3;
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateY(0) scale(1.2);
     z-index: 2;
+}
+
+.adventure .carousel-btn.next {
+    order: 4;
 }
 
 .adventure-card.right {
     order: 5;
-    transform: translateX(0) scale(0.9);
+    transform: translateY(0) scale(0.9);
 }
 
 
@@ -184,7 +188,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 1024px) {
+/*@media (min-width: 1024px) {
 
     .adventure-cards {
         max-width: 1000px;
@@ -192,5 +196,10 @@
         margin: 0 auto;
         gap: 12px;
     }
+
+}*/
+
+.carousel{
+    height: 600px;
 
 }
