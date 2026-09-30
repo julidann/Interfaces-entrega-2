@@ -11,71 +11,73 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
-    
+
 </head>
 
 <body>
 
     <header>
-            <nav class="nav-user">
-                <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
+        <nav class="nav-user">
+            <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
 
-                <aside class="hamburger-menu" id="hamburger-menu">
-                    <a href="#trending"><span class="menu-icon"><img src="../assets/icons/trending.svg" alt=""></span> Tendencias</a>
-                    <a href="#juegos"><span class="menu-icon free-icon"><img src="../assets/icons/freetoplay.svg" alt=""></span> Free to Play</a>
-                    <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
-                    <div class="menu-categories">
-                        <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
-                        <a href="#juegos">Conducción</a>
-                        <a href="#juegos">Estrategia</a>
-                        <a href="#juegos">Deportes</a>
-                        <a href="#juegos">Disparos</a>
-                        <a href="#juegos">Simuladores</a>
-                        <a href="#juegos">Ver más...</a>
-                    </div>
-                </aside>
+            <aside class="hamburger-menu" id="hamburger-menu">
+                <a href="#trending"><span class="menu-icon"><img src="../assets/icons/trending.svg" alt=""></span>
+                    Tendencias</a>
+                <a href="#juegos"><span class="menu-icon free-icon"><img src="../assets/icons/freetoplay.svg"
+                            alt=""></span> Free to Play</a>
+                <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
+                <div class="menu-categories">
+                    <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
+                    <a href="#juegos">Conducción</a>
+                    <a href="#juegos">Estrategia</a>
+                    <a href="#juegos">Deportes</a>
+                    <a href="#juegos">Disparos</a>
+                    <a href="#juegos">Simuladores</a>
+                    <a href="#juegos">Ver más...</a>
+                </div>
+            </aside>
 
-                <a class="nav-logo" href="home.html">
-                    <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
-                    <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
-                </a>
+            <a class="nav-logo" href="home.html">
+                <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
+                <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
+            </a>
 
-                <div class="nav-links">
-                    <a href="home.html">Inicio</a>
-                    <a href="home.html#juegos">Juegos</a>
-                    <a href="#">Mi biblioteca</a>
+            <div class="nav-links">
+                <a href="home.html">Inicio</a>
+                <a href="home.html#juegos">Juegos</a>
+                <a href="#">Mi biblioteca</a>
+            </div>
+
+            <input type="search" placeholder="Buscar">
+
+            <button class="user-button" type="button" aria-label="Abrir perfil">
+                <img src="../assets/img/avatar.jpg" alt="Avatar">
+            </button>
+
+            <aside class="profile-menu" id="profile-menu">
+                <div class="profile-header">
+                    <img src="../assets/img/avatar.jpg" alt="Avatar">
+                    <span>avatar_name</span>
                 </div>
 
-                <input type="search" placeholder="Buscar">
+                <a href="#"><span><img src="../assets/icons/user.svg" alt=""></span> Ver Perfil</a>
+                <a href="#"><span><img src="../assets/icons/settings.svg" alt=""></span> Configuración</a>
+                <a href="#"><span><img src="../assets/icons/suscriptions.svg" alt=""></span> Mis Suscripciones</a>
+                <a href="#"><span><img src="../assets/icons/suport.png" alt=""></span> Soporte</a>
 
-                <button class="user-button" type="button" aria-label="Abrir perfil">
-                    <img src="../assets/img/avatar.jpg" alt="Avatar">
-                </button>
-
-                <aside class="profile-menu" id="profile-menu">
-                    <div class="profile-header">
-                        <img src="../assets/img/avatar.jpg" alt="Avatar">
-                        <span>avatar_name</span>
-                    </div>
-
-                    <a href="#"><span><img src="../assets/icons/user.svg" alt=""></span> Ver Perfil</a>
-                    <a href="#"><span><img src="../assets/icons/settings.svg" alt=""></span> Configuración</a>
-                    <a href="#"><span><img src="../assets/icons/suscriptions.svg" alt=""></span> Mis Suscripciones</a>
-                    <a href="#"><span><img src="../assets/icons/suport.png" alt=""></span> Soporte</a>
-
-                    <a class="logout-link" href="../index.html">Cerrar Sesión</a>
-                </aside>
-            </nav>
-        </header>
+                <a class="logout-link" href="../index.html">Cerrar Sesión</a>
+            </aside>
+        </nav>
+    </header>
 
     <main>
 
         <section class="landing-main">
             <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
             <div>
-            <img class="game-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
+                <img class="game-image" id="gallery-main-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
             </div>
-                   
+
             <div class="tags">
                 <button class="secondary">Añadir a la lista de favoritos</button>
                 <button class="secondary">Jugar Online</button>
@@ -87,13 +89,13 @@
         <section class="gallery">
             <div class="gallery-thumbs">
                 <article>
-                    <img src="../assets/img/Spidergame-1.png" alt="">
+                    <img src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
                 </article>
                 <article>
-                    <img src="../assets/img/Spidergame-2.png" alt="">
+                    <img src="../assets/img/Spidergame-2.png" alt="Spider-Peg - imagen 2">
                 </article>
                 <article>
-                    <img src="../assets/img/Spidergame-3.png" alt="">
+                    <img src="../assets/img/Spidergame-3.png" alt="Spider-Peg - imagen 3">
                 </article>
             </div>
         </section>
@@ -173,7 +175,7 @@
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
-                
+
                 </p>
                 <p>Un puzzle rápido y entretenido.</p>
                 <small>June, 2025</small>
@@ -243,11 +245,12 @@
 
             <article class="also-played-card">
                 <div class="also-played-card-img">
-                <img src="../assets/img/allgames-fc27.jpg" alt="">
-                <div class="also-played-info">
-                <h3>EA Sports FC 27</h3>
-                <strong>GRATIS</strong>
-                <a class="accent" href="">Jugar ahora</a>
+                    <img src="../assets/img/allgames-fc27.jpg" alt="">
+                    <div class="also-played-info">
+                        <h3>EA Sports FC 27</h3>
+                        <strong>GRATIS</strong>
+                        <a class="accent" href="">Jugar ahora</a>
+                    </div>
                 </div>
                 </div>
             </article>
@@ -255,9 +258,10 @@
             <article class="also-played-card">
                 <img src="../assets/img/allgames-legacy.jpg" alt="">
                 <div class="also-played-info">
-                <h3>Hogwarts Legacy</h3>
-                <strong>PRO-GAMER</strong>
-                <a class="accent" href="">Jugar ahora</a>
+                    <h3>Hogwarts Legacy</h3>
+                    <strong>BASIC</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
                 </div>
                 </div>
             </article>
@@ -265,9 +269,10 @@
             <article class="also-played-card">
                 <img src="../assets/img/allgames-littlenightmares.jpg" alt="">
                 <div class="also-played-info">
-                <h3>Little Nightmares III</h3>
-                <strong>GRATIS</strong>
-                <a class="accent" href="">Jugar ahora</a>
+                    <h3>Little Nightmares III</h3>
+                    <strong>GRATIS</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
                 </div>
                 </div>
             </article>
@@ -275,9 +280,10 @@
             <article class="also-played-card">
                 <img src="../assets/img/allgames-battlefield.jpg" alt="">
                 <div class="also-played-info">
-                <h3>Battlefield 6</h3>
-                <strong>PRO-GAMER</strong>
-                <a class="accent" href="">Jugar ahora</a>
+                    <h3>Battlefield 6</h3>
+                    <strong>PRO-GAMER</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
                 </div>
                 </div>
             </article>
@@ -285,65 +291,11 @@
 
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-top">
-            <div class="footer-column">
-                <h3>About</h3>
-                <ul>
-                    <li><a href="#">Premium Memberships</a></li>
-                    <li><a href="#">Games</a></li>
-                    <li><a href="#">Release Highlights</a></li>
-                    <li><a href="#">Terms of Use</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h3>Resources</h3>
-                <ul>
-                    <li><a href="#">Forums</a></li>
-                    <li><a href="#">Recommended Products</a></li>
-                    <li><a href="#">Quick Start Guide</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="#">Service Status</a></li>
-                    <li><a href="#">Download</a></li>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">System Requirements</a></li>
-                    <li><a href="#">Technical Support</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h3>Legal</h3>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Cookies Settings</a></li>
-                    <li><a href="#">Refund Policy</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="footer-socials">
-                <img src="../assets/logo/GAMEZONE.png" alt="logo">
-                <img src="../assets/img/marvel-logo.png" alt="marvel" srcset="">
-                <img src="../assets/img/easports-logo.png" alt="easports" srcset="">
-            </div>
-            <p>Seguinos en nuestras redes</p>
-            <div class="social-icons">
-                <img src="../assets/icons/facebook.svg" alt="facebook">
-                <img src="../assets/icons/instagram.svg" alt="instagram">
-                <img src="../assets/icons/discord.svg" alt="discord">
-                <img src="../assets/icons/x-twitter.png" alt="x-twitter">
-            </div>
-            <p class="copyright">2026 - todos los derechos reservados</p>
-        </div>
-    </footer>
+    <footer class="site-footer"></footer>
 
 </body>
 <script src="../js/menu.js"></script>
+    <script src="../js/gallery.js"></script>
+<script src="../js/footer.js"></script>
+
 </html>

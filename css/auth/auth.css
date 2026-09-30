@@ -164,3 +164,25 @@
     display: flex;
     padding-left: 20px;
 }
+
+
+/* Estilo base de los inputs (borde normal) */
+.form-field input {
+    border: 1px solid #ccc; /* o el color base que uses */
+    background-color: #fff;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Estado de error: Al tener la clase .form-field.error, le gana por especificidad natural */
+.form-field.error input {
+    border-color: #D6006A;
+    background-color: rgba(214, 0, 106, 0.05);
+}
+
+/* Animación de éxito en el botón (especificidad compuesta por clases, sin necesitar important) */
+.login-form button.primary.success {
+    background-color: #06D606;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}

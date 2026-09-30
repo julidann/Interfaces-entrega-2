@@ -11,11 +11,11 @@ const games = [
         image: trendingImageRoute + "background-GTAVI.jpg"
     },
     {
-        name: "Grand Turismo 7",
+        name: "Gran Turismo 7",
         image: trendingImageRoute + "background-GT.jpg"
     },
     {
-        name: "Horizon Zero Down",
+        name: "Horizon Zero Dawn",
         image: trendingImageRoute + "background-zerodown.jpg"
     },
     {
