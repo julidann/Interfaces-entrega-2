@@ -23,7 +23,20 @@
         {
             name: "Ghost of Tsushima",
             image: trendingImageRoute + "background-ghost.jpg"
-        }
+        },
+        {
+            name: "Alan Wake II",
+            image: trendingImageRoute + "allgames-alanwake2.jpg"
+        },
+        {
+            name: "DIRT 5",
+            image: trendingImageRoute + "allgames-dirt5.jpg"
+        },
+        {
+            name: "Far Cry 6",
+            image: trendingImageRoute + "allgames-farcry6.jpg"
+        },
+        
     ];
 
     const trending = document.querySelector("#trending");
