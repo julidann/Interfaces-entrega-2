@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nextBtn.addEventListener("click", () => {
         currentIndex =
-            (currentIndex - 1 + featuredGames.length) %
+            (currentIndex + 1 + featuredGames.length) %
             featuredGames.length;
 
         updateCarouselClasses();
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     prevBtn.addEventListener("click", () => {
         currentIndex =
-            (currentIndex + 1) %
+            (currentIndex - 1) %
             featuredGames.length;
 
         updateCarouselClasses();

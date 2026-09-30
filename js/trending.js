@@ -1,39 +1,103 @@
-const isTrendingPage = window.location.pathname.includes("/pages/");
-const trendingImageRoute = isTrendingPage ? "../assets/img/" : "assets/img/";
+(function () {
 
-const games = [
-    {
-        name: "Spiderman ",
-        image: trendingImageRoute + "background-spiderman.jpg"
-    },
-    {
-        name: "Grand Theft Auto VI",
-        image: trendingImageRoute + "background-GTAVI.jpg"
-    },
-    {
-        name: "Gran Turismo 7",
-        image: trendingImageRoute + "background-GT.jpg"
-    },
-    {
-        name: "Horizon Zero Dawn",
-        image: trendingImageRoute + "background-zerodown.jpg"
-    },
-    {
-        name: "Ghost of Tsushima",
-        image: trendingImageRoute + "background-ghost.jpg"
+    const isTrendingPage = window.location.pathname.includes("/pages/");
+    const trendingImageRoute = isTrendingPage ? "../assets/img/" : "assets/img/";
+
+    const games = [
+        {
+            name: "Spiderman ",
+            image: trendingImageRoute + "background-spiderman.jpg"
+        },
+        {
+            name: "Grand Theft Auto VI",
+            image: trendingImageRoute + "background-GTAVI.jpg"
+        },
+        {
+            name: "Gran Turismo 7",
+            image: trendingImageRoute + "background-GT.jpg"
+        },
+        {
+            name: "Horizon Zero Dawn",
+            image: trendingImageRoute + "background-zerodown.jpg"
+        },
+        {
+            name: "Ghost of Tsushima",
+            image: trendingImageRoute + "background-ghost.jpg"
+        },
+        {
+            name: "Alan Wake II",
+            image: trendingImageRoute + "allgames-alanwake2.jpg"
+        },
+        {
+            name: "DIRT 5",
+            image: trendingImageRoute + "allgames-dirt5.jpg"
+        },
+        {
+            name: "Far Cry 6",
+            image: trendingImageRoute + "allgames-farcry6.jpg"
+        },
+        
+    ];
+
+    const trending = document.querySelector("#trending");
+
+    games.forEach(function (game) {
+
+        trending.innerHTML += `
+            <article class="card">
+                <img src="${game.image}" alt="${game.name}">
+                <p>${game.name}</p>
+            </article>
+        `;
+
+    });
+
+    /* ---------- Carrusel automático de "Tendencias actuales" ---------- */
+
+    const INTERVALO_MS = 3000;
+
+    const viewport = document.querySelector(".trending-section .carousel-viewport");
+    const track = document.querySelector("#trending");
+
+    let posicion = 0;
+
+    function anchoDeUnaTarjeta() {
+        const primeraTarjeta = track.firstElementChild;
+        if (!primeraTarjeta) return 0;
+
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        return primeraTarjeta.getBoundingClientRect().width + gap;
     }
-];
 
-const trending = document.querySelector("#trending");
+    /*function avanzar() {
+        const maximoScroll = track.scrollWidth - viewport.clientWidth;
 
-games.forEach(function (game) {
+        posicion += anchoDeUnaTarjeta();
 
-    trending.innerHTML += `
-        <article class="card">
-            <img src="${game.image}" alt="${game.name}">
-            <p>${game.name}</p>
-        </article>
-    `;
+        // Si no hay más tarjetas para mostrar, volvemos al principio
+        if (posicion > maximoScroll) {
+            posicion = 0;
+        }
 
-});
+        track.style.transform = `translateX(${-posicion}px)`;
+    }*/
 
+        function avanzar() { const ancho = anchoDeUnaTarjeta(); 
+            // Movemos una tarjeta hacia la izquierda 
+            track.style.transition = "transform 0.5s ease"; 
+            track.style.transform = `translateX(-${ancho}px)`; 
+            // Cuando termina el movimiento 
+            track.addEventListener("transitionend", function moverTarjeta() { 
+            // La primera tarjeta pasa al final 
+            track.appendChild(track.firstElementChild); 
+            //Reiniciamos la posición sin animación 
+            track.style.transition = "none"; 
+            track.style.transform = "translateX(0)"; 
+            // Evitamos acumular eventos
+            track.removeEventListener("transitionend", moverTarjeta); }); }
+
+    if (track && viewport) {
+        setInterval(avanzar, INTERVALO_MS);
+    }
+
+})();

@@ -51,6 +51,7 @@
     flex-direction: column;
     gap: 12px;
     margin-top: 10px;
+    width: fit-content;
 }
 
 .welcome-main {

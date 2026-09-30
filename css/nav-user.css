@@ -65,7 +65,9 @@
     height: 100%;
     object-fit: cover;
 }
-
+img.icons{
+    width: 100%;
+}
 /* MENU HAMBURGUESA */
 .hamburger-menu {
     display: none;

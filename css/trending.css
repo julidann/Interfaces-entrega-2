@@ -10,13 +10,25 @@
 
 .trending-section h2 {
     padding: 0 16px;
-    align-self: flex-start;
 }
 
 .trending-section .carousel {
     box-sizing: border-box;
+    width: 100%;
 }
 
+/* El "visor": recorta las tarjetas que no entran en pantalla */
+.carousel-viewport {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 250px;
+
+}
+
+/* El track: la fila de tarjetas que se mueve con transform (lo maneja el JS) */
 .trending {
     display: flex;
     gap: 10px;
@@ -44,6 +56,9 @@
 
 
 @media (min-width: 768px) {
+    .carousel {
+    padding: 0;
+}
     .trending-section {
         padding: 60px 0;
     }

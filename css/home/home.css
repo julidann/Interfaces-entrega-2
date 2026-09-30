@@ -16,7 +16,7 @@
 
 .adventure-cards {
     width: 100%;
-    min-height: 800px;
+    min-height: 430px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,7 +49,7 @@
 
 .adventure-card.left {
     order: 1;
-    transform: translateY(0) scale(0.9);
+    transform: translateX(0) scale(0.9) skewY(4deg);
 }
 
 .adventure .carousel-btn.prev {
@@ -59,17 +59,13 @@
 .adventure-card.center {
     order: 3;
     opacity: 1;
-    transform: translateY(0) scale(1.2);
+    transform: translateX(0) scale(1) skewY(0deg);
     z-index: 2;
-}
-
-.adventure .carousel-btn.next {
-    order: 4;
 }
 
 .adventure-card.right {
     order: 5;
-    transform: translateY(0) scale(0.9);
+    transform: translateX(0) scale(0.9) skewY(-4deg);
 }
 
 
@@ -96,11 +92,9 @@
 }
 
 .adventure-card button {
-    width: 230px;
     height: 32px;
     min-height: 32px;
-    margin: auto 15px 15px;
-    padding: 4px 8px;
+    margin: auto 20px 15px;
     font-size: 11px;
     border-radius: 6px;
 }
@@ -147,6 +141,11 @@
         overflow: hidden;
     }
 
+    .adventure-card {
+        flex: 0 0 240px;
+        width: 240px;
+    }
+
     .adventure-card.left,
     .adventure-card.right {
         position: absolute;
@@ -155,9 +154,8 @@
     }
 
     .adventure-card.center {
-        flex: 0 0 240px;
         opacity: 1;
-        transform: translateX(0) scale(1);
+        transform: translateX(0) scale(1) skewY(0deg);
     }
 
     .adventure-card img {
@@ -188,18 +186,21 @@
    DESKTOP
 ========================= */
 
-/*@media (min-width: 1024px) {
+@media (min-width: 1024px) {
 
     .adventure-cards {
-        max-width: 1000px;
+        max-width: 1100px;
         min-height: 430px;
         margin: 0 auto;
         gap: 12px;
     }
 
-}*/
+    .adventure-card button {
+        margin: auto 30px 15px;
+    }
 
-.carousel{
-    height: 600px;
+    .adventure-card.center {
+        flex: 0 0 420px;
+    }
 
 }

@@ -31,17 +31,9 @@ main {
     border-radius: 8px;
 }
 
-.gallery-change {
-    animation: galleryFade 0.4s ease;
-}
-
-@keyframes galleryFade {
-    from {
-        opacity: 0.3;
-    }
-    to {
-        opacity: 1;
-    }
+img.img-game{
+    height: 200px;
+    width: 400px;
 }
 
 .info {
