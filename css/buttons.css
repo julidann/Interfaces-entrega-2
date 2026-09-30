@@ -18,6 +18,9 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+
+    transition: transform 0.3s ease;
+    
 }
 
 .primary {
@@ -27,6 +30,7 @@
 
 .primary:hover {
     background-color: #FFB3D9;
+    transform: translateY(-5px);
 }
 
 .secondary {
@@ -36,6 +40,7 @@
 
 .secondary:hover {
     background-color: #B3FFB3;
+    transform: translateY(-5px);
 }
 
 .accent {
@@ -45,6 +50,7 @@
 
 .accent:hover {
     background-color: #FFE347;
+    transform: translateY(-5px);
 }
 
 .google-button {
@@ -62,3 +68,41 @@
     width: 20px;
     height: 20px;
 }
+
+
+.pulse{
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.10);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+.descubre-juegos {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.descubre-juegos::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background-color: #06D606;
+    transition: left 0.3s ease;
+}
+
