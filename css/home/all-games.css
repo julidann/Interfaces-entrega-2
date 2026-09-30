@@ -16,6 +16,7 @@
 .game-card {
     background-color: white;
     border-radius: 15px;
+    border: groove;
     height: 240px;
     overflow: hidden;
     color: black;
@@ -101,5 +102,9 @@ button.current-page  {
     .all-games {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .game-card {
+        border:none;
     }
 }
