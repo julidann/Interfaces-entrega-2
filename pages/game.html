@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="assets/logo/LOGOPAGE.png">
-    <title>GAMEZONE | Spider-Peg</title>
+    <link rel="icon" type="image/png" href="../assets/logo/LOGOPAGE.png">
+    <title>GAMEZONE | BLOCKA</title>
     <link rel="stylesheet" href="../css/game/game.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/landing/landing.css">
@@ -74,9 +74,38 @@
     <main>
 
         <section class="landing-main">
-            <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
-            <div>
-                <img class="game-image" id="gallery-main-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
+            <p><a href="home.html">Inicio</a> / Juegos / Free to Play / BLOCKA</p>
+
+            <!-- Contenedor del juego BLOCKA en lugar de la imagen estática -->
+            <div class="game-container">
+                <!-- Header de Controles y Estado -->
+                <div class="game-header">
+                    <div class="level-info">Nivel: <span id="current-level">1</span>/3</div>
+                    <div class="timer-info">Tiempo: <span id="timer">00:00</span></div>
+                    <button id="btn-start" class="btn-primary">Comenzar</button>
+                    <button id="btn-hint" class="btn-secondary" disabled>Ayudita (+5s)</button>
+                </div>
+
+                <!-- Extra 1: Selección Animada / Ruleta de Imagen -->
+                <div id="carousel-selection" class="image-selector-container hidden">
+                    <p>Sorteando imagen del nivel...</p>
+                    <div class="thumbnail-strip" id="thumbnail-strip"></div>
+                </div>
+
+                <!-- Tablero del Juego BLOCKA (JavaScript generará los 4 canvas acá adentro) -->
+                <div id="blocka-board" class="blocka-board"></div>
+
+                <!-- Overlay de fin de nivel o victoria -->
+                <div id="game-overlay" class="game-overlay hidden">
+                    <div class="overlay-content">
+                        <h2 id="overlay-title">¡Nivel Completado!</h2>
+                        <p id="overlay-message"></p>
+                        <div class="overlay-buttons">
+                            <button id="btn-next-level" class="btn-primary">Siguiente Nivel</button>
+                            <button id="btn-restart" class="btn-secondary">Reintentar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="tags">
@@ -90,27 +119,26 @@
         <section class="gallery">
             <div class="gallery-thumbs">
                 <article>
-                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
+                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="BLOCKA - Muestra 1">
                 </article>
                 <article>
-                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="Spider-Peg - imagen 2">
+                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="BLOCKA - Muestra 2">
                 </article>
                 <article>
-                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="Spider-Peg - imagen 3">
+                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="BLOCKA - Muestra 3">
                 </article>
             </div>
         </section>
 
         <section id="info" class="info">
             <article class="about">
-                <h2>Acerca de Spider-Peg:</h2>
+                <h2>Acerca de BLOCKA:</h2>
                 <p>
-                    Sumergite en una aventura de estrategia y precisión.
-                    Eliminá las bolitas del tablero haciendo saltos válidos
-                    y pensá cada movimiento para quedarte con la menor
-                    cantidad posible. Con una estética inspirada en la
-                    ciudad de noche, Spider Peg combina el clásico
-                    solitario de clavijas con desafíos cada vez más difíciles.
+                    BLOCKA es un juego de rompecabezas basado en imágenes.
+                    Al iniciar el nivel, la blocka aparece descompuesta en cuatro partes
+                    rotadas respecto a su posición original y con un filtro de imagen aplicado.
+                    El objetivo es rotar cada subimagen hasta alinearlas correctamente y conformar la ilustración final.
+                    Una vez resuelto, los filtros desaparecen revelando la imagen original en RGB.
                 </p>
             </article>
 
@@ -118,13 +146,13 @@
                 <h2>Información:</h2>
                 <dl>
                     <dt>Género</dt>
-                    <dd>Puzzle Estrategia</dd>
+                    <dd>Rompecabezas / Puzzle</dd>
                     <dt>Modalidad</dt>
                     <dd>Un jugador</dd>
                     <dt>Plataforma</dt>
-                    <dd>Web - Online - Descarga</dd>
+                    <dd>Web - HTML5 Canvas</dd>
                     <dt>Edad</dt>
-                    <dd>+7</dd>
+                    <dd>+3</dd>
                     <dt>Idioma</dt>
                     <dd>Español</dd>
                     <dt>Estado</dt>
@@ -135,15 +163,14 @@
             <article id="como-jugar" class="how-to-play">
                 <h2>¿Cómo jugar?</h2>
                 <p>
-                    El objetivo es eliminar la mayor cantidad de bolitas
-                    posible hasta dejar una sola en el tablero.
+                    Rotá las 4 subimágenes hasta dejarlas en su posición correcta para resolver la imagen.
                 </p>
                 <ol>
-                    <li>Elegí una bolita que tenga otra bolita pegada al lado.</li>
-                    <li>Saltá por encima de ella hacia un espacio vacío.</li>
-                    <li>La bolita que fue saltada se elimina.</li>
-                    <li>Repetí los movimientos y planeá tu estrategia.</li>
-                    <li>¡Ganás si lográs terminar con una única bolita!</li>
+                    <li>Hacé clic en **"Comenzar"** para iniciar el temporizador del nivel.</li>
+                    <li><strong>Click Izquierdo:</strong> Rota la subimagen 90° hacia la izquierda.</li>
+                    <li><strong>Click Derecho:</strong> Rota la subimagen 90° hacia la derecha.</li>
+                    <li>Usá el botón **"Ayudita"** si te trabás: acomodará una pieza por vos sumando 5 segundos al temporizador.</li>
+                    <li>¡Ganás cuando las cuatro piezas estén orientadas en 0° y sin filtros!</li>
                 </ol>
             </article>
         </section>
@@ -297,5 +324,8 @@
 </body>
 <script src="../js/menu.js"></script>
 <script src="../js/footer.js"></script>
+<!-- Script ejecutor de BLOCKA -->
+<script src="../js/blocka.js"></script>
 
 </html>
+
