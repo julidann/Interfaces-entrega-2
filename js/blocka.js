@@ -121,8 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Aplicar la grilla dinámica directamente al estilo del tablero
         tablero.style.display = 'grid';
-        tablero.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`;
-        tablero.style.gridTemplateRows = `repeat(${filas}, 1fr)`;
+        tablero.style.gridTemplateColumns = `repeat(${columnas}, minmax(0, 1fr))`;
+        tablero.style.gridTemplateRows = `repeat(${filas}, minmax(0, 1fr))`;
+        // Mantener cada celda cuadrada: el tablero adapta su proporción a la grilla.
+        tablero.style.aspectRatio = `${columnas} / ${filas}`;
     */
 
     // EXTRA 2: Carga e inicio del tablero recortando SIEMPRE piezas cuadradas
@@ -168,17 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
         img.onload = () => {
             imagenCargada = img;
 
-            // 1. Obtener la menor dimensión de la imagen original para asegurar un área cuadrada centrada
-            const ladoCuadradoImagen = Math.min(img.width, img.height);
-            
-            // 2. Definir el tamaño cuadrado de cada corte sobre la imagen de origen
-            const tamanoCorteX = ladoCuadradoImagen / columnas;
-            const tamanoCorteY = ladoCuadradoImagen / filas;
-            const tamanoCorte = Math.min(tamanoCorteX, tamanoCorteY);
+            // Calcular cortes cuadrados para que cada pieza coincida con una celda cuadrada.
+            const tamanoCorte = Math.min(img.width / columnas, img.height / filas);
 
-            // Centrar el recorte en la foto original si no es cuadrada
-            const offsetX = (img.width - (tamanoCorte * columnas)) / 2;
-            const offsetY = (img.height - (tamanoCorte * filas)) / 2;
+            // Centrar el área utilizada cuando la imagen no tiene la proporción de la grilla.
+            const offsetX = (img.width - tamanoCorte * columnas) / 2;
+            const offsetY = (img.height - tamanoCorte * filas) / 2;
 
             // Generar los cortes
             const cortes = [];
