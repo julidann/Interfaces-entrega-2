@@ -34,7 +34,7 @@
         },
         {
             name: "Blocka",
-            image: trendingImageRoute + "background-blocka.png",
+            image: trendingImageRoute + "background-spider.blocka.png",
             link: "game.html"
         },
         {
