@@ -19,11 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alt: "God of War Ragnarok"
         },
         {
-            title: "Ghost of Tsushima",
-            image: imgRoute + "background-ghost.jpg",
-            description: "Recorré la isla de Tsushima y luchá como samurái para defender tu hogar de la invasión.",
-            alt: "Ghost of Tsushima"
+            title: "Spider Blocka",
+            image: imgRoute + "SpiderBlocka.png",
+            description: "¡Pondrás a prueba tu rapidez y visión espacial! Encajá cada fragmento en su posición exacta para reconstruir las imágenes por completo. Demostrá tu habilidad, completá el tablero correctamente y convertite en el ganador.",
+            alt: "Spider Blocka"
         }
+        
     ];
 
     let currentIndex = 1;
