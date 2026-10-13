@@ -1,11 +1,16 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    const board = document.getElementById('blocka-board');
-    const btnStart = document.getElementById('btn-start');
-    const currentLevelSpan = document.getElementById('current-level');
+    // Elementos del DOM
+    const tablero = document.getElementById('blocka-board');
+    const btnComenzar = document.getElementById('btn-start');
+    const btnAyudita = document.getElementById('btn-hint');
+    const spanNivel = document.getElementById('current-level');
+    const spanTiempo = document.getElementById('timer');
+    
+    // Contenedor del juego
+    const contenedorJuego = document.querySelector('.game-container');
 
     // Banco de imágenes (mínimo 6 según la consigna)
-    const imageBank = [
+    const bancoImagenes = [
         '../assets/img/blocka1.jpg',
         '../assets/img/blocka2.jpg',
         '../assets/img/blocka3.jpg',
@@ -14,294 +19,388 @@ document.addEventListener('DOMContentLoaded', () => {
         '../assets/img/blocka6.jpg'
     ];
 
-    // Niveles y sus filtros
-    const levels = [
-        { level: 1, filter: 'grayscale' },
-        { level: 2, filter: 'brightness' },
-        { level: 3, filter: 'negative' }
+    // Configuración de los 3 niveles con Filtros + Extra 4 (Tiempo límite en Nivel 3)
+    const niveles = [
+        { numero: 1, filtro: 'grises', tiempoMaximo: null },   // Nivel 1: Sin límite
+        { numero: 2, filtro: 'brillo', tiempoMaximo: null },   // Nivel 2: Sin límite
+        { numero: 3, filtro: 'negativo', tiempoMaximo: 5 }    // Nivel 3: 45 segundos límite (Extra 4)
     ];
 
-    let currentLevelIdx = 0;
-    let piecesData = [];
-    let randomImgSrc = null;
-    let levelCompleted = false;
-    let gameStarted = false;
+    let nivelActualIndex = 0;
+    let piezas = []; 
+    let imagenCargada = null;
+    let enSorteo = false;
+    
+    // Control de tiempo y récords
+    let cronometroInterval = null;
+    let segundosTranscurridos = 0;
+    let mejoresTiempos = {};
 
-    let timerInterval = null;
-    let elapsedSeconds = 0;
-    let timerStarted = false;
+    // Eventos iniciales
+    if (btnComenzar) {
+        btnComenzar.addEventListener('click', () => {
+            if (!enSorteo) ejecutarSorteoImagen();
+        });
+    }
 
-    // Iniciar el juego
-    btnStart.addEventListener('click', () => {
-        currentLevelIdx = 0;
-        gameStarted = true;
-        startLevel(currentLevelIdx);
-    });
+    if (btnAyudita) {
+        btnAyudita.addEventListener('click', usarAyudita);
+    }
 
-    // Iniciar el temporizador
-    function startTimer() {
-    if (timerStarted) return;
+    // EXTRA 1: Animación de selección previa (Sorteo de miniaturas)
+    // EXTRA 1: Sorteo de imagen en tamaño completo
+   // EXTRA 1: Sorteo de imagen en tamaño completo
+    function ejecutarSorteoImagen() {
+        enSorteo = true;
+        tablero.innerHTML = '';
+        frenarCronometro();
 
-    timerStarted = true;
+        if (btnComenzar) btnComenzar.disabled = true;
+        if (btnAyudita) btnAyudita.disabled = true;
 
-    timerInterval = setInterval(() => {
-        elapsedSeconds++;
+        // Elemento <img> que ocupa todo el marco del tablero
+        const imgRuleta = document.createElement('img');
+        imgRuleta.id = 'img-ruleta';
+        imgRuleta.style.cssText = `
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+        `;
+        tablero.appendChild(imgRuleta);
 
-        const minutes = Math.floor(elapsedSeconds / 60);
-        const seconds = elapsedSeconds % 60;
+        // Elegir la imagen ganadora desde el arranque
+        const indiceElegido = Math.floor(Math.random() * bancoImagenes.length);
+        const imagenGanadora = bancoImagenes[indiceElegido];
 
-        document.getElementById('timer').textContent =
-            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }, 1000);
-}
+        let pasadas = 0;
+        let actual = 0;
+        const totalPasadas = 16 + indiceElegido; // Asegura que frene justo en indiceElegido
 
-    // Iniciar un nivel
-    function startLevel(levelIndex) {
-        if (levelIndex >= levels.length) {
-            return;
+        const intervalo = setInterval(() => {
+            // Muestra una foto aleatoria durante la animación
+            imgRuleta.src = bancoImagenes[actual % bancoImagenes.length];
+
+            pasadas++;
+            actual++;
+
+            // Cuando llega al final del sorteo
+            if (pasadas >= totalPasadas) {
+                clearInterval(intervalo);
+
+                // Fijar explícitamente la imagen ganadora en el visor
+                imgRuleta.src = imagenGanadora;
+
+                // Destello neón verde para indicar que esa es la imagen elegida
+                tablero.style.boxShadow = '0 0 25px #00d814';
+                tablero.style.borderColor = '#00d814';
+                
+                setTimeout(() => {
+                    tablero.style.boxShadow = 'none';
+                    enSorteo = false;
+                    // Arrancar el nivel con la MISMA imagen ganadora
+                    iniciarNivelConImagen(imagenGanadora);
+                }, 750);
+            }
+        }, 120);
+    }
+
+    // Carga e inicio del tablero de juego
+    function iniciarNivelConImagen(urlImagen) {
+        tablero.innerHTML = '';
+        piezas = [];
+        frenarCronometro();
+        iniciarCronometro();
+
+        if (btnComenzar) btnComenzar.disabled = false;
+        if (btnAyudita) btnAyudita.disabled = false;
+
+        if (spanNivel) {
+            spanNivel.textContent = niveles[nivelActualIndex].numero;
         }
 
-        board.innerHTML = '';
-        piecesData = [];
-        levelCompleted = false;
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = urlImagen;
 
-        updateLevelDisplay();
+        img.onload = () => {
+            imagenCargada = img;
+            const anchoParte = img.width / 2;
+            const altoParte = img.height / 2;
 
-        // Seleccionar una imagen aleatoria del banco
-        randomImgSrc = new Image();
-
-        randomImgSrc.onload = () => {
-            const subWidth = Math.floor(randomImgSrc.width / 2);
-            const subHeight = Math.floor(randomImgSrc.height / 2);
-
-            // Coordenadas de los cuatro recortes
-            const cuts = [
-                { sx: 0, sy: 0 },
-                { sx: subWidth, sy: 0 },
-                { sx: 0, sy: subHeight },
-                { sx: subWidth, sy: subHeight }
+            const cortes = [
+                { x: 0, y: 0 },
+                { x: anchoParte, y: 0 },
+                { x: 0, y: altoParte },
+                { x: anchoParte, y: altoParte }
             ];
 
-            cuts.forEach((cut, index) => {
-                // Crear un canvas para cada pieza
+            cortes.forEach((corte, index) => {
                 const canvas = document.createElement('canvas');
-                canvas.width = subWidth;
-                canvas.height = subHeight;
+                canvas.width = anchoParte;
+                canvas.height = altoParte;
                 canvas.classList.add('blocka-piece');
-                canvas.dataset.index = index;
 
                 const ctx = canvas.getContext('2d');
 
-                // Recortar una parte de la imagen original
+                // Corte de subimagen
                 ctx.drawImage(
-                    randomImgSrc,
-                    cut.sx, cut.sy, subWidth, subHeight,
-                    0, 0, subWidth, subHeight
+                    img,
+                    corte.x, corte.y, anchoParte, altoParte,
+                    0, 0, anchoParte, altoParte
                 );
 
-                // Aplicar el filtro correspondiente al nivel
-                applyPixelFilter(
-                    ctx,
-                    subWidth,
-                    subHeight,
-                    levels[levelIndex].filter
-                );
+                // Aplicación de filtro según nivel (Grises, Brillo 30% o Negativo)
+                aplicarFiltroMatriz(ctx, anchoParte, altoParte, niveles[nivelActualIndex].filtro);
 
-                // Rotación inicial aleatoria: 90, 180 o 270 grados
-                const possibleRotations = [90, 180, 270];
+                // Rotación aleatoria inicial
+                const angulosPosibles = [90, 180, 270];
+                const rotacionInicial = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)];
 
-                const initialRotation =
-                    possibleRotations[
-                        Math.floor(Math.random() * possibleRotations.length)
-                    ];
-
-                const piece = {
+                piezas.push({
                     canvas: canvas,
                     ctx: ctx,
-                    rotation: initialRotation,
-                    correct: false
-                };
+                    rotacion: rotacionInicial,
+                    fijada: false
+                });
 
-                piecesData.push(piece);
+                canvas.style.transform = `rotate(${rotacionInicial}deg)`;
 
-                canvas.style.transform = `rotate(${initialRotation}deg)`;
-
-                // Clic izquierdo: girar 90 grados hacia la izquierda
+                // Eventos de rotación
                 canvas.addEventListener('click', (e) => {
                     e.preventDefault();
-                    startTimer(); 
-                    rotatePiece(index, -90);
+                    rotarPieza(index, -90);
                 });
 
-                // Clic derecho: girar 90 grados hacia la derecha
                 canvas.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
-                    startTimer(); 
-                    rotatePiece(index, 90);
+                    rotarPieza(index, 90);
                 });
 
-                board.appendChild(canvas);
+                tablero.appendChild(canvas);
             });
         };
-
-        randomImgSrc.onerror = () => {
-            alert('No se pudo cargar la imagen. Revisá la ruta del archivo.');
-        };
-
-        // Cargar la imagen seleccionada
-        randomImgSrc.src =
-            imageBank[Math.floor(Math.random() * imageBank.length)];
     }
 
-    // Rotar una pieza
-    function rotatePiece(index, degrees) {
-        if (levelCompleted || !gameStarted) {
-            return;
-        }
+    // Rotación manual
+    function rotarPieza(index, grados) {
+        const pieza = piezas[index];
+        if (pieza.fijada) return;
 
-        const piece = piecesData[index];
+        pieza.rotacion = (pieza.rotacion + grados) % 360;
+        if (pieza.rotacion < 0) pieza.rotacion += 360;
 
-        if (!piece) {
-            return;
-        }
-
-        piece.rotation = (piece.rotation + degrees) % 360;
-
-        // Normalizar ángulos negativos
-        if (piece.rotation < 0) {
-            piece.rotation += 360;
-        }
-
-        piece.correct = piece.rotation === 0;
-
-        piece.canvas.style.transform =
-            `rotate(${piece.rotation}deg)`;
-
-        checkWinCondition();
+        pieza.canvas.style.transform = `rotate(${pieza.rotacion}deg)`;
+        verificarVictoria();
     }
 
-    // Aplicar filtros a los píxeles de la imagen
-    function applyPixelFilter(ctx, width, height, filterType) {
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const data = imageData.data;
+    // EXTRA 3: Lógica de la Ayudita (+5s y acomoda una pieza)
+    function usarAyudita() {
+        const piezasIncorrectas = piezas.filter(p => p.rotacion !== 0 && !p.fijada);
 
-        for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
+        if (piezasIncorrectas.length > 0) {
+            const piezaElegida = piezasIncorrectas[Math.floor(Math.random() * piezasIncorrectas.length)];
+            piezaElegida.rotacion = 0;
+            piezaElegida.fijada = true;
+            piezaElegida.canvas.style.transform = 'rotate(0deg)';
+            piezaElegida.canvas.style.outline = '2px solid #00d814';
 
-            if (filterType === 'grayscale') {
-                // Escala de grises
-                const avg = 0.3 * r + 0.59 * g + 0.11 * b;
+            // Penalización
+            segundosTranscurridos += 5;
+            actualizarPantallaTiempo();
 
-                data[i] = avg;
-                data[i + 1] = avg;
-                data[i + 2] = avg;
+            verificarVictoria();
+        }
+    }
 
-            } else if (filterType === 'brightness') {
-                // Aumentar el brillo un 30 %
-                data[i] = Math.min(255, r * 1.3);
-                data[i + 1] = Math.min(255, g * 1.3);
-                data[i + 2] = Math.min(255, b * 1.3);
+    // Aplicación manual de filtros con ImageData (Sin usar CSS Filter)
+    function aplicarFiltroMatriz(ctx, ancho, alto, tipoFiltro) {
+        const datosImagen = ctx.getImageData(0, 0, ancho, alto);
+        const pixeles = datosImagen.data;
 
-            } else if (filterType === 'negative') {
-                // Invertir los colores
-                data[i] = 255 - r;
-                data[i + 1] = 255 - g;
-                data[i + 2] = 255 - b;
+        for (let i = 0; i < pixeles.length; i += 4) {
+            let r = pixeles[i];
+            let g = pixeles[i + 1];
+            let b = pixeles[i + 2];
+
+            if (tipoFiltro === 'grises') {
+                let promedio = 0.3 * r + 0.59 * g + 0.11 * b;
+                pixeles[i] = pixeles[i + 1] = pixeles[i + 2] = promedio;
+            } else if (tipoFiltro === 'brillo') {
+                pixeles[i] = Math.min(255, r * 1.30);
+                pixeles[i + 1] = Math.min(255, g * 1.30);
+                pixeles[i + 2] = Math.min(255, b * 1.30);
+            } else if (tipoFiltro === 'negativo') {
+                pixeles[i] = 255 - r;
+                pixeles[i + 1] = 255 - g;
+                pixeles[i + 2] = 255 - b;
+            }
+        }
+
+        ctx.putImageData(datosImagen, 0, 0);
+    }
+
+    // Verificación de condición de victoria
+    function verificarVictoria() {
+        if (!piezas || piezas.length === 0) return;
+
+        const gano = piezas.every(p => p.rotacion === 0);
+
+        if (gano) {
+            frenarCronometro();
+            if (btnAyudita) btnAyudita.disabled = true;
+
+            const tiempoTexto = formatearTiempo(segundosTranscurridos);
+            mostrarImagenLimpia(); // Quita filtros y muestra la imagen original en RGB
+
+            const claveNivel = `nivel_${niveles[nivelActualIndex].numero}`;
+            const récordPrevio = mejoresTiempos[claveNivel];
+            let esNuevoRécord = false;
+
+            if (!récordPrevio || segundosTranscurridos < récordPrevio) {
+                mejoresTiempos[claveNivel] = segundosTranscurridos;
+                esNuevoRécord = true;
             }
 
-            // El canal alfa (data[i + 3]) se mantiene sin cambios
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    // Comprobar si todas las piezas están correctamente orientadas
-    function checkWinCondition() {
-        if (levelCompleted || piecesData.length === 0) {
-            return;
-        }
-
-        const allCorrect = piecesData.every(
-            piece => piece.rotation === 0
-        );
-
-        if (allCorrect) {
-            levelCompleted = true;
-            clearInterval(timerInterval);
-
-            // Quitar el filtro y mostrar los colores originales
-            removeFiltersAndShowRGB();
-
             setTimeout(() => {
-                alert(
-                    `¡Nivel ${levels[currentLevelIdx].level} completado!`
-                );
-
-                currentLevelIdx++;
-
-                if (currentLevelIdx < levels.length) {
-                    // Iniciar el siguiente nivel
-                    startLevel(currentLevelIdx);
-                } else {
-                    // Juego completado
-                    alert(
-                        '¡Felicitaciones! Completaste todos los niveles de BLOCKA.'
-                    );
-
-                    gameStarted = false;
-                    currentLevelIdx = 0;
-                    updateLevelDisplay();
-                    board.innerHTML = '';
-                    piecesData = [];
-                    btnStart.textContent = 'Jugar de nuevo';
-                }
-            }, 300);
+                mostrarCartelResultado(true, tiempoTexto, esNuevoRécord, récordPrevio);
+            }, 1000);
         }
     }
 
-    // Actualizar el número de nivel en el HTML
-    function updateLevelDisplay() {
-        if (currentLevelSpan) {
-            currentLevelSpan.textContent =
-                levels[currentLevelIdx].level;
-        }
-    }
+    // Remoción de filtros al completar el puzzle
+    function mostrarImagenLimpia() {
+        if (!imagenCargada) return;
 
-    // Quitar el filtro y recuperar la imagen original en cada canvas
-    function removeFiltersAndShowRGB() {
-        if (!randomImgSrc || !randomImgSrc.complete) {
-            return;
-        }
+        const anchoParte = imagenCargada.width / 2;
+        const altoParte = imagenCargada.height / 2;
 
-        const subWidth = Math.floor(randomImgSrc.width / 2);
-        const subHeight = Math.floor(randomImgSrc.height / 2);
-
-        const cuts = [
-            { sx: 0, sy: 0 },
-            { sx: subWidth, sy: 0 },
-            { sx: 0, sy: subHeight },
-            { sx: subWidth, sy: subHeight }
+        const cortes = [
+            { x: 0, y: 0 },
+            { x: anchoParte, y: 0 },
+            { x: 0, y: altoParte },
+            { x: anchoParte, y: altoParte }
         ];
 
-        piecesData.forEach((piece, index) => {
-            const cut = cuts[index];
-
-            // Limpiar el canvas
-            piece.ctx.clearRect(
-                0,
-                0,
-                piece.canvas.width,
-                piece.canvas.height
-            );
-
-            // Dibujar el recorte original sin filtros
-            piece.ctx.drawImage(
-                randomImgSrc,
-                cut.sx, cut.sy, subWidth, subHeight,
-                0, 0, subWidth, subHeight
+        piezas.forEach((pieza, i) => {
+            const corte = cortes[i];
+            pieza.ctx.clearRect(0, 0, anchoParte, altoParte);
+            pieza.ctx.drawImage(
+                imagenCargada,
+                corte.x, corte.y, anchoParte, altoParte,
+                0, 0, anchoParte, altoParte
             );
         });
+    }
+
+    // Cartel dinámico de resultado (Victoria / Derrota)
+    function mostrarCartelResultado(gano, tiempoTexto, esNuevoRécord = false, récordPrevio = null) {
+        const cartelExistente = document.getElementById('game-overlay');
+        if (cartelExistente) cartelExistente.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'game-overlay';
+        overlay.className = 'game-overlay';
+
+        if (gano) {
+            let textoRécordHTML = esNuevoRécord 
+                ? '🏆 ¡Nuevo récord alcanzado en este nivel!' 
+                : `Tu récord actual: ${formatearTiempo(récordPrevio)}`;
+
+            const textoBoton = (nivelActualIndex === niveles.length - 1) ? 'Reiniciar Juego' : 'Siguiente Nivel';
+
+            overlay.innerHTML = `
+                <div class="overlay-card">
+                    <h2>¡Nivel Completado! 🎉</h2>
+                    <p>Tiempo de partida: <strong>${tiempoTexto}</strong></p>
+                    <p class="record-text">${textoRécordHTML}</p>
+                    <div class="overlay-actions">
+                        <button id="btn-next-level" class="primary">${textoBoton}</button>
+                        <a href="home.html" class="secondary">Menú Principal</a>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Cartel de Derrota (Tiempo agotado en Nivel 3)
+            overlay.innerHTML = `
+                <div class="overlay-card" style="border-color: #e50914;">
+                    <h2 style="color: #e50914;">¡Tiempo Agotado! ⏳</h2>
+                    <p>Se terminó el tiempo límite para este nivel.</p>
+                    <div class="overlay-actions">
+                        <button id="btn-retry" class="primary">Reintentar Nivel</button>
+                        <a href="home.html" class="secondary">Menú Principal</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (contenedorJuego) contenedorJuego.appendChild(overlay);
+
+        // Listeners de los botones del cartel
+        const btnSiguiente = document.getElementById('btn-next-level');
+        if (btnSiguiente) {
+            btnSiguiente.addEventListener('click', () => {
+                overlay.remove();
+                if (nivelActualIndex < niveles.length - 1) {
+                    nivelActualIndex++;
+                } else {
+                    nivelActualIndex = 0;
+                }
+                ejecutarSorteoImagen();
+            });
+        }
+
+        const btnReintentar = document.getElementById('btn-retry');
+        if (btnReintentar) {
+            btnReintentar.addEventListener('click', () => {
+                overlay.remove();
+                ejecutarSorteoImagen();
+            });
+        }
+    }
+
+    // Temporizador y control de límite de tiempo (Extra 4)
+    function iniciarCronometro() {
+        segundosTranscurridos = 0;
+        actualizarPantallaTiempo();
+
+        cronometroInterval = setInterval(() => {
+            segundosTranscurridos++;
+            actualizarPantallaTiempo();
+
+            // Verificación del tiempo máximo si el nivel lo exige
+            const limiteNivel = niveles[nivelActualIndex].tiempoMaximo;
+            if (limiteNivel && segundosTranscurridos >= limiteNivel) {
+                frenarCronometro();
+                mostrarCartelResultado(false, null); // Se dispara la derrota
+            }
+        }, 1000);
+    }
+
+    function frenarCronometro() {
+        if (cronometroInterval) {
+            clearInterval(cronometroInterval);
+            cronometroInterval = null;
+        }
+    }
+
+    function actualizarPantallaTiempo() {
+        if (spanTiempo) {
+            const limiteNivel = niveles[nivelActualIndex].tiempoMaximo;
+            let textoDisplay = formatearTiempo(segundosTranscurridos);
+            
+            if (limiteNivel) {
+                textoDisplay += ` / ${formatearTiempo(limiteNivel)}`;
+            }
+            spanTiempo.textContent = textoDisplay;
+        }
+    }
+
+    function formatearTiempo(totalSegundos) {
+        const min = Math.floor(totalSegundos / 60);
+        const seg = totalSegundos % 60;
+        return `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
     }
 });

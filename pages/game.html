@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
-
 </head>
 
 <body>
@@ -76,36 +75,20 @@
         <section class="landing-main">
             <p><a href="home.html">Inicio</a> / Juegos / Free to Play / BLOCKA</p>
 
-            <!-- Contenedor del juego BLOCKA en lugar de la imagen estática -->
+            <!-- Contenedor del juego BLOCKA -->
+            <!-- Contenedor del juego BLOCKA -->
             <div class="game-container">
                 <!-- Header de Controles y Estado -->
                 <div class="game-header">
                     <div class="level-info">Nivel: <span id="current-level">1</span>/3</div>
                     <div class="timer-info">Tiempo: <span id="timer">00:00</span></div>
-                    <button id="btn-start" class="btn-primary">Comenzar</button>
-                    <button id="btn-hint" class="btn-secondary" disabled>Ayudita (+5s)</button>
+                    <button id="btn-hint" class="secondary" title="Suma +5 segundos">Ayudita (+5s)</button>
                 </div>
 
-                <!-- Extra 1: Selección Animada / Ruleta de Imagen -->
-                <div id="carousel-selection" class="image-selector-container hidden">
-                    <p>Sorteando imagen del nivel...</p>
-                    <div class="thumbnail-strip" id="thumbnail-strip"></div>
-                </div>
-
-                <!-- Tablero del Juego BLOCKA (JavaScript generará los 4 canvas acá adentro) -->
+                <!-- Tablero del Juego BLOCKA -->
                 <div id="blocka-board" class="blocka-board"></div>
 
-                <!-- Overlay de fin de nivel o victoria -->
-                <div id="game-overlay" class="game-overlay hidden">
-                    <div class="overlay-content">
-                        <h2 id="overlay-title">¡Nivel Completado!</h2>
-                        <p id="overlay-message"></p>
-                        <div class="overlay-buttons">
-                            <button id="btn-next-level" class="btn-primary">Siguiente Nivel</button>
-                            <button id="btn-restart" class="btn-secondary">Reintentar</button>
-                        </div>
-                    </div>
-                </div>
+                <button id="btn-start" class="accent">Comenzar</button>
             </div>
 
             <div class="tags">
@@ -119,13 +102,13 @@
         <section class="gallery">
             <div class="gallery-thumbs">
                 <article>
-                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="BLOCKA - Muestra 1">
+                    <img class="img-game" src="../assets/img/SpiderBlocka.png" alt="BLOCKA - Muestra 1">
                 </article>
                 <article>
-                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="BLOCKA - Muestra 2">
+                    <img class="img-game" src="../assets/img/blocka2.jpg" alt="BLOCKA - Muestra 2">
                 </article>
                 <article>
-                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="BLOCKA - Muestra 3">
+                    <img class="img-game" src="../assets/img/blocka3.jpg" alt="BLOCKA - Muestra 3">
                 </article>
             </div>
         </section>
@@ -166,11 +149,13 @@
                     Rotá las 4 subimágenes hasta dejarlas en su posición correcta para resolver la imagen.
                 </p>
                 <ol>
-                    <li>Hacé clic en **"Comenzar"** para iniciar el temporizador del nivel.</li>
+                    <li>Hacé clic en <strong>"Comenzar"</strong> para iniciar el temporizador del nivel.</li>
                     <li><strong>Click Izquierdo:</strong> Rota la subimagen 90° hacia la izquierda.</li>
                     <li><strong>Click Derecho:</strong> Rota la subimagen 90° hacia la derecha.</li>
-                    <li>Usá el botón **"Ayudita"** si te trabás: acomodará una pieza por vos sumando 5 segundos al temporizador.</li>
-                    <li>¡Ganás cuando las cuatro piezas estén orientadas en 0° y sin filtros!</li>
+                    <li>Usá el botón <strong>"Ayudita"</strong> si te trabás: acomodará una pieza por vos sumando 5
+                        segundos al temporizador.</li>
+                    <li>¡Ganás cuando las cuatro piezas estén orientadas en 0°! Al resolverlo, el filtro se quita y
+                        queda la imagen original en RGB.</li>
                 </ol>
             </article>
         </section>
@@ -203,7 +188,6 @@
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
-
                 </p>
                 <p>Un puzzle rápido y entretenido.</p>
                 <small>June, 2025</small>
@@ -280,7 +264,6 @@
                         <a class="accent" href="">Jugar ahora</a>
                     </div>
                 </div>
-                </div>
             </article>
 
             <article class="also-played-card">
@@ -289,8 +272,6 @@
                     <h3>Hogwarts Legacy</h3>
                     <strong>BASIC</strong>
                     <a class="accent" href="">Jugar ahora</a>
-                </div>
-                </div>
                 </div>
             </article>
 
@@ -301,8 +282,6 @@
                     <strong>GRATIS</strong>
                     <a class="accent" href="">Jugar ahora</a>
                 </div>
-                </div>
-                </div>
             </article>
 
             <article class="also-played-card">
@@ -311,8 +290,6 @@
                     <h3>Battlefield 6</h3>
                     <strong>PRO-GAMER</strong>
                     <a class="accent" href="">Jugar ahora</a>
-                </div>
-                </div>
                 </div>
             </article>
         </section>
@@ -324,8 +301,6 @@
 </body>
 <script src="../js/menu.js"></script>
 <script src="../js/footer.js"></script>
-<!-- Script ejecutor de BLOCKA -->
 <script src="../js/blocka.js"></script>
 
 </html>
-

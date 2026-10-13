@@ -269,57 +269,164 @@ img.img-game{
 
 /* Contenedor principal del juego dentro de la maquetación de GameZone */
 .game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  background-color: #1a1a2e;
-  border-radius: 12px;
-  padding: 24px;
-  width: 100%;
-  max-width: 650px;
-  margin: 0 auto 30px auto;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    position: relative; /* Clave para el overlay absoluto */
 }
 
+/* Modal de Fin de Nivel */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 20, 0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.overlay-card {
+    background-color: #1a1a2e;
+    border: 2px solid #00d814;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 216, 20, 0.3);
+}
+
+.overlay-card h2 {
+    color: #00d814;
+    margin-top: 0;
+}
+
+.record-text {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.overlay-actions a {
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   TABLERO Y PIEZAS DE BLOCKA - Imagen Unificada (2x2)
+   ========================================================================== */
+
+/* Contenedor principal del juego */
+.game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background-color: #1a1a2e;
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 720px;
+    margin: 20px auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Encabezado con tiempo y nivel */
 .game-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  font-size: 1.1rem;
-  color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 0.95rem;
 }
 
-/* Grilla $2 \times 2$ para alojar las 4 subimágenes/canvas */
+/* Tablero exacto de 400x400 sin espaciados (Gap = 0) */
 .blocka-board {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  width: 400px;
-  height: 400px;
-  background-color: #0f0f1d;
-  padding: 6px;
-  border-radius: 8px;
-  border: 2px solid #2a2a4a;
+    display: grid;
+    grid-template-columns: repeat(2, 200px);
+    grid-template-rows: repeat(2, 200px);
+    gap: 0; /* Sin espacio entre piezas para formar 1 sola imagen */
+    width: 400px;
+    height: 400px;
+    background-color: #000000;
+    border-radius: 8px;
+    overflow: hidden; /* Corta bordes sobrantes */
+    border: 2px solid #00d814;
+    box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
 }
 
-/* Estilo individual de cada Canvas (Pieza del rompecabezas) */
+/* Estilo de cada subimagen/canvas */
 .blocka-piece {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: transform 0.25s ease-in-out, box-shadow 0.2s ease;
-  user-select: none;
+    width: 200px;
+    height: 200px;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }
 
+/* Efecto hover sutil para saber cuál vas a rotar */
 .blocka-piece:hover {
-  outline: 2px solid #00d814;
-  box-shadow: 0 0 10px rgba(0, 216, 20, 0.5);
+    filter: brightness(1.15);
 }
 
-/* Ocultar elementos auxiliares */
-.hidden {
-  display: none !important;
+/* ==========================================================================
+   CARTEL / OVERLAY DE VICTORIA (Inyectado por JS)
+   ========================================================================== */
+
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(11, 11, 24, 0.93);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    z-index: 100;
+}
+
+.overlay-card {
+    background-color: #121222;
+    border: 2px solid #00d814;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #ffffff;
+    width: 85%;
+    box-shadow: 0 0 20px rgba(0, 216, 20, 0.3);
+}
+
+.overlay-card h2 {
+    margin: 0 0 10px 0;
+    color: #00d814;
+    font-size: 1.4rem;
+}
+
+.record-text {
+    color: #ffcc00;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.overlay-actions a {
+    text-decoration: none;
 }
