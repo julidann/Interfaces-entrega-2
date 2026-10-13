@@ -315,19 +315,18 @@ img.img-game {
 }
 
 /* ==========================================================================
-   TABLERO Y PIEZAS (Adaptación Cuadrada Responsiva 1:1)
+   TABLERO Y PIEZAS: celdas cuadradas en grillas 2x2, 3x2 y 4x2
    ========================================================================== */
 
 .blocka-board {
     display: grid;
-    /* grid-template-columns / rows se asignan dinámicamente desde JS */
-    gap: 0; /* Sin espacios entre piezas para formar 1 sola imagen limpia */
+    gap: 0;
     width: 100%;
     max-width: 500px;
-    aspect-ratio: 1 / 1; /* Garantiza tablero cuadrado en cualquier resolución */
+    /* La proporción se define desde JS según las columnas y filas. */
     background-color: #000000;
     border-radius: 8px;
-    overflow: hidden; /* Oculta desbordes durante rotaciones */
+    overflow: hidden;
     border: 2px solid #00d814;
     box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
     box-sizing: border-box;
@@ -335,12 +334,13 @@ img.img-game {
 }
 
 .blocka-piece {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
+    height: 100%;
     display: block;
     cursor: pointer;
     user-select: none;
-    object-fit: cover;
+    object-fit: fill;
+    box-sizing: border-box;
     transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }
 
@@ -399,29 +399,4 @@ img.img-game {
 
 .overlay-actions a {
     text-decoration: none;
-}
-
-/* Tablero dinámico de celdas cuadradas */
-.blocka-board {
-    display: grid;
-    gap: 0; /* Sin separación entre piezas */
-    width: 100%;
-    max-width: 500px;
-    background-color: #000000;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid #00d814;
-    box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
-    box-sizing: border-box;
-}
-
-/* Cada canvas cuadrado dentro de su celda */
-.blocka-piece {
-    width: 100% !important;
-    aspect-ratio: 1 / 1; /* Obliga a que la ficha sea SIEMPRE un cuadrado exacto */
-    display: block;
-    cursor: pointer;
-    user-select: none;
-    object-fit: cover;
-    transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }
