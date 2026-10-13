@@ -1,11 +1,13 @@
-
+/* ==========================================================================
+   SECCIÓN GENERAL & GAMEZONE UI
+   ========================================================================== */
 
 main {
     background-color: #0e0e0e;
     color: #ffffff;
 }
 
-.game-image{
+.game-image {
     cursor: pointer;
 }
 
@@ -31,7 +33,7 @@ main {
     border-radius: 8px;
 }
 
-img.img-game{
+img.img-game {
     height: 200px;
     width: 400px;
 }
@@ -90,6 +92,10 @@ img.img-game{
     margin: 15px 0 0 10px;
 }
 
+/* ==========================================================================
+   RATINGS & REVIEWS
+   ========================================================================== */
+
 .ratings {
     padding: 20px;
     display: flex;
@@ -117,7 +123,6 @@ img.img-game{
 .ratings article:hover {
     transform: scale(1.01);
 }
-
 
 .rating-user {
     display: flex;
@@ -147,7 +152,6 @@ img.img-game{
     color: #a3a3a3;
     font-size: 12px;
 }
-
 
 .reviews {
     padding: 20px;
@@ -208,7 +212,11 @@ img.img-game{
     margin-top: 5px;
 }
 
-.also-played-info{
+/* ==========================================================================
+   ALSO PLAYED SECTION
+   ========================================================================== */
+
+.also-played-info {
     padding: 0 20px 20px 20px;
     color: black;
 }
@@ -247,10 +255,10 @@ img.img-game{
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     transition: transform 0.3s ease;
 }
+
 .also-played-card:hover {
     transform: scale(1.01);
 }
-
 
 .also-played-card img {
     width: 100%;
@@ -263,82 +271,22 @@ img.img-game{
     margin-top: 10px;
 }
 
-
-/*ACÁ VA LO DEL JUEGO
-*/
-
-/* Contenedor principal del juego dentro de la maquetación de GameZone */
-.game-container {
-    position: relative; /* Clave para el overlay absoluto */
-}
-
-/* Modal de Fin de Nivel */
-.game-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(10, 10, 20, 0.92);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
-    z-index: 10;
-}
-
-.overlay-card {
-    background-color: #1a1a2e;
-    border: 2px solid #00d814;
-    border-radius: 10px;
-    padding: 24px;
-    text-align: center;
-    color: #ffffff;
-    box-shadow: 0 0 20px rgba(0, 216, 20, 0.3);
-}
-
-.overlay-card h2 {
-    color: #00d814;
-    margin-top: 0;
-}
-
-.record-text {
-    color: #ffcc00;
-    font-weight: bold;
-}
-
-.overlay-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 16px;
-}
-
-.overlay-actions a {
-    text-decoration: none;
-}
-
 /* ==========================================================================
-   TABLERO Y PIEZAS DE BLOCKA - Imagen Unificada (2x2)
+   JUEGO BLOCKA - CONTENEDOR PRINCIPAL Y ENCABEZADO
    ========================================================================== */
 
-/* Contenedor principal del juego */
 .game-container {
-    position: relative;
+    position: relative; /* Clave para el overlay absoluto */
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    background-color: #1a1a2e;
-    border-radius: 12px;
     padding: 24px;
-    width: 100%;
-    max-width: 720px;
     margin: 20px auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 520px;
 }
 
-/* Encabezado con tiempo y nivel */
 .game-header {
     display: flex;
     justify-content: space-between;
@@ -348,38 +296,60 @@ img.img-game{
     font-size: 0.95rem;
 }
 
-/* Tablero exacto de 400x400 sin espaciados (Gap = 0) */
-.blocka-board {
-    display: grid;
-    grid-template-columns: repeat(2, 200px);
-    grid-template-rows: repeat(2, 200px);
-    gap: 0; /* Sin espacio entre piezas para formar 1 sola imagen */
-    width: 400px;
-    height: 400px;
-    background-color: #000000;
-    border-radius: 8px;
-    overflow: hidden; /* Corta bordes sobrantes */
-    border: 2px solid #00d814;
-    box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
+.pieces-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    font-size: 0.95rem;
 }
 
-/* Estilo de cada subimagen/canvas */
+.pieces-selector select {
+    background-color: #121222;
+    color: #ffffff;
+    border: 1px solid #00d814;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    outline: none;
+}
+
+/* ==========================================================================
+   TABLERO Y PIEZAS (Adaptación Cuadrada Responsiva 1:1)
+   ========================================================================== */
+
+.blocka-board {
+    display: grid;
+    /* grid-template-columns / rows se asignan dinámicamente desde JS */
+    gap: 0; /* Sin espacios entre piezas para formar 1 sola imagen limpia */
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1; /* Garantiza tablero cuadrado en cualquier resolución */
+    background-color: #000000;
+    border-radius: 8px;
+    overflow: hidden; /* Oculta desbordes durante rotaciones */
+    border: 2px solid #00d814;
+    box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
 .blocka-piece {
-    width: 200px;
-    height: 200px;
+    width: 100% !important;
+    height: 100% !important;
     display: block;
     cursor: pointer;
     user-select: none;
+    object-fit: cover;
     transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }
 
-/* Efecto hover sutil para saber cuál vas a rotar */
 .blocka-piece:hover {
     filter: brightness(1.15);
 }
 
 /* ==========================================================================
-   CARTEL / OVERLAY DE VICTORIA (Inyectado por JS)
+   OVERLAY / CARTEL DE RESULTADO (Inyectado por JS)
    ========================================================================== */
 
 .game-overlay {
@@ -388,8 +358,7 @@ img.img-game{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(11, 11, 24, 0.93);
-    backdrop-filter: blur(4px);
+    background-color: rgba(10, 10, 20, 0.92);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -405,6 +374,7 @@ img.img-game{
     text-align: center;
     color: #ffffff;
     width: 85%;
+    max-width: 380px;
     box-shadow: 0 0 20px rgba(0, 216, 20, 0.3);
 }
 
@@ -429,4 +399,29 @@ img.img-game{
 
 .overlay-actions a {
     text-decoration: none;
+}
+
+/* Tablero dinámico de celdas cuadradas */
+.blocka-board {
+    display: grid;
+    gap: 0; /* Sin separación entre piezas */
+    width: 100%;
+    max-width: 500px;
+    background-color: #000000;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #00d814;
+    box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
+    box-sizing: border-box;
+}
+
+/* Cada canvas cuadrado dentro de su celda */
+.blocka-piece {
+    width: 100% !important;
+    aspect-ratio: 1 / 1; /* Obliga a que la ficha sea SIEMPRE un cuadrado exacto */
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    object-fit: cover;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }

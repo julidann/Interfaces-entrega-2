@@ -80,10 +80,21 @@
             <div class="game-container">
                 <!-- Header de Controles y Estado -->
                 <div class="game-header">
-                    <div class="level-info">Nivel: <span id="current-level">1</span>/3</div>
-                    <div class="timer-info">Tiempo: <span id="timer">00:00</span></div>
-                    <button id="btn-hint" class="secondary" title="Suma +5 segundos">Ayudita (+5s)</button>
-                </div>
+    <div class="level-info">Nivel: <span id="current-level">1</span>/3</div>
+    
+    <!-- Selector del Extra 2: Cantidad de piezas -->
+    <div class="pieces-selector">
+        <label for="select-pieces">Piezas:</label>
+        <select id="select-pieces">
+            <option value="4" selected>4 (2x2)</option>
+            <option value="6">6 (3x2)</option>
+            <option value="8">8 (4x2)</option>
+        </select>
+    </div>
+
+    <div class="timer-info">Tiempo: <span id="timer">00:00</span></div>
+    <button id="btn-hint" class="btn-secondary" title="Suma +5 segundos">Ayudita (+5s)</button>
+</div>
 
                 <!-- Tablero del Juego BLOCKA -->
                 <div id="blocka-board" class="blocka-board"></div>

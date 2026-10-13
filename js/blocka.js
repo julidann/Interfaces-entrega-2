@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tablero = document.getElementById('blocka-board');
     const btnComenzar = document.getElementById('btn-start');
     const btnAyudita = document.getElementById('btn-hint');
+    const selectPiezas = document.getElementById('select-pieces');
     const spanNivel = document.getElementById('current-level');
     const spanTiempo = document.getElementById('timer');
     
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const niveles = [
         { numero: 1, filtro: 'grises', tiempoMaximo: null },   // Nivel 1: Sin límite
         { numero: 2, filtro: 'brillo', tiempoMaximo: null },   // Nivel 2: Sin límite
-        { numero: 3, filtro: 'negativo', tiempoMaximo: 5 }    // Nivel 3: 45 segundos límite (Extra 4)
+        { numero: 3, filtro: 'negativo', tiempoMaximo: 45 }    // Nivel 3: 45 segundos límite
     ];
 
     let nivelActualIndex = 0;
@@ -47,18 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAyudita.addEventListener('click', usarAyudita);
     }
 
-    // EXTRA 1: Animación de selección previa (Sorteo de miniaturas)
     // EXTRA 1: Sorteo de imagen en tamaño completo
-   // EXTRA 1: Sorteo de imagen en tamaño completo
     function ejecutarSorteoImagen() {
         enSorteo = true;
         tablero.innerHTML = '';
+        tablero.style.display = 'grid';
+        tablero.style.gridTemplateColumns = '1fr';
+        tablero.style.gridTemplateRows = '1fr';
+
         frenarCronometro();
 
         if (btnComenzar) btnComenzar.disabled = true;
         if (btnAyudita) btnAyudita.disabled = true;
+        if (selectPiezas) selectPiezas.disabled = true;
 
-        // Elemento <img> que ocupa todo el marco del tablero
         const imgRuleta = document.createElement('img');
         imgRuleta.id = 'img-ruleta';
         imgRuleta.style.cssText = `
@@ -66,48 +69,63 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 100%;
             object-fit: cover;
             border-radius: 6px;
-            grid-column: 1 / -1;
-            grid-row: 1 / -1;
         `;
         tablero.appendChild(imgRuleta);
 
-        // Elegir la imagen ganadora desde el arranque
         const indiceElegido = Math.floor(Math.random() * bancoImagenes.length);
         const imagenGanadora = bancoImagenes[indiceElegido];
 
         let pasadas = 0;
         let actual = 0;
-        const totalPasadas = 16 + indiceElegido; // Asegura que frene justo en indiceElegido
+        const totalPasadas = 16 + indiceElegido;
 
         const intervalo = setInterval(() => {
-            // Muestra una foto aleatoria durante la animación
             imgRuleta.src = bancoImagenes[actual % bancoImagenes.length];
-
             pasadas++;
             actual++;
 
-            // Cuando llega al final del sorteo
             if (pasadas >= totalPasadas) {
                 clearInterval(intervalo);
-
-                // Fijar explícitamente la imagen ganadora en el visor
                 imgRuleta.src = imagenGanadora;
 
-                // Destello neón verde para indicar que esa es la imagen elegida
                 tablero.style.boxShadow = '0 0 25px #00d814';
                 tablero.style.borderColor = '#00d814';
                 
                 setTimeout(() => {
                     tablero.style.boxShadow = 'none';
                     enSorteo = false;
-                    // Arrancar el nivel con la MISMA imagen ganadora
                     iniciarNivelConImagen(imagenGanadora);
-                }, 750);
+                }, 1500);
             }
-        }, 120);
+        }, 180);
     }
 
-    // Carga e inicio del tablero de juego
+    /*
+
+    // Obtener la cantidad de piezas seleccionada
+        const totalPiezas = selectPiezas ? parseInt(selectPiezas.value) : 4;
+        let columnas, filas;
+
+        // Estructura if / else para definir la grilla exacta
+        if (totalPiezas === 6) {
+            columnas = 3;
+            filas = 2;
+        } else if (totalPiezas === 8) {
+            columnas = 4;
+            filas = 2;
+        } else {
+            // Por defecto: 4 piezas (2x2)
+            columnas = 2;
+            filas = 2;
+        }
+
+        // Aplicar la grilla dinámica directamente al estilo del tablero
+        tablero.style.display = 'grid';
+        tablero.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`;
+        tablero.style.gridTemplateRows = `repeat(${filas}, 1fr)`;
+    */
+
+    // EXTRA 2: Carga e inicio del tablero recortando SIEMPRE piezas cuadradas
     function iniciarNivelConImagen(urlImagen) {
         tablero.innerHTML = '';
         piezas = [];
@@ -116,10 +134,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (btnComenzar) btnComenzar.disabled = false;
         if (btnAyudita) btnAyudita.disabled = false;
+        if (selectPiezas) selectPiezas.disabled = false;
 
         if (spanNivel) {
             spanNivel.textContent = niveles[nivelActualIndex].numero;
         }
+
+        // Obtener la cantidad de piezas seleccionada
+        const totalPiezas = selectPiezas ? parseInt(selectPiezas.value) : 4;
+        let columnas, filas;
+
+        if (totalPiezas === 6) {
+            columnas = 3;
+            filas = 2;
+        } else if (totalPiezas === 8) {
+            columnas = 4;
+            filas = 2;
+        } else {
+            // Por defecto: 4 piezas (2x2)
+            columnas = 2;
+            filas = 2;
+        }
+
+        // Grilla dinámica del tablero
+        tablero.style.display = 'grid';
+        tablero.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`;
+        tablero.style.gridTemplateRows = `repeat(${filas}, 1fr)`;
 
         const img = new Image();
         img.crossOrigin = "Anonymous";
@@ -127,35 +167,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
         img.onload = () => {
             imagenCargada = img;
-            const anchoParte = img.width / 2;
-            const altoParte = img.height / 2;
 
-            const cortes = [
-                { x: 0, y: 0 },
-                { x: anchoParte, y: 0 },
-                { x: 0, y: altoParte },
-                { x: anchoParte, y: altoParte }
-            ];
+            // 1. Obtener la menor dimensión de la imagen original para asegurar un área cuadrada centrada
+            const ladoCuadradoImagen = Math.min(img.width, img.height);
+            
+            // 2. Definir el tamaño cuadrado de cada corte sobre la imagen de origen
+            const tamanoCorteX = ladoCuadradoImagen / columnas;
+            const tamanoCorteY = ladoCuadradoImagen / filas;
+            const tamanoCorte = Math.min(tamanoCorteX, tamanoCorteY);
+
+            // Centrar el recorte en la foto original si no es cuadrada
+            const offsetX = (img.width - (tamanoCorte * columnas)) / 2;
+            const offsetY = (img.height - (tamanoCorte * filas)) / 2;
+
+            // Generar los cortes
+            const cortes = [];
+            for (let f = 0; f < filas; f++) {
+                for (let c = 0; c < columnas; c++) {
+                    cortes.push({
+                        x: offsetX + (c * tamanoCorte),
+                        y: offsetY + (f * tamanoCorte)
+                    });
+                }
+            }
 
             cortes.forEach((corte, index) => {
                 const canvas = document.createElement('canvas');
-                canvas.width = anchoParte;
-                canvas.height = altoParte;
+                
+                // 3. Forzar dimensión 1:1 (Cuadrada) en la resolución interna del Canvas
+                canvas.width = 300; 
+                canvas.height = 300;
                 canvas.classList.add('blocka-piece');
 
                 const ctx = canvas.getContext('2d');
 
-                // Corte de subimagen
+                // Recortar la porción cuadrada exacta y dibujarla en el canvas cuadrado
                 ctx.drawImage(
                     img,
-                    corte.x, corte.y, anchoParte, altoParte,
-                    0, 0, anchoParte, altoParte
+                    corte.x, corte.y, tamanoCorte, tamanoCorte,
+                    0, 0, canvas.width, canvas.height
                 );
 
-                // Aplicación de filtro según nivel (Grises, Brillo 30% o Negativo)
-                aplicarFiltroMatriz(ctx, anchoParte, altoParte, niveles[nivelActualIndex].filtro);
+                // Aplicar filtro de nivel
+                aplicarFiltroMatriz(ctx, canvas.width, canvas.height, niveles[nivelActualIndex].filtro);
 
-                // Rotación aleatoria inicial
+                // Rotación aleatoria
                 const angulosPosibles = [90, 180, 270];
                 const rotacionInicial = angulosPosibles[Math.floor(Math.random() * angulosPosibles.length)];
 
@@ -163,12 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     canvas: canvas,
                     ctx: ctx,
                     rotacion: rotacionInicial,
-                    fijada: false
+                    fijada: false,
+                    columna: index % columnas,
+                    fila: Math.floor(index / columnas),
+                    corteX: corte.x,
+                    corteY: corte.y,
+                    tamanoCorte: tamanoCorte
                 });
 
                 canvas.style.transform = `rotate(${rotacionInicial}deg)`;
 
-                // Eventos de rotación
+                // Controles de rotación
                 canvas.addEventListener('click', (e) => {
                     e.preventDefault();
                     rotarPieza(index, -90);
@@ -196,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         verificarVictoria();
     }
 
-    // EXTRA 3: Lógica de la Ayudita (+5s y acomoda una pieza)
+    // EXTRA 3: Lógica de Ayudita
     function usarAyudita() {
         const piezasIncorrectas = piezas.filter(p => p.rotacion !== 0 && !p.fijada);
 
@@ -207,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
             piezaElegida.canvas.style.transform = 'rotate(0deg)';
             piezaElegida.canvas.style.outline = '2px solid #00d814';
 
-            // Penalización
             segundosTranscurridos += 5;
             actualizarPantallaTiempo();
 
@@ -215,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Aplicación manual de filtros con ImageData (Sin usar CSS Filter)
+    // Filtros con ImageData
     function aplicarFiltroMatriz(ctx, ancho, alto, tipoFiltro) {
         const datosImagen = ctx.getImageData(0, 0, ancho, alto);
         const pixeles = datosImagen.data;
@@ -242,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.putImageData(datosImagen, 0, 0);
     }
 
-    // Verificación de condición de victoria
+    // Verificación de victoria
     function verificarVictoria() {
         if (!piezas || piezas.length === 0) return;
 
@@ -253,9 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btnAyudita) btnAyudita.disabled = true;
 
             const tiempoTexto = formatearTiempo(segundosTranscurridos);
-            mostrarImagenLimpia(); // Quita filtros y muestra la imagen original en RGB
+            mostrarImagenLimpia();
 
-            const claveNivel = `nivel_${niveles[nivelActualIndex].numero}`;
+            const claveNivel = `nivel_${niveles[nivelActualIndex].numero}_piezas_${piezas.length}`;
             const récordPrevio = mejoresTiempos[claveNivel];
             let esNuevoRécord = false;
 
@@ -270,32 +330,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Remoción de filtros al completar el puzzle
+    // Remoción de filtros
+    // Remoción de filtros manteniendo el corte cuadrado perfecto
     function mostrarImagenLimpia() {
         if (!imagenCargada) return;
 
-        const anchoParte = imagenCargada.width / 2;
-        const altoParte = imagenCargada.height / 2;
-
-        const cortes = [
-            { x: 0, y: 0 },
-            { x: anchoParte, y: 0 },
-            { x: 0, y: altoParte },
-            { x: anchoParte, y: altoParte }
-        ];
-
-        piezas.forEach((pieza, i) => {
-            const corte = cortes[i];
-            pieza.ctx.clearRect(0, 0, anchoParte, altoParte);
+        piezas.forEach((pieza) => {
+            pieza.ctx.clearRect(0, 0, pieza.canvas.width, pieza.canvas.height);
             pieza.ctx.drawImage(
                 imagenCargada,
-                corte.x, corte.y, anchoParte, altoParte,
-                0, 0, anchoParte, altoParte
+                pieza.corteX, pieza.corteY, pieza.tamanoCorte, pieza.tamanoCorte,
+                0, 0, pieza.canvas.width, pieza.canvas.height
             );
         });
     }
 
-    // Cartel dinámico de resultado (Victoria / Derrota)
+    // Cartel dinámico
     function mostrarCartelResultado(gano, tiempoTexto, esNuevoRécord = false, récordPrevio = null) {
         const cartelExistente = document.getElementById('game-overlay');
         if (cartelExistente) cartelExistente.remove();
@@ -306,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (gano) {
             let textoRécordHTML = esNuevoRécord 
-                ? '🏆 ¡Nuevo récord alcanzado en este nivel!' 
+                ? '¡Nuevo récord alcanzado!' 
                 : `Tu récord actual: ${formatearTiempo(récordPrevio)}`;
 
             const textoBoton = (nivelActualIndex === niveles.length - 1) ? 'Reiniciar Juego' : 'Siguiente Nivel';
@@ -323,10 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         } else {
-            // Cartel de Derrota (Tiempo agotado en Nivel 3)
             overlay.innerHTML = `
-                <div class="overlay-card" style="border-color: #e50914;">
-                    <h2 style="color: #e50914;">¡Tiempo Agotado! ⏳</h2>
+                <div class="overlay-card">
+                    <h2>¡Tiempo Agotado! ⏳</h2>
                     <p>Se terminó el tiempo límite para este nivel.</p>
                     <div class="overlay-actions">
                         <button id="btn-retry" class="primary">Reintentar Nivel</button>
@@ -338,7 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (contenedorJuego) contenedorJuego.appendChild(overlay);
 
-        // Listeners de los botones del cartel
         const btnSiguiente = document.getElementById('btn-next-level');
         if (btnSiguiente) {
             btnSiguiente.addEventListener('click', () => {
@@ -361,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Temporizador y control de límite de tiempo (Extra 4)
+    // Temporizador y control del Extra 4
     function iniciarCronometro() {
         segundosTranscurridos = 0;
         actualizarPantallaTiempo();
@@ -370,11 +418,10 @@ document.addEventListener('DOMContentLoaded', () => {
             segundosTranscurridos++;
             actualizarPantallaTiempo();
 
-            // Verificación del tiempo máximo si el nivel lo exige
             const limiteNivel = niveles[nivelActualIndex].tiempoMaximo;
             if (limiteNivel && segundosTranscurridos >= limiteNivel) {
                 frenarCronometro();
-                mostrarCartelResultado(false, null); // Se dispara la derrota
+                mostrarCartelResultado(false, null);
             }
         }, 1000);
     }
