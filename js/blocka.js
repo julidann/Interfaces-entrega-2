@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tablero.style.display = 'grid';
         tablero.style.gridTemplateColumns = '1fr';
         tablero.style.gridTemplateRows = '1fr';
+        // La ruleta conserva el rectángulo fijo; la imagen se adapta a él.
+        tablero.style.aspectRatio = '5 / 3';
 
         frenarCronometro();
 
