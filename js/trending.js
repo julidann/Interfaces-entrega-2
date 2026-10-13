@@ -44,15 +44,26 @@
 
     ];
 
-    const trending = document.querySelector("#trending");
+   const trending = document.querySelector("#trending");
+
+    // 1. Evaluamos si la página actual es home.html
+    const estamosEnHome = window.location.pathname.includes("home.html");
 
     games.forEach(function (game) {
 
         const imagen = `<img src="${game.image}" alt="${game.name}">`;
 
+        // 2. Definimos la ruta de destino según la página
+        let destino;
+        if (estamosEnHome) {
+            destino = game.link; // Va a game.html
+        } else {
+            destino = isTrendingPage ? "login.html" : "pages/login.html"; // Va al login
+        }
+
         trending.innerHTML += `
             <article class="card">
-                ${game.link ? `<a href="${game.link}">${imagen}</a>` : imagen}
+                ${game.link ? `<a href="${destino}">${imagen}</a>` : imagen}
                 <p>${game.name}</p>
             </article>
         `;
