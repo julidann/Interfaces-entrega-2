@@ -158,10 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
             filas = 2;
         }
 
-        // Grilla dinámica del tablero
+        // Grilla dinámica con celdas cuadradas.
         tablero.style.display = 'grid';
-        tablero.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`;
-        tablero.style.gridTemplateRows = `repeat(${filas}, 1fr)`;
+        tablero.style.gridTemplateColumns = `repeat(${columnas}, minmax(0, 1fr))`;
+        tablero.style.gridTemplateRows = `repeat(${filas}, minmax(0, 1fr))`;
+        tablero.style.aspectRatio = `${columnas} / ${filas}`;
 
         const img = new Image();
         img.crossOrigin = "Anonymous";
