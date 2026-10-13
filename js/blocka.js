@@ -102,33 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 180);
     }
 
-    /*
-
-    // Obtener la cantidad de piezas seleccionada
-        const totalPiezas = selectPiezas ? parseInt(selectPiezas.value) : 4;
-        let columnas, filas;
-
-        // Estructura if / else para definir la grilla exacta
-        if (totalPiezas === 6) {
-            columnas = 3;
-            filas = 2;
-        } else if (totalPiezas === 8) {
-            columnas = 4;
-            filas = 2;
-        } else {
-            // Por defecto: 4 piezas (2x2)
-            columnas = 2;
-            filas = 2;
-        }
-
-        // Aplicar la grilla dinámica directamente al estilo del tablero
-        tablero.style.display = 'grid';
-        tablero.style.gridTemplateColumns = `repeat(${columnas}, minmax(0, 1fr))`;
-        tablero.style.gridTemplateRows = `repeat(${filas}, minmax(0, 1fr))`;
-        // Mantener cada celda cuadrada: el tablero adapta su proporción a la grilla.
-        tablero.style.aspectRatio = `${columnas} / ${filas}`;
-    */
-
     // EXTRA 2: Carga e inicio del tablero recortando SIEMPRE piezas cuadradas
     function iniciarNivelConImagen(urlImagen) {
         tablero.innerHTML = '';
@@ -363,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             overlay.innerHTML = `
                 <div class="overlay-card">
-                    <h2>¡Nivel Completado! 🎉</h2>
+                    <h2>¡Nivel Completado!</h2>
                     <p>Tiempo de partida: <strong>${tiempoTexto}</strong></p>
                     <p class="record-text">${textoRécordHTML}</p>
                     <div class="overlay-actions">
@@ -375,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             overlay.innerHTML = `
                 <div class="overlay-card">
-                    <h2>¡Tiempo Agotado! ⏳</h2>
+                    <h2>¡Tiempo Agotado!</h2>
                     <p>Se terminó el tiempo límite para este nivel.</p>
                     <div class="overlay-actions">
                         <button id="btn-retry" class="primary">Reintentar Nivel</button>
