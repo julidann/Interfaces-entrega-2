@@ -276,7 +276,7 @@ img.img-game {
    ========================================================================== */
 
 .game-container {
-    position: relative; /* Clave para el overlay absoluto */
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -315,15 +315,17 @@ img.img-game {
 }
 
 /* ==========================================================================
-   TABLERO Y PIEZAS: celdas cuadradas en grillas 2x2, 3x2 y 4x2
+   TABLERO Y PIEZAS: rectángulo fijo al inicio; piezas cuadradas al jugar
    ========================================================================== */
 
 .blocka-board {
     display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     gap: 0;
     width: 100%;
     max-width: 500px;
-    /* La proporción se define desde JS según las columnas y filas. */
+    aspect-ratio: 5 / 3;
     background-color: #000000;
     border-radius: 8px;
     overflow: hidden;
@@ -331,6 +333,13 @@ img.img-game {
     box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
     box-sizing: border-box;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.blocka-board img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .blocka-piece {
