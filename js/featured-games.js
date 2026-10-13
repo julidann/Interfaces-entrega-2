@@ -83,6 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (position === 0) {
                 card.classList.add("center", "featured");
                 btn.classList.add("primary");
+                btn.addEventListener("click", () => {
+                window.location.href = "game.html";
+    });
             } else if (position === 1) {
                 card.classList.add("right");
                 btn.classList.add("accent");
