@@ -33,6 +33,11 @@
             image: trendingImageRoute + "allgames-dirt5.jpg"
         },
         {
+            name: "Blocka",
+            image: trendingImageRoute + "background-blocka.png",
+            link: "game.html"
+        },
+        {
             name: "Far Cry 6",
             image: trendingImageRoute + "allgames-farcry6.jpg"
         },
@@ -43,9 +48,11 @@
 
     games.forEach(function (game) {
 
+        const imagen = `<img src="${game.image}" alt="${game.name}">`;
+
         trending.innerHTML += `
             <article class="card">
-                <img src="${game.image}" alt="${game.name}">
+                ${game.link ? `<a href="${game.link}">${imagen}</a>` : imagen}
                 <p>${game.name}</p>
             </article>
         `;
@@ -54,7 +61,7 @@
 
     /* ---------- Carrusel automático de "Tendencias actuales" ---------- */
 
-    const INTERVALO_MS = 3000;
+    const INTERVALO_MS = 4000;
 
     const viewport = document.querySelector(".trending-section .carousel-viewport");
     const track = document.querySelector("#trending");
@@ -87,9 +94,9 @@
 
     track.addEventListener("click", function (e) {
 
-        if (e.target.closest(".card img")) {
-            avanzar();
-        }
+        if (e.target.closest(".card img") && !e.target.closest("a")) {
+        avanzar();
+    }
 
     });
 
