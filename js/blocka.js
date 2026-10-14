@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const tablero = document.getElementById('blocka-board');
     const btnComenzar = document.getElementById('btn-start');
@@ -31,6 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let cronometroInterval = null;
     let segundosTranscurridos = 0;
     let mejoresTiempos = {};
+
+    const btnStart = document.querySelector("#btn-start");
+const startScreen = document.querySelector("#start-screen");
+
+btnStart.addEventListener("click", () => {
+    // Ocultamos la portada
+    startScreen.style.display = "none";
+    
+    // Acá llamas a tu función para iniciar/dibujar el juego
+    iniciarJuego(); 
+});
 
     // Comenzar y ayudita
     btnComenzar.addEventListener('click', () => {

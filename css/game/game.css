@@ -408,3 +408,65 @@ img.img-game {
 .overlay-actions a {
     text-decoration: none;
 }
+
+
+/* Aseguramos que el contenedor verde tenga posición relativa */
+.blocka-board {
+    position: relative;
+    width: 100%;
+    min-height: 350px;
+    border: 2px solid #00ff00;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Pantalla de inicio dentro del cuadro */
+.start-screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-preview {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Imagen de fondo levemente oscurecida */
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    filter: blur(2px);
+}
+
+/* Texto y botón superpuestos */
+.preview-overlay {
+    position: absolute;
+    text-align: center;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.preview-overlay h3 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.preview-overlay p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
