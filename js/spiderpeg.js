@@ -272,6 +272,9 @@
 
     // Conecta los botones con las acciones correspondientes.
     startButton.addEventListener("click", startGame);
+    document.getElementById("peg-play-online").addEventListener("click", () => {
+        document.getElementById("jugar").scrollIntoView({ behavior: "smooth" });
+    });
     restartButton.addEventListener("click", restartGame);
     hintButton.addEventListener("click", showHint);
     closeButton.addEventListener("click", closeModal);
