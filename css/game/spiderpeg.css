@@ -1,61 +1,100 @@
-/* Spider-Peg: estilos propios, usando la identidad visual existente de GameZone. */
-.peg-stage {
-    min-height: calc(100vh - 70px);
-    box-sizing: border-box;
-    padding: 28px clamp(18px, 4vw, 64px);
-    color: #fff;
-    background: linear-gradient(rgba(0,0,0,.82), rgba(0,0,0,.92)), url("../../assets/img/background-spiderman.jpg") center/cover fixed;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
-    gap: 28px;
+/* Estilos del tablero Spider-Peg integrados en la página del juego. */
+.peg-landing {
     align-items: center;
+    padding-top: 24px;
+    padding-bottom: 30px;
 }
-.peg-main { min-width: 0; display:flex; flex-direction:column; align-items:center; gap:16px; }
-.peg-title { width:min(100%,720px); display:flex; justify-content:space-between; align-items:end; gap:16px; }
-.peg-title h1 { margin:0; font-size:clamp(24px,3vw,38px); }
-.peg-title p { color:#aaa; margin:6px 0 0; font-size:13px; }
-.peg-stats { display:flex; gap:10px; flex-wrap:wrap; }
-.peg-stat { background:#171717; border:1px solid #333; border-radius:8px; padding:9px 13px; min-width:78px; text-align:center; }
-.peg-stat span { display:block; color:#aaa; font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
-.peg-stat strong { display:block; margin-top:3px; color:#FFD600; font-family:"JetBrains Mono",monospace; font-size:18px; }
-.peg-board-wrap { width:min( min(68vh, 690px), 100%); aspect-ratio:1; padding:clamp(10px,1.6vw,20px); box-sizing:border-box; background:rgba(12,12,12,.94); border:1px solid #4a4a4a; border-radius:16px; box-shadow:0 18px 55px #0009; }
-.peg-board { width:100%; height:100%; display:grid; grid-template-columns:repeat(7,1fr); grid-template-rows:repeat(7,1fr); gap:clamp(3px,.6vw,8px); }
-.peg-hole { border:0; background:transparent; padding:0; display:flex; align-items:center; justify-content:center; min-width:0; min-height:0; position:relative; border-radius:50%; }
-.peg-hole:disabled { cursor:default; }
-.peg-hole.has-peg { cursor:grab; }
-.peg-hole.has-peg:active { cursor:grabbing; }
-.peg-hole.selected { background:rgba(255,214,0,.18); outline:2px solid #FFD600; outline-offset:1px; }
-.peg-hole.valid-target::after { content:""; position:absolute; inset:12%; border:2px dashed #06D606; border-radius:50%; animation:peg-pulse 1s ease-in-out infinite; }
-.peg-hole img { width:88%; height:88%; object-fit:contain; pointer-events:none; filter:drop-shadow(0 3px 3px #0008); transition:transform .15s ease; }
-.peg-hole.has-peg:hover img { transform:scale(1.08); }
-.peg-hole.hint-from { animation:hint-from .65s ease-in-out 3; }
-.peg-hole.hint-to { animation:hint-to .65s ease-in-out 3; }
-@keyframes peg-pulse { 50% { transform:scale(.76); opacity:.35; } }
-@keyframes hint-from { 50% { background:rgba(214,0,106,.55); box-shadow:0 0 18px #D6006A; } }
-@keyframes hint-to { 50% { background:rgba(6,214,6,.4); box-shadow:0 0 18px #06D606; } }
-.peg-controls { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
-.peg-controls button { min-width:116px; }
-.peg-side { background:rgba(18,18,18,.94); border:1px solid #303030; border-radius:12px; padding:22px; align-self:center; }
-.peg-side h2 { margin:0 0 12px; font-size:20px; }
-.peg-side p,.peg-side li { color:#b8b8b8; font-size:13px; line-height:1.65; }
-.peg-side ol { padding-left:20px; }
-.peg-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
-.peg-legend span { display:flex; align-items:center; gap:6px; color:#aaa; font-size:11px; }
-.peg-legend img { width:26px; height:26px; object-fit:contain; }
-.peg-message { min-height:20px; text-align:center; color:#FFD600; font-size:13px; }
-.peg-modal { position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; padding:20px; background:#000c; }
-.peg-modal.show { display:flex; }
-.peg-modal-card { width:min(100%,420px); padding:28px; border-radius:14px; background:#171717; border:1px solid #555; text-align:center; }
-.peg-modal-card h2 { color:#FFD600; margin-top:0; }
-.peg-modal-card p { color:#bbb; line-height:1.6; }
-@media (max-width:900px) {
-    .peg-stage { grid-template-columns:1fr; }
-    .peg-side { width:min(100%,690px); box-sizing:border-box; }
-    .peg-board-wrap { width:min( min(68vh, 690px), 100%); }
+.peg-landing > p:first-child {
+    width: min(100%, 1100px);
+    align-self: center;
 }
-@media (max-width:560px) {
-    .peg-stage { padding:22px 12px; }
-    .peg-title { align-items:flex-start; flex-direction:column; }
-    .peg-board-wrap { width:100%; padding:8px; }
-    .peg-stat { min-width:65px; padding:7px 9px; }
+.peg-canvas-wrap {
+    width: min(100%, 720px);
+    aspect-ratio: 1 / 1;
+    padding: clamp(8px, 1.5vw, 16px);
+    box-sizing: border-box;
+    border: 1px solid #444;
+    border-radius: 14px;
+    background: rgba(17, 17, 17, .96);
+    box-shadow: 0 14px 40px #0009;
+}
+#peg-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: grab;
+}
+#peg-canvas:active { cursor: grabbing; }
+.peg-title {
+    width: min(100%, 720px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+.peg-title h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(24px, 3vw, 36px);
+}
+.peg-stats { display: flex; flex-wrap: wrap; gap: 9px; }
+.peg-stat {
+    min-width: 78px;
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #353535;
+    border-radius: 8px;
+    background: #171717;
+}
+.peg-stat span {
+    display: block;
+    color: #aaa;
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+.peg-stat strong {
+    display: block;
+    margin-top: 3px;
+    color: #FFD600;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+}
+.peg-controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.peg-controls button { min-width: 116px; }
+.peg-message {
+    min-height: 20px;
+    margin: 0;
+    text-align: center;
+    color: #FFD600;
+    font-size: 13px;
+}
+.peg-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #000c;
+}
+.peg-modal.show { display: flex; }
+.peg-modal-card {
+    width: min(100%, 420px);
+    padding: 28px;
+    border: 1px solid #555;
+    border-radius: 14px;
+    background: #171717;
+    text-align: center;
+}
+.peg-modal-card h2 { margin-top: 0; color: #FFD600; }
+.peg-modal-card p { color: #bbb; line-height: 1.6; }
+@media (max-width: 560px) {
+    .peg-landing { padding-left: 12px; padding-right: 12px; }
+    .peg-title { justify-content: center; }
+    .peg-stats { justify-content: center; }
+    .peg-stat { min-width: 66px; padding: 7px 9px; }
 }
