@@ -1,17 +1,12 @@
-/* Lógica de Spider-Peg. Cada función está comentada para facilitar su lectura. */
+/* Lógica de Spider-Peg: tablero dibujado en canvas y controles con Pointer Events. */
 (() => {
     "use strict";
 
-    // Define las 33 posiciones válidas del tablero clásico inglés de 7 x 7.
-    const positions = [];
-    for (let row = 0; row < 7; row++) {
-        for (let col = 0; col < 7; col++) {
-            if ((row >= 2 && row <= 4) || (col >= 2 && col <= 4)) positions.push({ row, col });
-        }
-    }
+    // Obtiene el canvas y su contexto para dibujar el tablero.
+    const canvas = document.getElementById("peg-canvas");
+    const ctx = canvas.getContext("2d");
 
-    // Guarda las referencias a los elementos de la interfaz.
-    const boardElement = document.getElementById("peg-board");
+    // Obtiene los elementos que muestran el estado de la partida.
     const movesElement = document.getElementById("peg-moves");
     const remainingElement = document.getElementById("peg-remaining");
     const timerElement = document.getElementById("peg-timer");
@@ -26,33 +21,58 @@
     const modalRestartButton = document.getElementById("peg-modal-restart");
     const timeLimit = 5 * 60;
 
-    // Mantiene el estado actual de la partida.
-    let board = [];
+    // Define las 33 posiciones que forman la cruz del tablero clásico.
+    const positions = [];
+    for (let row = 0; row < 7; row++) {
+        for (let col = 0; col < 7; col++) {
+            if ((row >= 2 && row <= 4) || (col >= 2 && col <= 4)) {
+                positions.push({ row, col });
+            }
+        }
+    }
+
+    // Carga las imágenes SVG que representan los distintos tipos de fichas.
+    const pieceImages = ["peg-red.svg", "peg-blue.svg", "peg-gold.svg"].map(file => {
+        const image = new Image();
+        image.src = "../assets/img/" + file;
+        image.onload = drawBoard;
+        return image;
+    });
+
+    // Guarda el estado y las medidas actuales del tablero.
+    let board = {};
     let selected = null;
     let moves = 0;
     let secondsLeft = timeLimit;
     let timerId = null;
     let started = false;
     let finished = false;
-    let draggedPosition = null;
+    let pointerStart = null;
+    let pointerPosition = null;
+    let isDragging = false;
+    let hintMove = null;
+    let hintTimeout = null;
+    let cellSize = 0;
+    let boardOffsetX = 0;
+    let boardOffsetY = 0;
+    let boardSize = 0;
 
-    // Devuelve una clave única para identificar una casilla.
+    // Devuelve la clave usada para guardar una casilla dentro del estado.
     function key(row, col) {
         return row + "-" + col;
     }
 
-    // Comprueba si una coordenada pertenece al tablero con forma de cruz.
+    // Comprueba si una fila y columna forman parte de la cruz del tablero.
     function isValidPosition(row, col) {
         return positions.some(position => position.row === row && position.col === col);
     }
 
-    // Selecciona el tipo de ficha ilustrada según la posición del tablero.
-    function pieceImage(row, col) {
-        const types = ["peg-red.svg", "peg-blue.svg", "peg-gold.svg"];
-        return "../assets/img/" + types[(row * 3 + col) % types.length];
+    // Elige la ilustración de ficha correspondiente a una casilla.
+    function getPieceImage(row, col) {
+        return pieceImages[(row * 3 + col) % pieceImages.length];
     }
 
-    // Construye el estado inicial: todas las posiciones ocupadas salvo el centro.
+    // Crea un tablero nuevo con el hueco central vacío.
     function createInitialBoard() {
         const initial = {};
         positions.forEach(({ row, col }) => {
@@ -61,7 +81,106 @@
         return initial;
     }
 
-    // Calcula todos los saltos válidos disponibles para el estado recibido.
+    // Ajusta el tamaño interno del canvas para que se vea nítido en pantallas HD.
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * pixelRatio);
+        canvas.height = Math.round(rect.height * pixelRatio);
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        boardSize = Math.min(rect.width, rect.height);
+        cellSize = boardSize / 7;
+        boardOffsetX = (rect.width - boardSize) / 2;
+        boardOffsetY = (rect.height - boardSize) / 2;
+        drawBoard();
+    }
+
+    // Dibuja el fondo, los huecos, las fichas y los resaltados del tablero.
+    function drawBoard() {
+        if (!canvas || !ctx || !cellSize) return;
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+
+        // Pinta la base oscura que contiene la cruz del solitario.
+        ctx.fillStyle = "#111111";
+        ctx.fillRect(boardOffsetX, boardOffsetY, boardSize, boardSize);
+
+        positions.forEach(({ row, col }) => {
+            const x = boardOffsetX + col * cellSize;
+            const y = boardOffsetY + row * cellSize;
+            const centerX = x + cellSize / 2;
+            const centerY = y + cellSize / 2;
+            const radius = cellSize * 0.39;
+
+            // Dibuja el hueco de cada posición válida.
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#292929";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#454545";
+            ctx.stroke();
+
+            // Resalta el origen seleccionado y el destino de una pista.
+            if (selected && selected.row === row && selected.col === col) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius + 4, 0, Math.PI * 2);
+                ctx.strokeStyle = "#FFD600";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            if (hintMove && hintMove.from.row === row && hintMove.from.col === col) {
+                drawHighlight(centerX, centerY, radius, "#D6006A");
+            }
+            if (hintMove && hintMove.to.row === row && hintMove.to.col === col) {
+                drawHighlight(centerX, centerY, radius, "#06D606");
+            }
+
+            // Dibuja la ficha si la posición está ocupada y no está siendo arrastrada.
+            if (board[key(row, col)] && !(isDragging && pointerStart &&
+                pointerStart.row === row && pointerStart.col === col)) {
+                drawPiece(getPieceImage(row, col), centerX, centerY, cellSize * 0.76);
+            }
+        });
+
+        // Dibuja la ficha bajo el puntero mientras se realiza el arrastre.
+        if (isDragging && pointerPosition && pointerStart) {
+            drawPiece(getPieceImage(pointerStart.row, pointerStart.col),
+                pointerPosition.x, pointerPosition.y, cellSize * 0.82);
+        }
+    }
+
+    // Dibuja un círculo de color para indicar una casilla de la pista.
+    function drawHighlight(x, y, radius, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+    }
+
+    // Dibuja una ficha centrada en las coordenadas indicadas.
+    function drawPiece(image, x, y, size) {
+        if (!image || !image.complete || !image.naturalWidth) return;
+        ctx.save();
+        ctx.shadowColor = "#000000aa";
+        ctx.shadowBlur = 7;
+        ctx.drawImage(image, x - size / 2, y - size / 2, size, size);
+        ctx.restore();
+    }
+
+    // Convierte la posición del puntero en una fila y columna del tablero.
+    function getCellFromPointer(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left - boardOffsetX;
+        const y = event.clientY - rect.top - boardOffsetY;
+        const col = Math.floor(x / cellSize);
+        const row = Math.floor(y / cellSize);
+        if (row < 0 || row > 6 || col < 0 || col > 6 || !isValidPosition(row, col)) return null;
+        return { row, col };
+    }
+
+    // Calcula los saltos posibles en el estado de tablero recibido.
     function getValidMoves(state) {
         const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
         const validMoves = [];
@@ -75,14 +194,17 @@
                 if (isValidPosition(targetRow, targetCol) &&
                     state[key(middleRow, middleCol)] &&
                     !state[key(targetRow, targetCol)]) {
-                    validMoves.push({ from: { row, col }, to: { row: targetRow, col: targetCol } });
+                    validMoves.push({
+                        from: { row, col },
+                        to: { row: targetRow, col: targetCol }
+                    });
                 }
             });
         });
         return validMoves;
     }
 
-    // Actualiza los contadores visibles de movimientos, fichas y tiempo.
+    // Actualiza el tiempo y los contadores que aparecen junto al canvas.
     function updateStats() {
         movesElement.textContent = moves;
         remainingElement.textContent = Object.values(board).filter(Boolean).length;
@@ -91,43 +213,13 @@
         timerElement.textContent = minutes + ":" + seconds;
     }
 
-    // Dibuja las 49 celdas y coloca imágenes únicamente en las posiciones válidas.
+    // Redibuja el tablero y sincroniza los contadores.
     function renderBoard() {
-        boardElement.innerHTML = "";
-        for (let row = 0; row < 7; row++) {
-            for (let col = 0; col < 7; col++) {
-                const cell = document.createElement("button");
-                cell.type = "button";
-                cell.className = "peg-hole";
-                cell.dataset.row = row;
-                cell.dataset.col = col;
-                cell.setAttribute("aria-label", "Fila " + (row + 1) + ", columna " + (col + 1));
-                if (isValidPosition(row, col)) {
-                    const occupied = board[key(row, col)];
-                    if (occupied) {
-                        cell.classList.add("has-peg");
-                        const image = document.createElement("img");
-                        image.src = pieceImage(row, col);
-                        image.alt = "Ficha";
-                        cell.appendChild(image);
-                        cell.draggable = started && !finished;
-                    }
-                    if (selected && selected.row === row && selected.col === col) cell.classList.add("selected");
-                    cell.addEventListener("click", handleCellClick);
-                    cell.addEventListener("dragstart", handleDragStart);
-                    cell.addEventListener("dragover", event => event.preventDefault());
-                    cell.addEventListener("drop", handleDrop);
-                } else {
-                    cell.disabled = true;
-                    cell.style.visibility = "hidden";
-                }
-                boardElement.appendChild(cell);
-            }
-        }
         updateStats();
+        drawBoard();
     }
 
-    // Inicia el temporizador cuando comienza una partida.
+    // Inicia el contador regresivo de la partida.
     function startTimer() {
         clearInterval(timerId);
         timerId = setInterval(() => {
@@ -138,7 +230,7 @@
         }, 1000);
     }
 
-    // Inicia una partida nueva y activa los controles del juego.
+    // Prepara una partida nueva y activa el temporizador.
     function startGame() {
         board = createInitialBoard();
         selected = null;
@@ -146,26 +238,30 @@
         secondsLeft = timeLimit;
         started = true;
         finished = false;
-        messageElement.textContent = "Seleccioná una ficha y después el espacio al que querés saltar.";
+        hintMove = null;
+        clearTimeout(hintTimeout);
         modalElement.classList.remove("show");
+        messageElement.textContent = "Elegí una ficha y arrastrala hasta un hueco válido.";
         renderBoard();
         startTimer();
     }
 
-    // Comprueba si el movimiento entre dos coordenadas cumple las reglas del solitario.
+    // Verifica que el salto sea recto, de dos casillas y sobre otra ficha.
     function isLegalMove(from, to) {
+        if (!from || !to) return false;
         const rowDistance = to.row - from.row;
         const colDistance = to.col - from.col;
-        const isStraightJump = (Math.abs(rowDistance) === 2 && colDistance === 0) ||
+        const straightJump = (Math.abs(rowDistance) === 2 && colDistance === 0) ||
             (Math.abs(colDistance) === 2 && rowDistance === 0);
-        if (!isStraightJump || !isValidPosition(to.row, to.col)) return false;
-        const middle = { row: from.row + rowDistance / 2, col: from.col + colDistance / 2 };
+        if (!straightJump || !isValidPosition(to.row, to.col)) return false;
+        const middleRow = from.row + rowDistance / 2;
+        const middleCol = from.col + colDistance / 2;
         return board[key(from.row, from.col)] &&
-            board[key(middle.row, middle.col)] &&
+            board[key(middleRow, middleCol)] &&
             !board[key(to.row, to.col)];
     }
 
-    // Ejecuta un salto válido y elimina la ficha que quedó en el medio.
+    // Ejecuta el salto, elimina la ficha intermedia y comprueba el final del juego.
     function makeMove(from, to) {
         if (!started || finished || !isLegalMove(from, to)) return false;
         const middleRow = (from.row + to.row) / 2;
@@ -175,53 +271,76 @@
         board[key(to.row, to.col)] = true;
         selected = null;
         moves++;
+        hintMove = null;
         renderBoard();
         checkGameState();
         return true;
     }
 
-    // Maneja la selección de fichas y el destino elegido mediante clic.
-    function handleCellClick(event) {
+    // Gestiona el inicio del puntero sobre una ficha.
+    function handlePointerDown(event) {
         if (!started || finished) return;
-        const row = Number(event.currentTarget.dataset.row);
-        const col = Number(event.currentTarget.dataset.col);
-        if (board[key(row, col)]) {
-            selected = { row, col };
-            messageElement.textContent = "Ahora elegí una casilla vacía a dos posiciones.";
-            renderBoard();
+        const cell = getCellFromPointer(event);
+        if (!cell || !board[key(cell.row, cell.col)]) return;
+        pointerStart = cell;
+        pointerPosition = { x: event.clientX - canvas.getBoundingClientRect().left,
+            y: event.clientY - canvas.getBoundingClientRect().top };
+        isDragging = true;
+        canvas.setPointerCapture(event.pointerId);
+        renderBoard();
+    }
+
+    // Actualiza la posición visual de la ficha mientras se arrastra.
+    function handlePointerMove(event) {
+        if (!isDragging || !pointerStart) return;
+        const rect = canvas.getBoundingClientRect();
+        pointerPosition = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        drawBoard();
+    }
+
+    // Suelta la ficha en el destino, o conserva la selección si fue un clic.
+    function handlePointerUp(event) {
+        if (!isDragging || !pointerStart) return;
+        const target = getCellFromPointer(event);
+        const rect = canvas.getBoundingClientRect();
+        const endX = event.clientX - rect.left;
+        const endY = event.clientY - rect.top;
+        const startX = boardOffsetX + (pointerStart.col + 0.5) * cellSize;
+        const startY = boardOffsetY + (pointerStart.row + 0.5) * cellSize;
+        const distance = Math.hypot(endX - startX, endY - startY);
+        const origin = pointerStart;
+        isDragging = false;
+        pointerStart = null;
+        pointerPosition = null;
+
+        if (distance < 8) {
+            selected = origin;
+            messageElement.textContent = "Ahora soltá la ficha en un hueco válido o elegí el destino con otro clic.";
+        } else if (target && makeMove(origin, target)) {
+            messageElement.textContent = "¡Buen movimiento!";
+        } else {
+            messageElement.textContent = "Ese movimiento no es válido. La ficha volvió a su lugar.";
+        }
+        renderBoard();
+    }
+
+    // Permite completar un movimiento haciendo clic en la ficha y luego en el destino.
+    function handleCanvasClick(event) {
+        if (!started || finished || isDragging) return;
+        const cell = getCellFromPointer(event);
+        if (!cell) return;
+        if (board[key(cell.row, cell.col)]) {
+            selected = cell;
+            messageElement.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
+        } else if (selected && makeMove(selected, cell)) {
+            messageElement.textContent = "¡Buen movimiento!";
         } else if (selected) {
-            if (!makeMove(selected, { row, col })) {
-                messageElement.textContent = "Ese salto no es válido. Elegí otra casilla.";
-            }
+            messageElement.textContent = "Ese movimiento no es válido.";
         }
+        renderBoard();
     }
 
-    // Guarda el origen de la ficha que se está arrastrando.
-    function handleDragStart(event) {
-        if (!started || finished) { event.preventDefault(); return; }
-        draggedPosition = {
-            row: Number(event.currentTarget.dataset.row),
-            col: Number(event.currentTarget.dataset.col)
-        };
-        selected = draggedPosition;
-        event.dataTransfer.setData("text/plain", key(draggedPosition.row, draggedPosition.col));
-    }
-
-    // Ejecuta el movimiento cuando una ficha se suelta sobre otra casilla.
-    function handleDrop(event) {
-        event.preventDefault();
-        if (!draggedPosition || finished) return;
-        const target = {
-            row: Number(event.currentTarget.dataset.row),
-            col: Number(event.currentTarget.dataset.col)
-        };
-        if (!makeMove(draggedPosition, target)) {
-            messageElement.textContent = "Movimiento no válido. No se modificó el tablero.";
-        }
-        draggedPosition = null;
-    }
-
-    // Comprueba si quedan movimientos y determina si la partida terminó.
+    // Comprueba si queda una ficha o si ya no existen saltos disponibles.
     function checkGameState() {
         const remaining = Object.values(board).filter(Boolean).length;
         if (remaining === 1) {
@@ -231,7 +350,7 @@
         }
     }
 
-    // Detiene la partida y muestra el resultado.
+    // Detiene el temporizador y muestra el resultado de la partida.
     function endGame(won, message) {
         finished = true;
         started = false;
@@ -243,44 +362,49 @@
         renderBoard();
     }
 
-    // Muestra durante unos segundos un par de casillas que forman un movimiento válido.
+    // Resalta temporalmente el origen y el destino de un salto posible.
     function showHint() {
         if (!started || finished) return;
         const availableMoves = getValidMoves(board);
-        if (!availableMoves.length) { checkGameState(); return; }
-        const hint = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        const fromCell = boardElement.querySelector('[data-row="' + hint.from.row + '"][data-col="' + hint.from.col + '"]');
-        const toCell = boardElement.querySelector('[data-row="' + hint.to.row + '"][data-col="' + hint.to.col + '"]');
-        fromCell.classList.add("hint-from");
-        toCell.classList.add("hint-to");
-        messageElement.textContent = "Pista: mové la ficha resaltada hacia el destino marcado.";
-        setTimeout(() => {
-            fromCell.classList.remove("hint-from");
-            toCell.classList.remove("hint-to");
-        }, 2100);
+        if (!availableMoves.length) {
+            checkGameState();
+            return;
+        }
+        hintMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        messageElement.textContent = "Pista: mové la ficha resaltada hacia el círculo marcado.";
+        drawBoard();
+        clearTimeout(hintTimeout);
+        hintTimeout = setTimeout(() => {
+            hintMove = null;
+            drawBoard();
+        }, 2200);
     }
 
-    // Reinicia el tablero, el contador y el tiempo desde cero.
+    // Reinicia el juego desde el estado inicial.
     function restartGame() {
         startGame();
     }
 
-    // Cierra el cartel final sin modificar el resultado de la partida.
+    // Oculta el mensaje final de la partida.
     function closeModal() {
         modalElement.classList.remove("show");
     }
 
-    // Conecta los botones con las acciones correspondientes.
+    // Conecta botones, eventos del canvas y ajuste de tamaño.
     startButton.addEventListener("click", startGame);
-    document.getElementById("peg-play-online").addEventListener("click", () => {
-        document.getElementById("jugar").scrollIntoView({ behavior: "smooth" });
-    });
     restartButton.addEventListener("click", restartGame);
     hintButton.addEventListener("click", showHint);
     closeButton.addEventListener("click", closeModal);
     modalRestartButton.addEventListener("click", restartGame);
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", handlePointerUp);
+    canvas.addEventListener("pointercancel", handlePointerUp);
+    canvas.addEventListener("click", handleCanvasClick);
+    window.addEventListener("resize", resizeCanvas);
 
-    // Presenta el tablero inicial como vista previa antes de comenzar.
+    // Muestra el tablero inicial antes de comenzar la partida.
     board = createInitialBoard();
+    resizeCanvas();
     renderBoard();
 })();
