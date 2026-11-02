@@ -4,7 +4,7 @@
     box-sizing: border-box;
     padding: 28px clamp(18px, 4vw, 64px);
     color: #fff;
-    background: linear-gradient(rgba(0,0,0,.82), rgba(0,0,0,.92)), url("../assets/img/background-spiderman.jpg") center/cover fixed;
+    background: linear-gradient(rgba(0,0,0,.82), rgba(0,0,0,.92)), url("../../assets/img/background-spiderman.jpg") center/cover fixed;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
     gap: 28px;
