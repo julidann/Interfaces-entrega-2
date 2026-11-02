@@ -52,6 +52,7 @@
     let isDragging = false;
     let hintMove = null;
     let hintTimeout = null;
+    let suppressNextClick = false;
     let cellSize = 0;
     let boardOffsetX = 0;
     let boardOffsetY = 0;
@@ -309,6 +310,7 @@
         const startY = boardOffsetY + (pointerStart.row + 0.5) * cellSize;
         const distance = Math.hypot(endX - startX, endY - startY);
         const origin = pointerStart;
+        suppressNextClick = true;
         isDragging = false;
         pointerStart = null;
         pointerPosition = null;
@@ -326,6 +328,10 @@
 
     // Permite completar un movimiento haciendo clic en la ficha y luego en el destino.
     function handleCanvasClick(event) {
+        if (suppressNextClick) {
+            suppressNextClick = false;
+            return;
+        }
         if (!started || finished || isDragging) return;
         const cell = getCellFromPointer(event);
         if (!cell) return;
@@ -392,6 +398,9 @@
 
     // Conecta botones, eventos del canvas y ajuste de tamaño.
     startButton.addEventListener("click", startGame);
+    document.getElementById("peg-play-online").addEventListener("click", () => {
+        canvas.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
     restartButton.addEventListener("click", restartGame);
     hintButton.addEventListener("click", showHint);
     closeButton.addEventListener("click", closeModal);
