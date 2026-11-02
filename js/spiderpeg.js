@@ -14,10 +14,8 @@
     const modalElement = document.getElementById("peg-modal");
     const modalTitle = document.getElementById("peg-modal-title");
     const modalText = document.getElementById("peg-modal-text");
-    const startButton = document.getElementById("peg-start");
     const hintButton = document.getElementById("peg-hint");
     const restartButton = document.getElementById("peg-restart");
-    const closeButton = document.getElementById("peg-close");
     const modalRestartButton = document.getElementById("peg-modal-restart");
     const pieceChoice = document.getElementById("peg-piece-choice");
     const timeLimit = 5 * 60;
@@ -265,7 +263,7 @@
         restartButton.disabled = false;
         clearTimeout(hintTimeout);
         modalElement.classList.remove("show");
-        messageElement.textContent = "Elegí una ficha y arrastrala hasta un hueco válido.";
+        messageElement.textContent = "Arrastrá una ficha hasta un hueco válido para empezar a jugar.";
         renderBoard();
         startTimer();
     }
@@ -303,9 +301,17 @@
 
     // Gestiona el inicio del puntero sobre una ficha.
     function handlePointerDown(event) {
-        if (!started || finished) return;
+        if (finished) return;
         const cell = getCellFromPointer(event);
         if (!cell || !board[key(cell.row, cell.col)]) return;
+        // La primera ficha arrastrada inicia la partida y pone en marcha el temporizador.
+        if (!started) {
+            if (selectedPieceIndex === null) {
+                messageElement.textContent = "Primero elegí el diseño de tus fichas.";
+                return;
+            }
+            startGame();
+        }
         pointerStart = cell;
         pointerPosition = { x: event.clientX - canvas.getBoundingClientRect().left,
             y: event.clientY - canvas.getBoundingClientRect().top };
@@ -422,31 +428,23 @@
             board = createInitialBoard();
             selected = null;
             renderBoard();
-            startButton.disabled = false;
             restartButton.disabled = false;
-            messageElement.textContent = "Diseño seleccionado. Presioná “Comenzar partida”.";
+            messageElement.textContent = "Diseño seleccionado. Arrastrá una ficha para comenzar.";
         } else {
             renderBoard();
             messageElement.textContent = "Cambiaste el diseño de las fichas.";
         }
     }
 
-    // Oculta el mensaje final de la partida.
-    function closeModal() {
-        modalElement.classList.remove("show");
-    }
-
     // Conecta el selector de diseño con el tablero.
     pieceChoice.addEventListener("change", changePieceDesign);
 
     // Conecta botones, eventos del canvas y ajuste de tamaño.
-    startButton.addEventListener("click", startGame);
     document.getElementById("peg-play-online").addEventListener("click", () => {
         canvas.scrollIntoView({ behavior: "smooth", block: "center" });
     });
     restartButton.addEventListener("click", restartGame);
     hintButton.addEventListener("click", showHint);
-    closeButton.addEventListener("click", closeModal);
     modalRestartButton.addEventListener("click", restartGame);
     canvas.addEventListener("pointerdown", handlePointerDown);
     canvas.addEventListener("pointermove", handlePointerMove);
@@ -455,9 +453,8 @@
     canvas.addEventListener("click", handleCanvasClick);
     window.addEventListener("resize", resizeCanvas);
 
-    // Muestra el tablero inicial antes de comenzar la partida.
+    // Muestra el tablero inicial; el temporizador comienza con el primer arrastre.
     board = createInitialBoard();
-    startButton.disabled = true;
     hintButton.disabled = true;
     restartButton.disabled = true;
     resizeCanvas();
