@@ -32,7 +32,7 @@
     }
 
     // Carga las imágenes SVG que representan los distintos tipos de fichas.
-    const pieceImages = ["peg-red.svg", "peg-blue.svg", "peg-gold.svg"].map(file => {
+    const pieceImages = ["ficha1.png", "ficha2.png", "ficha3.png"].map(file => {
         const image = new Image();
         image.src = "../assets/img/" + file;
         image.onload = drawBoard;
