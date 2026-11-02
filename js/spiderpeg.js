@@ -19,6 +19,7 @@
     const restartButton = document.getElementById("peg-restart");
     const closeButton = document.getElementById("peg-close");
     const modalRestartButton = document.getElementById("peg-modal-restart");
+    const pieceChoice = document.getElementById("peg-piece-choice");
     const timeLimit = 5 * 60;
 
     // Define las 33 posiciones que forman la cruz del tablero clásico.
@@ -31,13 +32,19 @@
         }
     }
 
-    // Carga las imágenes SVG que representan los distintos tipos de fichas.
+    // Carga las tres imágenes PNG disponibles para que el usuario elija una.
     const pieceImages = ["ficha1.png", "ficha2.png", "ficha3.png"].map(file => {
         const image = new Image();
         image.src = "../assets/img/" + file;
         image.onload = drawBoard;
+        image.onerror = () => {
+            messageElement.textContent = "No se pudo cargar " + file + ". Revisá el nombre y la ubicación del archivo.";
+        };
         return image;
     });
+
+    // Guarda el diseño elegido por el usuario; null indica que aún no eligió.
+    let selectedPieceIndex = null;
 
     // Guarda el estado y las medidas actuales del tablero.
     let board = {};
@@ -69,8 +76,8 @@
     }
 
     // Elige la ilustración de ficha correspondiente a una casilla.
-    function getPieceImage(row, col) {
-        return pieceImages[(row * 3 + col) % pieceImages.length];
+    function getPieceImage() {
+        return selectedPieceIndex === null ? null : pieceImages[selectedPieceIndex];
     }
 
     // Crea un tablero nuevo con el hueco central vacío.
@@ -140,13 +147,13 @@
             // Dibuja la ficha si la posición está ocupada y no está siendo arrastrada.
             if (board[key(row, col)] && !(isDragging && pointerStart &&
                 pointerStart.row === row && pointerStart.col === col)) {
-                drawPiece(getPieceImage(row, col), centerX, centerY, cellSize * 0.76);
+                drawPiece(getPieceImage(), centerX, centerY, cellSize * 0.76);
             }
         });
 
         // Dibuja la ficha bajo el puntero mientras se realiza el arrastre.
         if (isDragging && pointerPosition && pointerStart) {
-            drawPiece(getPieceImage(pointerStart.row, pointerStart.col),
+            drawPiece(getPieceImage(),
                 pointerPosition.x, pointerPosition.y, cellSize * 0.82);
         }
     }
@@ -233,6 +240,10 @@
 
     // Prepara una partida nueva y activa el temporizador.
     function startGame() {
+        if (selectedPieceIndex === null) {
+            messageElement.textContent = "Primero elegí el diseño de tus fichas.";
+            return;
+        }
         board = createInitialBoard();
         selected = null;
         moves = 0;
@@ -240,6 +251,8 @@
         started = true;
         finished = false;
         hintMove = null;
+        hintButton.disabled = false;
+        restartButton.disabled = false;
         clearTimeout(hintTimeout);
         modalElement.classList.remove("show");
         messageElement.textContent = "Elegí una ficha y arrastrala hasta un hueco válido.";
@@ -361,6 +374,7 @@
         finished = true;
         started = false;
         clearInterval(timerId);
+        hintButton.disabled = true;
         modalTitle.textContent = won ? "¡Lo lograste!" : "Fin de la partida";
         modalText.textContent = message;
         modalElement.classList.add("show");
@@ -386,15 +400,34 @@
         }, 2200);
     }
 
-    // Reinicia el juego desde el estado inicial.
+    // Reinicia el juego desde el estado inicial si ya se eligió un diseño.
     function restartGame() {
         startGame();
+    }
+
+    // Aplica a todas las posiciones el diseño seleccionado en el menú.
+    function changePieceDesign() {
+        selectedPieceIndex = Number(pieceChoice.value);
+        if (!started) {
+            board = createInitialBoard();
+            selected = null;
+            renderBoard();
+            startButton.disabled = false;
+            restartButton.disabled = false;
+            messageElement.textContent = "Diseño seleccionado. Presioná “Comenzar partida”.";
+        } else {
+            renderBoard();
+            messageElement.textContent = "Cambiaste el diseño de las fichas.";
+        }
     }
 
     // Oculta el mensaje final de la partida.
     function closeModal() {
         modalElement.classList.remove("show");
     }
+
+    // Conecta el selector de diseño con el tablero.
+    pieceChoice.addEventListener("change", changePieceDesign);
 
     // Conecta botones, eventos del canvas y ajuste de tamaño.
     startButton.addEventListener("click", startGame);
@@ -414,6 +447,9 @@
 
     // Muestra el tablero inicial antes de comenzar la partida.
     board = createInitialBoard();
+    startButton.disabled = true;
+    hintButton.disabled = true;
+    restartButton.disabled = true;
     resizeCanvas();
     renderBoard();
 })();
