@@ -76,9 +76,23 @@
 
         <section class="landing-main">
             <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
-            <div>
-                <img class="game-image" id="gallery-main-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
+            <div class="peg-canvas-wrap">
+                <canvas id="peg-canvas" aria-label="Tablero interactivo de Spider-Peg" role="img"></canvas>
             </div>
+            <div class="peg-title">
+                <h1>Spider-Peg</h1>
+                <div class="peg-stats">
+                    <div class="peg-stat"><span>Tiempo</span><strong id="peg-timer">05:00</strong></div>
+                    <div class="peg-stat"><span>Movimientos</span><strong id="peg-moves">0</strong></div>
+                    <div class="peg-stat"><span>Fichas</span><strong id="peg-remaining">32</strong></div>
+                </div>
+            </div>
+            <div class="peg-controls">
+                <button class="accent" id="peg-start" type="button">Comenzar partida</button>
+                <button class="secondary" id="peg-hint" type="button">Ver pista</button>
+                <button class="primary" id="peg-restart" type="button">Reiniciar</button>
+            </div>
+            <p class="peg-message" id="peg-message" aria-live="polite">Presioná “Comenzar partida” para jugar.</p>
 
             <div class="tags">
                 <button class="secondary">Añadir a la lista de favoritos</button>
@@ -89,42 +103,6 @@
         </section>
 
 
-        <section class="peg-stage" id="jugar">
-            <div class="peg-main">
-                <div class="peg-title">
-                    <div><h1>Spider-Peg</h1><p>Un desafío de lógica. Pensá cada salto antes de mover.</p></div>
-                    <div class="peg-stats">
-                        <div class="peg-stat"><span>Tiempo</span><strong id="peg-timer">05:00</strong></div>
-                        <div class="peg-stat"><span>Movimientos</span><strong id="peg-moves">0</strong></div>
-                        <div class="peg-stat"><span>Fichas</span><strong id="peg-remaining">32</strong></div>
-                    </div>
-                </div>
-                <div class="peg-board-wrap"><div class="peg-board" id="peg-board" aria-label="Tablero de Peg Solitaire"></div></div>
-                <div class="peg-controls">
-                    <button class="accent" id="peg-start" type="button">Comenzar partida</button>
-                    <button class="secondary" id="peg-hint" type="button">Ver pista</button>
-                    <button class="primary" id="peg-restart" type="button">Reiniciar</button>
-                </div>
-                <p class="peg-message" id="peg-message" aria-live="polite">Presioná “Comenzar partida” para jugar.</p>
-            </div>
-            <aside class="peg-side">
-                <h2>Cómo jugar</h2>
-                <p>El objetivo es eliminar las fichas saltando unas sobre otras hasta dejar una sola en el tablero.</p>
-                <ol>
-                    <li>Elegí una ficha haciendo clic o arrastrándola.</li>
-                    <li>Movela en línea recta, horizontal o vertical.</li>
-                    <li>Saltá por encima de una ficha hacia un hueco libre.</li>
-                    <li>La ficha saltada desaparece automáticamente.</li>
-                    <li>Terminás cuando queda una ficha o ya no hay saltos posibles.</li>
-                </ol>
-                <p>Tenés cinco minutos para resolver el tablero. La pista resalta un movimiento válido.</p>
-                <div class="peg-legend">
-                    <span><img src="../assets/img/peg-red.svg" alt=""> Araña</span>
-                    <span><img src="../assets/img/peg-blue.svg" alt=""> Escudo</span>
-                    <span><img src="../assets/img/peg-gold.svg" alt=""> Estrella</span>
-                </div>
-            </aside>
-        </section>
         <div class="peg-modal" id="peg-modal" role="dialog" aria-modal="true" aria-labelledby="peg-modal-title">
             <div class="peg-modal-card">
                 <h2 id="peg-modal-title">Fin de la partida</h2>
@@ -134,7 +112,7 @@
             </div>
         </div>
 
-        <section class="gallery">
+        <section class="gallery" id="galeria">
             <div class="gallery-thumbs">
                 <article>
                     <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
