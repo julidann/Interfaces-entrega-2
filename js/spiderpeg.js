@@ -418,7 +418,25 @@
 
     // Reinicia el juego desde el estado inicial si ya se eligió un diseño.
     function restartGame() {
-        startGame();
+        clearInterval(timerId);
+        clearTimeout(hintTimeout);
+        board = createInitialBoard();
+        selected = null;
+        moves = 0;
+        secondsLeft = timeLimit;
+        started = false;
+        finished = false;
+        hintMove = null;
+        isDragging = false;
+        pointerStart = null;
+        pointerPosition = null;
+        hintButton.disabled = true;
+        restartButton.disabled = selectedPieceIndex === null;
+        modalElement.classList.remove("show");
+        messageElement.textContent = selectedPieceIndex === null
+            ? "Elegí un diseño de ficha para comenzar."
+            : "Arrastrá una ficha para comenzar la partida.";
+        renderBoard();
     }
 
     // Aplica a todas las posiciones el diseño seleccionado en el menú.
