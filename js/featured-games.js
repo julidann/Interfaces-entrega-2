@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             title: "Spider Blocka",
             image: imgRoute + "SpiderBlocka.png",
-            description: "¡Pondrás a prueba tu rapidez y visión espacial! Encajá cada fragmento en su posición exacta para reconstruir las imágenes por completo. Demostrá tu habilidad, completá el tablero correctamente y convertite en el ganador.",
+            description: "¡Pondrás a prueba tu rapidez y visión espacial! Encajá cada fragmento en su posición exacta para reconstruir las imágenes por completo.",
             alt: "Spider Blocka"
         }
         

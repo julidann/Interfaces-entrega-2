@@ -315,24 +315,24 @@ img.img-game {
 }
 
 /* ==========================================================================
-   TABLERO Y PIEZAS: rectángulo fijo al inicio; piezas cuadradas al jugar
+   TABLERO Y PIEZAS (Única regla unificada sin conflictos)
    ========================================================================== */
-
+/*ESTO LO CORREGIMOS PARA QUE EL ROMPECABEZAS NO SE DEFORME!!!*/
 .blocka-board {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    gap: 0;
+    position: relative;
+    width: 100vw; /* o 100% según tu layout */
     width: 100%;
-    aspect-ratio: 5 / 3;
+    aspect-ratio: 5 / 3; /* <--- ¡ESTO ES CLAVE para que el cuadro tenga altura al arrancar! */
     background-color: #000000;
-    border-radius: 8px;
-    overflow: hidden;
     border: 2px solid #00d814;
+    border-radius: 12px;
+    overflow: hidden;
+    display: grid; /* Tu JS lo cambiará luego a grid con las piezas */
     box-shadow: 0 0 15px rgba(0, 216, 20, 0.2);
     box-sizing: border-box;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
+
+
 
 .blocka-board img {
     width: 100%;
@@ -347,7 +347,7 @@ img.img-game {
     display: block;
     cursor: pointer;
     user-select: none;
-    object-fit: fill;
+    object-fit: cover;
     box-sizing: border-box;
     transition: transform 0.2s ease-in-out, filter 0.2s ease;
 }
@@ -357,7 +357,7 @@ img.img-game {
 }
 
 /* ==========================================================================
-   OVERLAY / CARTEL DE RESULTADO (Inyectado por JS)
+   OVERLAY / CARTEL DE RESULTADO & PANTALLA DE INICIO
    ========================================================================== */
 
 .game-overlay {
@@ -409,21 +409,6 @@ img.img-game {
     text-decoration: none;
 }
 
-
-/* Aseguramos que el contenedor verde tenga posición relativa */
-.blocka-board {
-    position: relative;
-    width: 100%;
-    min-height: 350px;
-    border: 2px solid #00ff00;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Pantalla de inicio dentro del cuadro */
 .start-screen {
     width: 100%;
     height: 100%;
@@ -444,7 +429,6 @@ img.img-game {
     align-items: center;
 }
 
-/* Imagen de fondo levemente oscurecida */
 .preview-img {
     width: 100%;
     height: 100%;
@@ -453,7 +437,6 @@ img.img-game {
     filter: blur(2px);
 }
 
-/* Texto y botón superpuestos */
 .preview-overlay {
     position: absolute;
     text-align: center;
@@ -469,4 +452,13 @@ img.img-game {
 .preview-overlay p {
     font-size: 1rem;
     margin-bottom: 20px;
+}
+
+
+.image-preview img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1000;
+    
 }
