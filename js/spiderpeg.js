@@ -23,6 +23,7 @@
     const hintButton = document.getElementById("peg-hint");
     const restartButton = document.getElementById("peg-restart");
     const closeButton = document.getElementById("peg-close");
+    const modalRestartButton = document.getElementById("peg-modal-restart");
     const timeLimit = 5 * 60;
 
     // Mantiene el estado actual de la partida.
@@ -274,6 +275,7 @@
     restartButton.addEventListener("click", restartGame);
     hintButton.addEventListener("click", showHint);
     closeButton.addEventListener("click", closeModal);
+    modalRestartButton.addEventListener("click", restartGame);
 
     // Presenta el tablero inicial como vista previa antes de comenzar.
     board = createInitialBoard();
