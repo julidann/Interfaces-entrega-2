@@ -22,6 +22,11 @@
     const pieceChoice = document.getElementById("peg-piece-choice");
     const timeLimit = 5 * 60;
 
+    // Carga el tablero gráfico; las fichas y las pistas se dibujan encima desde el canvas.
+    const boardImage = new Image();
+    boardImage.src = "../assets/img/tablero.svg";
+    boardImage.onload = drawBoard;
+
     // Define las 33 posiciones que forman la cruz del tablero clásico.
     const positions = [];
     for (let row = 0; row < 7; row++) {
@@ -109,9 +114,12 @@
         const rect = canvas.getBoundingClientRect();
         ctx.clearRect(0, 0, rect.width, rect.height);
 
-        // Pinta la base oscura que contiene la cruz del solitario.
+        // Pinta el tablero gráfico y deja las posiciones listas para las fichas.
         ctx.fillStyle = "#111111";
         ctx.fillRect(boardOffsetX, boardOffsetY, boardSize, boardSize);
+        if (boardImage.complete && boardImage.naturalWidth) {
+            ctx.drawImage(boardImage, boardOffsetX, boardOffsetY, boardSize, boardSize);
+        }
 
         positions.forEach(({ row, col }) => {
             const x = boardOffsetX + col * cellSize;
@@ -120,14 +128,16 @@
             const centerY = y + cellSize / 2;
             const radius = cellSize * 0.39;
 
-            // Dibuja el hueco de cada posición válida.
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = "#292929";
-            ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "#454545";
-            ctx.stroke();
+            // Dibuja huecos simples como respaldo mientras carga el tablero gráfico.
+            if (!boardImage.complete || !boardImage.naturalWidth) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#292929";
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#454545";
+                ctx.stroke();
+            }
 
             // Resalta el origen seleccionado y el destino de una pista.
             if (selected && selected.row === row && selected.col === col) {
