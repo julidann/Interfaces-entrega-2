@@ -78,24 +78,36 @@
             <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
             <div class="peg-title">
                 <h1>Spider-Peg</h1>
-                <div class="peg-stats">
-                    <div class="peg-stat"><span>Tiempo</span><strong id="peg-timer">05:00</strong></div>
-                    <div class="peg-stat"><span>Movimientos</span><strong id="peg-moves">0</strong></div>
-                    <div class="peg-stat"><span>Fichas</span><strong id="peg-remaining">32</strong></div>
+            </div>
+            <div class="peg-game-shell">
+                <div class="peg-game-topbar">
+                    <label class="peg-piece-picker" for="peg-piece-choice">
+                        Elegí tus fichas
+                        <select id="peg-piece-choice">
+                            <option value="" selected disabled>Seleccionar diseño</option>
+                            <option value="0">Ficha 1</option>
+                            <option value="1">Ficha 2</option>
+                            <option value="2">Ficha 3</option>
+                        </select>
+                    </label>
+                    <div class="peg-stats">
+                        <div class="peg-stat"><span>Tiempo</span><strong id="peg-timer">05:00</strong></div>
+                        <div class="peg-stat"><span>Movimientos</span><strong id="peg-moves">0</strong></div>
+                        <div class="peg-stat"><span>Fichas</span><strong id="peg-remaining">32</strong></div>
+                    </div>
+                </div>
+                <div class="peg-canvas-wrap">
+                    <canvas id="peg-canvas" aria-label="Tablero interactivo de Spider-Peg" role="img"></canvas>
+                </div>
+                <div class="peg-game-bottombar">
+                    <div class="peg-controls">
+                        <button class="accent" id="peg-start" type="button" disabled>Comenzar partida</button>
+                        <button class="secondary" id="peg-hint" type="button" disabled>Ver pista</button>
+                        <button class="primary" id="peg-restart" type="button" disabled>Reiniciar</button>
+                    </div>
+                    <p class="peg-message" id="peg-message" aria-live="polite">Elegí un diseño de ficha para comenzar.</p>
                 </div>
             </div>
-            <div class="peg-canvas-wrap">
-                
-                <canvas id="peg-canvas" aria-label="Tablero interactivo de Spider-Peg" role="img"></canvas>
-            </div>
-            
-            <div class="peg-controls">
-                <button class="accent" id="peg-start" type="button">Comenzar partida</button>
-                <button class="secondary" id="peg-hint" type="button">Ver pista</button>
-                <button class="primary" id="peg-restart" type="button">Reiniciar</button>
-            </div>
-            <p class="peg-message" id="peg-message" aria-live="polite">Presioná “Comenzar partida” para jugar.</p>
-
             <div class="tags">
                 <button class="secondary">Añadir a la lista de favoritos</button>
                 <button class="secondary" id="peg-play-online" type="button">Jugar Online</button>
