@@ -1,100 +1,49 @@
 /* Estilos del tablero Spider-Peg integrados en la página del juego. */
-.peg-landing {
-    align-items: center;
-    padding-top: 24px;
-    padding-bottom: 30px;
+.peg-landing { align-items: center; padding-top: 24px; padding-bottom: 30px; }
+.peg-landing > p:first-child { width: min(100%, 1100px); align-self: center; }
+.peg-title { width: min(100%, 920px); margin-bottom: 12px; }
+.peg-title h1 { margin: 0; color: #fff; font-size: clamp(24px, 3vw, 36px); }
+.peg-game-shell {
+    width: min(100%, 920px); box-sizing: border-box; padding: 16px;
+    border: 1px solid #444; border-radius: 14px; background: rgba(17,17,17,.97);
+    box-shadow: 0 14px 40px #0009; display: flex; flex-direction: column; gap: 12px;
 }
-.peg-landing > p:first-child {
-    width: min(100%, 1100px);
-    align-self: center;
+.peg-game-topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.peg-piece-picker {
+    display: flex; flex-direction: column; gap: 6px; color: #FFD600;
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
 }
-.peg-canvas-wrap {
-    width: min(100%, 720px);
-    aspect-ratio: 1 / 1;
-    padding: clamp(8px, 1.5vw, 16px);
-    box-sizing: border-box;
-    border: 1px solid #444;
-    border-radius: 14px;
-    background: rgba(17, 17, 17, .96);
-    box-shadow: 0 14px 40px #0009;
-}
-#peg-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-    cursor: grab;
-}
-#peg-canvas:active { cursor: grabbing; }
-.peg-title {
-    width: min(100%, 720px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 18px;
-    flex-wrap: wrap;
-}
-.peg-title h1 {
-    margin: 0;
-    color: #fff;
-    font-size: clamp(24px, 3vw, 36px);
+.peg-piece-picker select {
+    min-width: 190px; padding: 9px 32px 9px 11px; border: 1px solid #555;
+    border-radius: 7px; background: #242424; color: #fff; font: inherit;
+    font-size: 13px; text-transform: none; letter-spacing: normal;
 }
 .peg-stats { display: flex; flex-wrap: wrap; gap: 9px; }
-.peg-stat {
-    min-width: 78px;
-    padding: 8px 12px;
-    text-align: center;
-    border: 1px solid #353535;
-    border-radius: 8px;
-    background: #171717;
+.peg-stat { min-width: 78px; padding: 8px 12px; text-align: center; border: 1px solid #353535; border-radius: 8px; background: #202020; }
+.peg-stat span { display: block; color: #aaa; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+.peg-stat strong { display: block; margin-top: 3px; color: #FFD600; font-family: "JetBrains Mono", monospace; font-size: 18px; }
+.peg-canvas-wrap {
+    width: min(100%, 680px); aspect-ratio: 1 / 1; align-self: center; box-sizing: border-box;
+    padding: clamp(8px, 1.5vw, 16px); border: 1px solid #444; border-radius: 12px; background: #101010;
 }
-.peg-stat span {
-    display: block;
-    color: #aaa;
-    font-size: 10px;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-}
-.peg-stat strong {
-    display: block;
-    margin-top: 3px;
-    color: #FFD600;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 18px;
-}
+#peg-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#peg-canvas:active { cursor: grabbing; }
+.peg-game-bottombar { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .peg-controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
 .peg-controls button { min-width: 116px; }
-.peg-message {
-    min-height: 20px;
-    margin: 0;
-    text-align: center;
-    color: #FFD600;
-    font-size: 13px;
-}
-.peg-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: #000c;
-}
+.peg-controls button:disabled { opacity: .45; cursor: not-allowed; }
+.peg-message { min-height: 20px; margin: 0; text-align: center; color: #FFD600; font-size: 13px; }
+.peg-modal { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; background: #000c; }
 .peg-modal.show { display: flex; }
-.peg-modal-card {
-    width: min(100%, 420px);
-    padding: 28px;
-    border: 1px solid #555;
-    border-radius: 14px;
-    background: #171717;
-    text-align: center;
-}
+.peg-modal-card { width: min(100%, 420px); padding: 28px; border: 1px solid #555; border-radius: 14px; background: #171717; text-align: center; }
 .peg-modal-card h2 { margin-top: 0; color: #FFD600; }
 .peg-modal-card p { color: #bbb; line-height: 1.6; }
-@media (max-width: 560px) {
+@media (max-width: 680px) {
     .peg-landing { padding-left: 12px; padding-right: 12px; }
-    .peg-title { justify-content: center; }
+    .peg-game-shell { padding: 10px; }
+    .peg-game-topbar { justify-content: center; }
+    .peg-piece-picker { width: 100%; align-items: center; }
+    .peg-piece-picker select { width: min(100%, 280px); }
     .peg-stats { justify-content: center; }
     .peg-stat { min-width: 66px; padding: 7px 9px; }
 }
