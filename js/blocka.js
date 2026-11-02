@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const spanNivel = document.getElementById('current-level');
     const spanTiempo = document.getElementById('timer');
     const contenedorJuego = document.querySelector('.game-container');
+    const btnViewImage = document.getElementById('btn-view-image');
+    //let imagenGanadora = null;
+
+
 
     const bancoImagenes = [
         '../assets/img/blocka1.jpg',
@@ -17,10 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const niveles = [
-        { numero: 1, filtro: 'grises', tiempoMaximo: null },
-        { numero: 2, filtro: 'brillo', tiempoMaximo: null },
+        { numero: 1, filtro: 'grises', tiempoMaximo: 30 },
+        { numero: 2, filtro: 'brillo', tiempoMaximo: 45 },
         { numero: 3, filtro: 'negativo', tiempoMaximo: 45 }
     ];
+
+
+
 
     let nivelActualIndex = 0;
     let piezas = [];
@@ -30,17 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let cronometroInterval = null;
     let segundosTranscurridos = 0;
     let mejoresTiempos = {};
+    
+    btnViewImage.disabled = true;
 
     const btnStart = document.querySelector("#btn-start");
-const startScreen = document.querySelector("#start-screen");
-
-btnStart.addEventListener("click", () => {
-    // Ocultamos la portada
-    startScreen.style.display = "none";
+    const startScreen = document.querySelector("#start-screen");
     
-    // Acá llamas a tu función para iniciar/dibujar el juego
-    iniciarJuego(); 
-});
+    btnStart.addEventListener("click", () => {
+        // Ocultamos la portada
+        startScreen.style.display = "none";
+
+        // Acá llamas a tu función para iniciar/dibujar el juego
+        ejecutarSorteoImagen();
+    });
 
     // Comenzar y ayudita
     btnComenzar.addEventListener('click', () => {
@@ -49,8 +58,18 @@ btnStart.addEventListener("click", () => {
 
     btnAyudita.addEventListener('click', usarAyudita);
 
+
+
     // EXTRA 1: sorteo animado de una imagen
     function ejecutarSorteoImagen() {
+        if (enSorteo) return;
+
+        // Remover la pantalla de bienvenida al hacer clic en Comenzar
+        const pantallaInicio = document.getElementById('start-screen');
+        if (pantallaInicio) {
+            pantallaInicio.remove();
+        }
+
         enSorteo = true;
         nivelTerminado = false;
         piezas = [];
@@ -67,6 +86,7 @@ btnStart.addEventListener("click", () => {
         btnComenzar.disabled = true;
         btnAyudita.disabled = true;
         selectPiezas.disabled = true;
+        btnViewImage.disabled = true;
 
         const imgRuleta = document.createElement('img');
         imgRuleta.style.cssText =
@@ -76,6 +96,9 @@ btnStart.addEventListener("click", () => {
 
         const indiceElegido = Math.floor(Math.random() * bancoImagenes.length);
         const imagenGanadora = bancoImagenes[indiceElegido];
+
+        console.log ("IMAGEN GUARDADA" + imagenGanadora);
+
 
         let pasadas = 0;
         let actual = 0;
@@ -96,13 +119,21 @@ btnStart.addEventListener("click", () => {
                     tablero.style.boxShadow = 'none';
                     enSorteo = false;
                     iniciarNivelConImagen(imagenGanadora);
+                
+                    if (probando){
+                         showImagePreview(imagenGanadora);
+
+                    }
+                
+                                    
                 }, 1500);
             }
         }, 180);
+
     }
 
     // Preparar tablero
-    function iniciarNivelConImagen(urlImagen) {
+    /*function iniciarNivelConImagen(urlImagen) {
         tablero.innerHTML = '';
         piezas = [];
         nivelTerminado = false;
@@ -199,6 +230,117 @@ btnStart.addEventListener("click", () => {
             selectPiezas.disabled = false;
             alert('No se pudo cargar la imagen.');
         };
+    }*/
+/*
+         btnComenzar.addEventListener('click', () => {
+        if (!enSorteo) ejecutarSorteoImagen();
+    });
+
+    btnAyudita.addEventListener('click', usarAyudita);
+*/
+
+const probando = btnViewImage.addEventListener('click', showImagePreview);
+
+/* PARTE NUEVAAAAA */
+
+    function showImagePreview(urlImagen) {
+
+        const vistaPrevia = document.getElementById('image-preview');
+        vistaPrevia.innerHTML = '';
+        const img = new Image();
+       img.src = urlImagen;
+       console.log(urlImagen, "probando");
+        img.onload = () => {
+            imagenCargada = imagenGanadora;
+        }
+        
+        vistaPrevia.appendChild(img);
+        setTimeout(() => {
+            vistaPrevia.innerHTML = '';
+        }
+, 3000); 
+       
+    }
+
+    function iniciarNivelConImagen(urlImagen) {
+        tablero.innerHTML = '';
+        piezas = [];
+        nivelTerminado = false;
+        
+
+        const nivel = niveles[nivelActualIndex];
+        const totalPiezas = parseInt(selectPiezas?.value || 4);
+
+        // Definir columnas y filas según la selección (2x2, 3x2 o 4x2)
+        let columnas = 2;
+        if (totalPiezas === 8) {
+            columnas = 4;
+        } else if (totalPiezas === 6) {
+            columnas = 3;
+        }
+        const filas = 2;
+
+        tablero.style.display = 'grid';
+        tablero.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`;
+        tablero.style.gridTemplateRows = `repeat(${filas}, 1fr)`;
+        tablero.style.aspectRatio = `${columnas} / ${filas}`;
+        spanNivel.textContent = nivel.numero;
+
+       const img = new Image();
+        img.src = urlImagen;
+
+        img.onload = () => {
+            imagenCargada = img;
+            const anchoPieza = img.width / columnas;
+            const altoPieza = img.height / filas;
+
+            for (let f = 0; f < filas; f++) {
+                for (let c = 0; c < columnas; c++) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 300;
+                    canvas.height = 300;
+                    canvas.className = 'blocka-piece';
+
+                    const ctx = canvas.getContext('2d');
+                    const corteX = c * anchoPieza;
+                    const corteY = f * altoPieza;
+
+                    ctx.drawImage(img, corteX, corteY, anchoPieza, altoPieza, 0, 0, 300, 300);
+                    aplicarFiltroMatriz(ctx, nivel.filtro);
+
+                    const rotacion = [90, 180, 270][Math.floor(Math.random() * 3)];
+                    canvas.style.transform = `rotate(${rotacion}deg)`;
+
+
+                    const pieza = {
+                        canvas,
+                        rotacion,
+                        fijada: false,
+                        corte: { x: corteX, y: corteY, tamanoX: anchoPieza, tamanoY: altoPieza }
+                    };
+                    piezas.push(pieza);
+
+                    // Eventos de giro
+                    canvas.addEventListener('click', () => rotarPieza(pieza, -90));
+                    canvas.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        rotarPieza(pieza, 90);
+                    });
+
+                    tablero.appendChild(canvas);
+                }
+            }
+
+            btnComenzar.disabled = btnAyudita.disabled = selectPiezas.disabled = false;
+            btnViewImage.disabled = false;
+            iniciarCronometro();
+        };
+
+        img.onerror = () => {
+            enSorteo = false;
+            btnComenzar.disabled = selectPiezas.disabled = false;
+            alert('No se pudo cargar la imagen.');
+        };
     }
 
     // Rotar una pieza
@@ -262,6 +404,8 @@ btnStart.addEventListener("click", () => {
             }
         }
 
+
+
         ctx.putImageData(imagen, 0, 0);
     }
 
@@ -301,15 +445,29 @@ btnStart.addEventListener("click", () => {
     }
 
     // Mostrar la imagen original sin filtros
+    /*  function mostrarImagenLimpia() {
+          piezas.forEach(pieza => {
+              const ctx = pieza.canvas.getContext('2d');
+              const { x, y, tamano } = pieza.corte;
+  
+              ctx.clearRect(0, 0, 300, 300);
+              ctx.drawImage(
+                  imagenCargada,
+                  x, y, tamano, tamano,
+                  0, 0, 300, 300
+              );
+          });
+      }*/
+
     function mostrarImagenLimpia() {
         piezas.forEach(pieza => {
             const ctx = pieza.canvas.getContext('2d');
-            const { x, y, tamano } = pieza.corte;
+            const { x, y, tamanoX, tamanoY } = pieza.corte;
 
             ctx.clearRect(0, 0, 300, 300);
             ctx.drawImage(
                 imagenCargada,
-                x, y, tamano, tamano,
+                x, y, tamanoX, tamanoY,
                 0, 0, 300, 300
             );
         });
@@ -344,8 +502,9 @@ btnStart.addEventListener("click", () => {
                     <p>Tiempo de partida: <strong>${tiempoTexto}</strong></p>
                     <p class="record-text">${textoRecord}</p>
                     <div class="overlay-actions">
+                    <a href="home.html" class="secondary">Menú Principal</a>
                         <button id="btn-next-level" class="primary">${textoBoton}</button>
-                        <a href="home.html" class="secondary">Menú Principal</a>
+                        
                     </div>
                 </div>
             `;
@@ -355,8 +514,9 @@ btnStart.addEventListener("click", () => {
                     <h2>¡Tiempo Agotado!</h2>
                     <p>Se terminó el tiempo límite para este nivel.</p>
                     <div class="overlay-actions">
+                    <a href="home.html" class="secondary">Menú Principal</a>
                         <button id="btn-retry" class="primary">Reintentar Nivel</button>
-                        <a href="home.html" class="secondary">Menú Principal</a>
+                        
                     </div>
                 </div>
             `;
@@ -391,12 +551,36 @@ btnStart.addEventListener("click", () => {
         actualizarPantallaTiempo();
 
         frenarCronometro();
+        const tiempo = document.getElementById('tiempito');
+       // const ctx = tiempo.getContext('2d');
+       /* const alerta = [
+            { color: 'green' },
+            { color: 'yellow' },
+            { color: 'red' }
+        ];*/
+
+       // ctx = tiempo.getContext('2d');
+
 
         cronometroInterval = setInterval(() => {
             segundosTranscurridos++;
             actualizarPantallaTiempo();
-
             const limite = niveles[nivelActualIndex].tiempoMaximo;
+            if (tiempo){
+                console.log('Tiempo transcurrido:', segundosTranscurridos);
+            
+            }
+
+            if (segundosTranscurridos <= 10) {
+                console.log('Tiempo en verde');
+                tiempo.fillStyle = 'rgb(0, 255, 0)';
+            } else if (segundosTranscurridos > 10 && segundosTranscurridos <= 20) {
+                tiempo.fillStyle = 'rgb(255, 255, 0)';
+            } else if (segundosTranscurridos > 20) {
+                tiempo.fillStyle = 'rgb(255, 0, 0)';
+            }
+
+    
 
             if (limite !== null && segundosTranscurridos >= limite) {
                 nivelTerminado = true;
