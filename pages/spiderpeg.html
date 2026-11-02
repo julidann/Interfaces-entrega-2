@@ -100,11 +100,10 @@
                 </div>
                 <div class="peg-game-bottombar">
                     <div class="peg-controls">
-                        <button class="accent" id="peg-start" type="button" disabled>Comenzar partida</button>
                         <button class="secondary" id="peg-hint" type="button" disabled>Ver pista</button>
                         <button class="primary" id="peg-restart" type="button" disabled>Reiniciar</button>
                     </div>
-                    <p class="peg-message" id="peg-message" aria-live="polite">Elegí un diseño de ficha para comenzar.</p>
+                    <p class="peg-message" id="peg-message" aria-live="polite">Elegí un diseño y arrastrá una ficha para comenzar.</p>
                 </div>
             </div>
             <div class="tags">
@@ -120,8 +119,10 @@
             <div class="peg-modal-card">
                 <h2 id="peg-modal-title">Fin de la partida</h2>
                 <p id="peg-modal-text"></p>
-                <button class="accent" id="peg-close" type="button">Cerrar</button>
-                <button class="secondary" id="peg-modal-restart" type="button">Volver a jugar</button>
+                <div class="peg-modal-actions">
+                    <button class="accent" id="peg-modal-restart" type="button">Jugar de nuevo</button>
+                    <a class="secondary" href="home.html">Salir</a>
+                </div>
             </div>
         </div>
 
