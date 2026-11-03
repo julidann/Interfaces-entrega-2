@@ -60,11 +60,10 @@
     let partidaIniciada = false;
     let partidaTerminada = false;
 
-    // Estado del arrastre y de la pista animada.
+    // Estado del arrastre con mouse y de la pista animada.
     let origenArrastre = null;
-    let posicionPuntero = null;
+    let posicionMouse = null;
     let arrastrando = false;
-    let ignorarProximoClic = false;
     let movimientoPista = null;
     let temporizadorPista = null;
     let animacionPista = null;
@@ -191,8 +190,8 @@
 
         if (movimientoPista) dibujarRecorridoPista(performance.now());
 
-        if (arrastrando && posicionPuntero) {
-            dibujarFicha(posicionPuntero.x, posicionPuntero.y, tamanioCelda * 0.82);
+        if (arrastrando && posicionMouse) {
+            dibujarFicha(posicionMouse.x, posicionMouse.y, tamanioCelda * 0.82);
         }
     }
 
@@ -271,7 +270,7 @@
     }
 
     /**
-     * Convierte las coordenadas del puntero en una casilla del tablero.
+     * Convierte las coordenadas del mouse en una casilla del tablero.
      */
     function obtenerCasilla(evento) {
         const rect = canvas.getBoundingClientRect();
@@ -404,6 +403,7 @@
         tablero[clave(origen.fila, origen.columna)] = false;
         tablero[clave(medio.fila, medio.columna)] = false;
         tablero[clave(destino.fila, destino.columna)] = true;
+        movimientos++;
         seleccion = null;
 
         limpiarPista();
@@ -415,7 +415,7 @@
     /**
      * Inicia el arrastre de una ficha y, si es la primera, comienza la partida.
      */
-    function alPresionarPuntero(evento) {
+    function alPresionarMouse(evento) {
         if (partidaTerminada) return;
 
         const casilla = obtenerCasilla(evento);
@@ -431,27 +431,26 @@
 
         origenArrastre = casilla;
         const rect = canvas.getBoundingClientRect();
-        posicionPuntero = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
+        posicionMouse = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
         arrastrando = true;
-        canvas.setPointerCapture(evento.pointerId);
         dibujarTablero();
     }
 
     /**
      * Mueve visualmente la ficha mientras se arrastra.
      */
-    function alMoverPuntero(evento) {
+    function alMoverMouse(evento) {
         if (!arrastrando) return;
 
         const rect = canvas.getBoundingClientRect();
-        posicionPuntero = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
+        posicionMouse = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
         dibujarTablero();
     }
 
     /**
      * Suelta la ficha: ejecuta el salto o deja la ficha en su lugar.
      */
-    function alSoltarPuntero(evento) {
+    function alSoltarMouse(evento) {
         if (!arrastrando || !origenArrastre) return;
 
         const destino = obtenerCasilla(evento);
@@ -463,13 +462,11 @@
         const distancia = Math.hypot(x - inicioX, y - inicioY);
         const origen = origenArrastre;
 
-        ignorarProximoClic = true;
         arrastrando = false;
         origenArrastre = null;
-        posicionPuntero = null;
+        posicionMouse = null;
 
         if (distancia < 8) {
-            fichaElegida = Number(elementos.selectorFichas.value);
             // Un clic selecciona la ficha para elegir el destino con otro clic.
             seleccion = origen;
             elementos.mensaje.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
@@ -477,32 +474,6 @@
             elementos.mensaje.textContent = "¡Buen movimiento!";
         } else {
             elementos.mensaje.textContent = "Ese movimiento no es válido. La ficha volvió a su lugar.";
-        }
-
-        actualizarJuego();
-    }
-
-    /**
-     * Permite mover una ficha seleccionándola y luego haciendo clic en el destino.
-     */
-    function alHacerClic(evento) {
-        if (ignorarProximoClic) {
-            ignorarProximoClic = false;
-            return;
-        }
-        if (!partidaIniciada || partidaTerminada || arrastrando) return;
-
-        const casilla = obtenerCasilla(evento);
-        if (!casilla) return;
-
-        if (tablero[clave(casilla.fila, casilla.columna)]) {
-            seleccion = casilla;
-            elementos.mensaje.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
-        } else if (seleccion && moverFicha(seleccion, casilla)) {
-            seleccion = null;
-            elementos.mensaje.textContent = "¡Buen movimiento!";
-        } else if (seleccion) {
-            elementos.mensaje.textContent = "Ese movimiento no es válido.";
         }
 
         actualizarJuego();
@@ -592,7 +563,7 @@
         partidaTerminada = false;
         arrastrando = false;
         origenArrastre = null;
-        posicionPuntero = null;
+        posicionMouse = null;
 
         elementos.pista.disabled = true;
         elementos.reiniciar.disabled = fichaElegida === null;
@@ -627,11 +598,9 @@
     elementos.reiniciar.addEventListener("click", reiniciarPartida);
     elementos.reiniciarModal.addEventListener("click", reiniciarPartida);
     elementos.pista.addEventListener("click", mostrarPista);
-    canvas.addEventListener("pointerdown", alPresionarPuntero);
-    canvas.addEventListener("pointermove", alMoverPuntero);
-    canvas.addEventListener("pointerup", alSoltarPuntero);
-    canvas.addEventListener("pointercancel", alSoltarPuntero);
-    canvas.addEventListener("click", alHacerClic);
+    canvas.addEventListener("mousedown", alPresionarMouse);
+    window.addEventListener("mousemove", alMoverMouse);
+    window.addEventListener("mouseup", alSoltarMouse);
     window.addEventListener("resize", ajustarCanvas);
 
     // Desplaza la página hasta el tablero desde el botón de acceso.
