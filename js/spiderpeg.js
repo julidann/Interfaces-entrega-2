@@ -62,6 +62,8 @@
     let isDragging = false;
     let hintMove = null;
     let hintTimeout = null;
+    let hintAnimationFrame = null;
+    let hintAnimationStart = 0;
     let suppressNextClick = false;
     let cellSize = 0;
     let boardOffsetX = 0;
@@ -146,10 +148,10 @@
                 ctx.stroke();
             }
             if (hintMove && hintMove.from.row === row && hintMove.from.col === col) {
-                drawHighlight(centerX, centerY, radius, "#D6006A");
+                drawHighlight(centerX, centerY, radius, "#D6006A", performance.now());
             }
             if (hintMove && hintMove.to.row === row && hintMove.to.col === col) {
-                drawHighlight(centerX, centerY, radius, "#06D606");
+                drawHighlight(centerX, centerY, radius, "#06D606", performance.now());
             }
 
             // Dibuja la ficha si la posición está ocupada y no está siendo arrastrada.
@@ -159,6 +161,9 @@
             }
         });
 
+        // Dibuja el recorrido animado de la pista por encima de las fichas.
+        if (hintMove) drawHintPath(performance.now());
+
         // Dibuja la ficha bajo el puntero mientras se realiza el arrastre.
         if (isDragging && pointerPosition && pointerStart) {
             drawPiece(getPieceImage(),
@@ -167,12 +172,61 @@
     }
 
     // Dibuja un círculo de color para indicar una casilla de la pista.
-    function drawHighlight(x, y, radius, color) {
+    function drawHighlight(x, y, radius, color, now) {
+        const pulse = (Math.sin(now / 180) + 1) / 2;
+        const ringRadius = radius + 4 + pulse * 9;
+        ctx.save();
+        ctx.globalAlpha = 0.55 + pulse * 0.45;
         ctx.beginPath();
-        ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
+        ctx.arc(x, y, ringRadius, 0, Math.PI * 2);
         ctx.strokeStyle = color;
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 3 + pulse * 2;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12 + pulse * 10;
         ctx.stroke();
+        ctx.restore();
+    }
+
+    // Dibuja una línea punteada y un punto luminoso que recorre el salto sugerido.
+    function drawHintPath(now) {
+        const fromX = boardOffsetX + (hintMove.from.col + 0.5) * cellSize;
+        const fromY = boardOffsetY + (hintMove.from.row + 0.5) * cellSize;
+        const toX = boardOffsetX + (hintMove.to.col + 0.5) * cellSize;
+        const toY = boardOffsetY + (hintMove.to.row + 0.5) * cellSize;
+        const progress = (now % 1100) / 1100;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.setLineDash([6, 7]);
+        ctx.lineDashOffset = -now / 35;
+        ctx.strokeStyle = "#FFD600";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "#FFD600";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+
+        const dotX = fromX + (toX - fromX) * progress;
+        const dotY = fromY + (toY - fromY) * progress;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.arc(dotX, dotY, 5 + Math.sin(now / 90) * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.shadowColor = "#FFD600";
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // Mantiene el efecto de pulso activo hasta que la pista desaparece.
+    function animateHint() {
+        if (!hintMove) {
+            hintAnimationFrame = null;
+            return;
+        }
+        drawBoard();
+        hintAnimationFrame = requestAnimationFrame(animateHint);
     }
 
     // Dibuja una ficha centrada en las coordenadas indicadas.
@@ -294,6 +348,9 @@
         selected = null;
         moves++;
         hintMove = null;
+        clearTimeout(hintTimeout);
+        cancelAnimationFrame(hintAnimationFrame);
+        hintAnimationFrame = null;
         renderBoard();
         checkGameState();
         return true;
@@ -391,6 +448,10 @@
         started = false;
         clearInterval(timerId);
         hintButton.disabled = true;
+        clearTimeout(hintTimeout);
+        cancelAnimationFrame(hintAnimationFrame);
+        hintAnimationFrame = null;
+        hintMove = null;
         modalTitle.textContent = won ? "¡Lo lograste!" : "Fin de la partida";
         modalText.textContent = message;
         modalElement.classList.add("show");
@@ -406,20 +467,26 @@
             checkGameState();
             return;
         }
-        hintMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        messageElement.textContent = "Pista: mové la ficha resaltada hacia el círculo marcado.";
-        drawBoard();
         clearTimeout(hintTimeout);
+        cancelAnimationFrame(hintAnimationFrame);
+        hintMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        hintAnimationStart = performance.now();
+        messageElement.textContent = "Pista: mové la ficha resaltada hacia el círculo marcado.";
+        animateHint();
         hintTimeout = setTimeout(() => {
             hintMove = null;
+            cancelAnimationFrame(hintAnimationFrame);
+            hintAnimationFrame = null;
             drawBoard();
-        }, 2200);
+        }, 3000);
     }
 
     // Reinicia el juego desde el estado inicial si ya se eligió un diseño.
     function restartGame() {
         clearInterval(timerId);
         clearTimeout(hintTimeout);
+        cancelAnimationFrame(hintAnimationFrame);
+        hintAnimationFrame = null;
         board = createInitialBoard();
         selected = null;
         moves = 0;
