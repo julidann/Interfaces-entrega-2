@@ -85,7 +85,6 @@ h1 {
     .landing-main {
         min-height: calc(100vh - 70px);
         padding: 0 60px;
-        gap: 20px;
     }
 
     .landing-buttons {

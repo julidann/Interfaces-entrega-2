@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="assets/logo/LOGOPAGE.png">
+    <link rel="icon" type="image/png" href="../assets/logo/LOGOPAGE.png">
     <title>GAMEZONE | Spider-Peg</title>
     <link rel="stylesheet" href="../css/game/game.css">
     <link rel="stylesheet" href="../css/general.css">
@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
+    <!-- NUEVO: estilos del juego Peg Solitaire -->
+    <link rel="stylesheet" href="../css/spiderpeg.css">
 
 </head>
 
@@ -74,9 +76,29 @@
     <main>
 
         <section class="landing-main">
-            <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
-            <div>
-                <img class="game-image" id="gallery-main-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
+            <p class="spiderpeg-ruta"><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
+            <!-- El juego vive directamente en este div (antes tenía la imagen SpiderPeg-1.jpg) -->
+            <div class="spiderpeg-contenedor">
+                <div class="spiderpeg-juego" id="spiderpeg-juego">
+
+                    <!-- Tablero del juego -->
+                    <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
+
+                    <!-- Panel al costado: tiempo, fichas, reiniciar y mensaje final -->
+                    <div class="spiderpeg-panel">
+                        <div class="spiderpeg-dato">
+                            <span class="dato-titulo">Tiempo</span>
+                            <strong class="dato-numero" id="spiderpeg-timer">5:00</strong>
+                        </div>
+                        <div class="spiderpeg-dato">
+                            <span class="dato-titulo">Fichas</span>
+                            <strong class="dato-numero" id="spiderpeg-fichas">32</strong>
+                        </div>
+                        <button class="primary reiniciar-btn" id="spiderpeg-reiniciar" type="button">Reiniciar</button>
+                        <p class="spiderpeg-mensaje" id="spiderpeg-mensaje"></p>
+                    </div>
+
+                </div>
             </div>
 
             <div class="tags">
@@ -294,8 +316,12 @@
 
     <footer class="site-footer"></footer>
 
+    <script src="../js/menu.js"></script>
+    <script src="../js/footer.js"></script>
+    <!-- NUEVO: el juego (primero la lógica, después la conexión con la página) -->
+    <script src="../js/peg-solitaire.js"></script>
+    <script src="../js/spiderpeg.js"></script>
+
 </body>
-<script src="../js/menu.js"></script>
-<script src="../js/footer.js"></script>
 
 </html>

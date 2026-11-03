@@ -1,0 +1,114 @@
+/* =====================================================
+   SPIDERPEG - estilos del juego dentro de la página
+   (clases directas, sin variables ni selectores avanzados)
+   Se arma primero para celular (todo en columna) y
+   después se acomoda para pantallas grandes.
+   ===================================================== */
+
+/* Contenedor del juego (el div que antes tenía la imagen):
+   ocupa el ancho disponible y el juego nunca se sale de él */
+.spiderpeg-contenedor {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* flex: 1 hace que el div crezca y ocupe todo el alto libre de la sección */
+    flex: 1;
+    /* el juego queda pegado arriba del div (sin espacio vacío arriba) */
+    align-items: flex-start;
+}
+
+/* Texto "Inicio / Juegos / ..." de arriba: le sacamos el margen de abajo
+   para que no quede espacio entre el texto y el juego */
+.spiderpeg-ruta {
+    margin-bottom: 0;
+}
+
+/* Juego: el tablero y el panel, uno abajo del otro (en celular) */
+.spiderpeg-juego {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Tablero: ocupa el ancho disponible, hasta 700px, siempre cuadrado */
+#spiderpeg-canvas {
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+}
+
+/* Panel con los datos del juego */
+.spiderpeg-panel {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Cada dato (tiempo / fichas): título chico arriba y número grande abajo */
+.spiderpeg-dato {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Título del dato */
+.dato-titulo {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a3a3a3;
+}
+
+/* Número del dato */
+.dato-numero {
+    font-size: 40px;
+    color: #06D606;
+}
+
+/* Botón Reiniciar: se suma al estilo .primary de buttons.css */
+.reiniciar-btn {
+    width: 100%;
+    padding: 0 20px;
+}
+
+/* Mensaje final (victoria / derrota) */
+.spiderpeg-mensaje {
+    min-height: 44px;
+    margin: 0;
+    font-size: 16px;
+    text-align: center;
+    color: #06D606;
+}
+
+/* ---------- Pantallas grandes: el panel pasa al costado ---------- */
+@media (min-width: 768px) {
+
+    /* Tablero y panel uno al lado del otro, alineados arriba */
+    .spiderpeg-juego {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 24px;
+        align-items: center;
+    }
+
+    /* El tablero se mide según el alto de la pantalla, así entra
+       completo en Full HD sin scroll. Puede achicarse si falta ancho */
+    #spiderpeg-canvas {
+        width: 75vh;
+        max-width: 700px;
+        min-width: 0;
+    }
+
+    /* El panel tiene un ancho fijo y se queda al costado */
+    .spiderpeg-panel {
+        width: 200px;
+        flex: none;
+    }
+}
+
