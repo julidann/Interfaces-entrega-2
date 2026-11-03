@@ -53,6 +53,7 @@
     // Estado de la partida.
     let tablero = crearTableroInicial();
     let fichaElegida = null;
+    let seleccion = null;
     let movimientos = 0;
     let segundosRestantes = TIEMPO_LIMITE;
     let temporizador = null;
@@ -171,7 +172,7 @@
             }
 
             // Marca la ficha seleccionada y los extremos de la pista.
-            if (coincide(origenArrastre || fichaElegida, fila, columna)) {
+            if (coincide(origenArrastre || seleccion, fila, columna)) {
                 dibujarResaltado(x, y, radio, "#FFD600", performance.now());
             }
             if (movimientoPista && coincide(movimientoPista.origen, fila, columna)) {
@@ -354,6 +355,7 @@
 
         tablero = crearTableroInicial();
         fichaElegida = Number(elementos.selectorFichas.value);
+        seleccion = null;
         movimientos = 0;
         segundosRestantes = TIEMPO_LIMITE;
         partidaIniciada = true;
@@ -402,6 +404,7 @@
         tablero[clave(origen.fila, origen.columna)] = false;
         tablero[clave(medio.fila, medio.columna)] = false;
         tablero[clave(destino.fila, destino.columna)] = true;
+        seleccion = null;
 
         limpiarPista();
         actualizarJuego();
@@ -521,7 +524,7 @@
     /**
      * Detiene la partida y muestra el resultado.
      */
-    function finalizarPartida gano(mensaje) {
+    function finalizarPartida(gano, mensaje) {
         partidaTerminada = true;
         partidaIniciada = false;
         clearInterval(temporizador);
