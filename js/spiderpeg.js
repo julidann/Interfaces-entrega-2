@@ -1,217 +1,251 @@
-/* Lógica de Spider-Peg: tablero dibujado en canvas y controles con Pointer Events. */
+/**
+ * Spider-Peg
+ * Solitario de clavijas en un tablero de 7x7.
+ * Incluye arrastrar y soltar, selección por clic, pistas, temporizador y reinicio.
+ */
 (() => {
     "use strict";
 
-    // Obtiene el canvas y su contexto para dibujar el tablero.
+    // Configuración general del juego.
+    const TAMANIO_TABLERO = 7;
+    const TIEMPO_LIMITE = 5 * 60;
+    const DIRECCIONES = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    const ARCHIVOS_FICHAS = ["ficha1.png", "ficha2.png", "ficha3.png"];
+
+    // Elementos de la página.
     const canvas = document.getElementById("peg-canvas");
+    if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
+    const elementos = {
+        movimientos: document.getElementById("peg-moves"),
+        fichas: document.getElementById("peg-remaining"),
+        tiempo: document.getElementById("peg-timer"),
+        mensaje: document.getElementById("peg-message"),
+        modal: document.getElementById("peg-modal"),
+        tituloModal: document.getElementById("peg-modal-title"),
+        textoModal: document.getElementById("peg-modal-text"),
+        pista: document.getElementById("peg-hint"),
+        reiniciar: document.getElementById("peg-restart"),
+        reiniciarModal: document.getElementById("peg-modal-restart"),
+        selectorFichas: document.getElementById("peg-piece-choice")
+    };
 
-    // Obtiene los elementos que muestran el estado de la partida.
-    const movesElement = document.getElementById("peg-moves");
-    const remainingElement = document.getElementById("peg-remaining");
-    const timerElement = document.getElementById("peg-timer");
-    const messageElement = document.getElementById("peg-message");
-    const modalElement = document.getElementById("peg-modal");
-    const modalTitle = document.getElementById("peg-modal-title");
-    const modalText = document.getElementById("peg-modal-text");
-    const hintButton = document.getElementById("peg-hint");
-    const restartButton = document.getElementById("peg-restart");
-    const modalRestartButton = document.getElementById("peg-modal-restart");
-    const pieceChoice = document.getElementById("peg-piece-choice");
-    const timeLimit = 5 * 60;
+    // Carga las imágenes utilizadas en el tablero.
+    const imagenTablero = cargarImagen("../assets/img/tablero.svg");
+    const imagenesFichas = ARCHIVOS_FICHAS.map(archivo =>
+        cargarImagen("../assets/img/" + archivo)
+    );
 
-    // Carga el tablero gráfico; las fichas y las pistas se dibujan encima desde el canvas.
-    const boardImage = new Image();
-    boardImage.src = "../assets/img/tablero.svg";
-    boardImage.onload = drawBoard;
+    // Guarda las 33 casillas que forman la cruz del tablero.
+    const posiciones = [];
+    const posicionesValidas = new Set();
 
-    // Define las 33 posiciones que forman la cruz del tablero clásico.
-    const positions = [];
-    for (let row = 0; row < 7; row++) {
-        for (let col = 0; col < 7; col++) {
-            if ((row >= 2 && row <= 4) || (col >= 2 && col <= 4)) {
-                positions.push({ row, col });
+    for (let fila = 0; fila < TAMANIO_TABLERO; fila++) {
+        for (let columna = 0; columna < TAMANIO_TABLERO; columna++) {
+            if (fila >= 2 && fila <= 4 || columna >= 2 && columna <= 4) {
+                posiciones.push({ fila, columna });
+                posicionesValidas.add(clave(fila, columna));
             }
         }
     }
 
-    // Carga las tres imágenes PNG disponibles para que el usuario elija una.
-    const pieceImages = ["ficha1.png", "ficha2.png", "ficha3.png"].map(file => {
-        const image = new Image();
-        image.src = "../assets/img/" + file;
-        image.onload = drawBoard;
-        image.onerror = () => {
-            messageElement.textContent = "No se pudo cargar " + file + ". Revisá el nombre y la ubicación del archivo.";
+    // Estado de la partida.
+    let tablero = crearTableroInicial();
+    let fichaElegida = null;
+    let movimientos = 0;
+    let segundosRestantes = TIEMPO_LIMITE;
+    let temporizador = null;
+    let partidaIniciada = false;
+    let partidaTerminada = false;
+
+    // Estado del arrastre y de la pista animada.
+    let origenArrastre = null;
+    let posicionPuntero = null;
+    let arrastrando = false;
+    let ignorarProximoClic = false;
+    let movimientoPista = null;
+    let temporizadorPista = null;
+    let animacionPista = null;
+
+    // Medidas del tablero dentro del canvas.
+    let tamanioCelda = 0;
+    let desplazamientoX = 0;
+    let desplazamientoY = 0;
+    let tamanioCuadrado = 0;
+
+    /**
+     * Carga una imagen y vuelve a dibujar el tablero cuando está lista.
+     */
+    function cargarImagen(ruta) {
+        const imagen = new Image();
+        imagen.onload = dibujarTablero;
+        imagen.onerror = () => {
+            elementos.mensaje.textContent = "No se pudo cargar una imagen del juego.";
+            dibujarTablero();
         };
-        return image;
-    });
-
-    // Guarda el diseño elegido por el usuario; null indica que aún no eligió.
-    let selectedPieceIndex = null;
-
-    // Guarda el estado y las medidas actuales del tablero.
-    let board = {};
-    let selected = null;
-    let moves = 0;
-    let secondsLeft = timeLimit;
-    let timerId = null;
-    let started = false;
-    let finished = false;
-    let pointerStart = null;
-    let pointerPosition = null;
-    let isDragging = false;
-    let hintMove = null;
-    let hintTimeout = null;
-    let hintAnimationFrame = null;
-    let hintAnimationStart = 0;
-    let suppressNextClick = false;
-    let cellSize = 0;
-    let boardOffsetX = 0;
-    let boardOffsetY = 0;
-    let boardSize = 0;
-
-    // Devuelve la clave usada para guardar una casilla dentro del estado.
-    function key(row, col) {
-        return row + "-" + col;
+        imagen.src = ruta;
+        return imagen;
     }
 
-    // Comprueba si una fila y columna forman parte de la cruz del tablero.
-    function isValidPosition(row, col) {
-        return positions.some(position => position.row === row && position.col === col);
+    /**
+     * Devuelve una clave única para identificar una casilla.
+     */
+    function clave(fila, columna) {
+        return fila + "-" + columna;
     }
 
-    // Elige la ilustración de ficha correspondiente a una casilla.
-    function getPieceImage() {
-        return selectedPieceIndex === null ? null : pieceImages[selectedPieceIndex];
+    /**
+     * Comprueba si una posición pertenece a la cruz del tablero.
+     */
+    function esPosicionValida(fila, columna) {
+        return posicionesValidas.has(clave(fila, columna));
     }
 
-    // Crea un tablero nuevo con el hueco central vacío.
-    function createInitialBoard() {
-        const initial = {};
-        positions.forEach(({ row, col }) => {
-            initial[key(row, col)] = !(row === 3 && col === 3);
+    /**
+     * Crea el tablero inicial con el centro vacío y las demás casillas ocupadas.
+     */
+    function crearTableroInicial() {
+        const nuevoTablero = {};
+        posiciones.forEach(({ fila, columna }) => {
+            nuevoTablero[clave(fila, columna)] = !(fila === 3 && columna === 3);
         });
-        return initial;
+        return nuevoTablero;
     }
 
-    // Ajusta el tamaño interno del canvas para que se vea nítido en pantallas HD.
-    function resizeCanvas() {
+    /**
+     * Devuelve la cantidad de fichas que siguen en el tablero.
+     */
+    function contarFichas() {
+        return Object.values(tablero).filter(Boolean).length;
+    }
+
+    /**
+     * Ajusta la resolución del canvas y calcula las medidas de cada casilla.
+     */
+    function ajustarCanvas() {
         const rect = canvas.getBoundingClientRect();
-        const pixelRatio = window.devicePixelRatio || 1;
-        canvas.width = Math.round(rect.width * pixelRatio);
-        canvas.height = Math.round(rect.height * pixelRatio);
-        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        boardSize = Math.min(rect.width, rect.height);
-        cellSize = boardSize / 7;
-        boardOffsetX = (rect.width - boardSize) / 2;
-        boardOffsetY = (rect.height - boardSize) / 2;
-        drawBoard();
+        const escala = window.devicePixelRatio || 1;
+
+        canvas.width = Math.round(rect.width * escala);
+        canvas.height = Math.round(rect.height * escala);
+        ctx.setTransform(escala, 0, 0, escala, 0, 0);
+
+        tamanioCuadrado = Math.min(rect.width, rect.height);
+        tamanioCelda = tamanioCuadrado / TAMANIO_TABLERO;
+        desplazamientoX = (rect.width - tamanioCuadrado) / 2;
+        desplazamientoY = (rect.height - tamanioCuadrado) / 2;
+
+        dibujarTablero();
     }
 
-    // Dibuja el fondo, los huecos, las fichas y los resaltados del tablero.
-    function drawBoard() {
-        if (!canvas || !ctx || !cellSize) return;
+    /**
+     * Dibuja el tablero, las fichas, la selección, la pista y la ficha arrastrada.
+     */
+    function dibujarTablero() {
+        if (!tamanioCelda) return;
+
         const rect = canvas.getBoundingClientRect();
         ctx.clearRect(0, 0, rect.width, rect.height);
-
-        // Pinta el tablero gráfico y deja las posiciones listas para las fichas.
         ctx.fillStyle = "#111111";
-        ctx.fillRect(boardOffsetX, boardOffsetY, boardSize, boardSize);
-        if (boardImage.complete && boardImage.naturalWidth) {
-            ctx.drawImage(boardImage, boardOffsetX, boardOffsetY, boardSize, boardSize);
+        ctx.fillRect(desplazamientoX, desplazamientoY, tamanioCuadrado, tamanioCuadrado);
+
+        if (imagenTablero.complete && imagenTablero.naturalWidth) {
+            ctx.drawImage(imagenTablero, desplazamientoX, desplazamientoY, tamanioCuadrado, tamanioCuadrado);
         }
 
-        positions.forEach(({ row, col }) => {
-            const x = boardOffsetX + col * cellSize;
-            const y = boardOffsetY + row * cellSize;
-            const centerX = x + cellSize / 2;
-            const centerY = y + cellSize / 2;
-            const radius = cellSize * 0.39;
+        posiciones.forEach(({ fila, columna }) => {
+            const x = desplazamientoX + (columna + 0.5) * tamanioCelda;
+            const y = desplazamientoY + (fila + 0.5) * tamanioCelda;
+            const radio = tamanioCelda * 0.39;
 
-            // Dibuja huecos simples como respaldo mientras carga el tablero gráfico.
-            if (!boardImage.complete || !boardImage.naturalWidth) {
+            // Dibuja los huecos si el fondo todavía no se cargó.
+            if (!imagenTablero.complete || !imagenTablero.naturalWidth) {
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.arc(x, y, radio, 0, Math.PI * 2);
                 ctx.fillStyle = "#292929";
                 ctx.fill();
-                ctx.lineWidth = 2;
                 ctx.strokeStyle = "#454545";
+                ctx.lineWidth = 2;
                 ctx.stroke();
             }
 
-            // Resalta el origen seleccionado y el destino de una pista.
-            if (selected && selected.row === row && selected.col === col) {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius + 4, 0, Math.PI * 2);
-                ctx.strokeStyle = "#FFD600";
-                ctx.lineWidth = 3;
-                ctx.stroke();
+            // Marca la ficha seleccionada y los extremos de la pista.
+            if (coincide(origenArrastre || fichaElegida, fila, columna)) {
+                dibujarResaltado(x, y, radio, "#FFD600", performance.now());
             }
-            if (hintMove && hintMove.from.row === row && hintMove.from.col === col) {
-                drawHighlight(centerX, centerY, radius, "#D6006A", performance.now());
+            if (movimientoPista && coincide(movimientoPista.origen, fila, columna)) {
+                dibujarResaltado(x, y, radio, "#D6006A", performance.now());
             }
-            if (hintMove && hintMove.to.row === row && hintMove.to.col === col) {
-                drawHighlight(centerX, centerY, radius, "#06D606", performance.now());
+            if (movimientoPista && coincide(movimientoPista.destino, fila, columna)) {
+                dibujarResaltado(x, y, radio, "#06D606", performance.now());
             }
 
-            // Dibuja la ficha si la posición está ocupada y no está siendo arrastrada.
-            if (board[key(row, col)] && !(isDragging && pointerStart &&
-                pointerStart.row === row && pointerStart.col === col)) {
-                drawPiece(getPieceImage(), centerX, centerY, cellSize * 0.76);
+            // Dibuja las fichas que no están siendo arrastradas.
+            const esFichaArrastrada = arrastrando && coincide(origenArrastre, fila, columna);
+            if (tablero[clave(fila, columna)] && !esFichaArrastrada) {
+                dibujarFicha(x, y, tamanioCelda * 0.76);
             }
         });
 
-        // Dibuja el recorrido animado de la pista por encima de las fichas.
-        if (hintMove) drawHintPath(performance.now());
+        if (movimientoPista) dibujarRecorridoPista(performance.now());
 
-        // Dibuja la ficha bajo el puntero mientras se realiza el arrastre.
-        if (isDragging && pointerPosition && pointerStart) {
-            drawPiece(getPieceImage(),
-                pointerPosition.x, pointerPosition.y, cellSize * 0.82);
+        if (arrastrando && posicionPuntero) {
+            dibujarFicha(posicionPuntero.x, posicionPuntero.y, tamanioCelda * 0.82);
         }
     }
 
-    // Dibuja un círculo de color para indicar una casilla de la pista.
-    function drawHighlight(x, y, radius, color, now) {
-        const pulse = (Math.sin(now / 180) + 1) / 2;
-        const ringRadius = radius + 4 + pulse * 9;
+    /**
+     * Comprueba si dos posiciones representan la misma casilla.
+     */
+    function coincide(posicion, fila, columna) {
+        return posicion && posicion.fila === fila && posicion.columna === columna;
+    }
+
+    /**
+     * Dibuja el contorno animado de una casilla resaltada.
+     */
+    function dibujarResaltado(x, y, radio, color, ahora) {
+        const pulso = (Math.sin(ahora / 180) + 1) / 2;
         ctx.save();
-        ctx.globalAlpha = 0.55 + pulse * 0.45;
+        ctx.globalAlpha = 0.55 + pulso * 0.45;
         ctx.beginPath();
-        ctx.arc(x, y, ringRadius, 0, Math.PI * 2);
+        ctx.arc(x, y, radio + 4 + pulso * 9, 0, Math.PI * 2);
         ctx.strokeStyle = color;
-        ctx.lineWidth = 3 + pulse * 2;
+        ctx.lineWidth = 3 + pulso * 2;
         ctx.shadowColor = color;
-        ctx.shadowBlur = 12 + pulse * 10;
+        ctx.shadowBlur = 12 + pulso * 10;
         ctx.stroke();
         ctx.restore();
     }
 
-    // Dibuja una línea punteada y un punto luminoso que recorre el salto sugerido.
-    function drawHintPath(now) {
-        const fromX = boardOffsetX + (hintMove.from.col + 0.5) * cellSize;
-        const fromY = boardOffsetY + (hintMove.from.row + 0.5) * cellSize;
-        const toX = boardOffsetX + (hintMove.to.col + 0.5) * cellSize;
-        const toY = boardOffsetY + (hintMove.to.row + 0.5) * cellSize;
-        const progress = (now % 1100) / 1100;
+    /**
+     * Dibuja la línea y el punto animado que muestran el salto sugerido.
+     */
+    function dibujarRecorridoPista(ahora) {
+        const desde = movimientoPista.origen;
+        const hasta = movimientoPista.destino;
+        const x1 = desplazamientoX + (desde.columna + 0.5) * tamanioCelda;
+        const y1 = desplazamientoY + (desde.fila + 0.5) * tamanioCelda;
+        const x2 = desplazamientoX + (hasta.columna + 0.5) * tamanioCelda;
+        const y2 = desplazamientoY + (hasta.fila + 0.5) * tamanioCelda;
+        const avance = (ahora % 1100) / 1100;
 
         ctx.save();
         ctx.beginPath();
-        ctx.moveTo(fromX, fromY);
-        ctx.lineTo(toX, toY);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
         ctx.setLineDash([6, 7]);
-        ctx.lineDashOffset = -now / 35;
+        ctx.lineDashOffset = -ahora / 35;
         ctx.strokeStyle = "#FFD600";
         ctx.lineWidth = 3;
         ctx.shadowColor = "#FFD600";
         ctx.shadowBlur = 10;
         ctx.stroke();
 
-        const dotX = fromX + (toX - fromX) * progress;
-        const dotY = fromY + (toY - fromY) * progress;
         ctx.setLineDash([]);
         ctx.beginPath();
-        ctx.arc(dotX, dotY, 5 + Math.sin(now / 90) * 1.5, 0, Math.PI * 2);
+        ctx.arc(x1 + (x2 - x1) * avance, y1 + (y2 - y1) * avance, 5, 0, Math.PI * 2);
         ctx.fillStyle = "#FFFFFF";
         ctx.shadowColor = "#FFD600";
         ctx.shadowBlur = 16;
@@ -219,329 +253,392 @@
         ctx.restore();
     }
 
-    // Mantiene el efecto de pulso activo hasta que la pista desaparece.
-    function animateHint() {
-        if (!hintMove) {
-            hintAnimationFrame = null;
-            return;
-        }
-        drawBoard();
-        hintAnimationFrame = requestAnimationFrame(animateHint);
-    }
+    /**
+     * Dibuja una ficha con el diseño seleccionado.
+     */
+    function dibujarFicha(x, y, tamanio) {
+        if (fichaElegida === null) return;
 
-    // Dibuja una ficha centrada en las coordenadas indicadas.
-    function drawPiece(image, x, y, size) {
-        if (!image || !image.complete || !image.naturalWidth) return;
+        const imagen = imagenesFichas[fichaElegida];
+        if (!imagen.complete || !imagen.naturalWidth) return;
+
         ctx.save();
         ctx.shadowColor = "#000000aa";
         ctx.shadowBlur = 7;
-        ctx.drawImage(image, x - size / 2, y - size / 2, size, size);
+        ctx.drawImage(imagen, x - tamanio / 2, y - tamanio / 2, tamanio, tamanio);
         ctx.restore();
     }
 
-    // Convierte la posición del puntero en una fila y columna del tablero.
-    function getCellFromPointer(event) {
+    /**
+     * Convierte las coordenadas del puntero en una casilla del tablero.
+     */
+    function obtenerCasilla(evento) {
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left - boardOffsetX;
-        const y = event.clientY - rect.top - boardOffsetY;
-        const col = Math.floor(x / cellSize);
-        const row = Math.floor(y / cellSize);
-        if (row < 0 || row > 6 || col < 0 || col > 6 || !isValidPosition(row, col)) return null;
-        return { row, col };
+        const x = evento.clientX - rect.left - desplazamientoX;
+        const y = evento.clientY - rect.top - desplazamientoY;
+        const columna = Math.floor(x / tamanioCelda);
+        const fila = Math.floor(y / tamanioCelda);
+
+        if (!esPosicionValida(fila, columna)) return null;
+        return { fila, columna };
     }
 
-    // Calcula los saltos posibles en el estado de tablero recibido.
-    function getValidMoves(state) {
-        const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-        const validMoves = [];
-        positions.forEach(({ row, col }) => {
-            if (!state[key(row, col)]) return;
-            directions.forEach(([dr, dc]) => {
-                const middleRow = row + dr;
-                const middleCol = col + dc;
-                const targetRow = row + dr * 2;
-                const targetCol = col + dc * 2;
-                if (isValidPosition(targetRow, targetCol) &&
-                    state[key(middleRow, middleCol)] &&
-                    !state[key(targetRow, targetCol)]) {
-                    validMoves.push({
-                        from: { row, col },
-                        to: { row: targetRow, col: targetCol }
-                    });
+    /**
+     * Calcula todos los saltos legales disponibles en el tablero actual.
+     */
+    function obtenerMovimientosValidos() {
+        const disponibles = [];
+
+        posiciones.forEach(({ fila, columna }) => {
+            if (!tablero[clave(fila, columna)]) return;
+
+            DIRECCIONES.forEach(([df, dc]) => {
+                const destino = { fila: fila + df * 2, columna: columna + dc * 2 };
+                const medio = { fila: fila + df, columna: columna + dc };
+
+                if (esPosicionValida(destino.fila, destino.columna) &&
+                    tablero[clave(medio.fila, medio.columna)] &&
+                    !tablero[clave(destino.fila, destino.columna)]) {
+                    disponibles.push({ origen: { fila, columna }, destino });
                 }
             });
         });
-        return validMoves;
+
+        return disponibles;
     }
 
-    // Actualiza el tiempo y los contadores que aparecen junto al canvas.
-    function updateStats() {
-        movesElement.textContent = moves;
-        remainingElement.textContent = Object.values(board).filter(Boolean).length;
-        const minutes = Math.floor(secondsLeft / 60).toString().padStart(2, "0");
-        const seconds = (secondsLeft % 60).toString().padStart(2, "0");
-        timerElement.textContent = minutes + ":" + seconds;
+    /**
+     * Actualiza los contadores y el tiempo que se muestran en pantalla.
+     */
+    function actualizarEstadisticas() {
+        elementos.movimientos.textContent = movimientos;
+        elementos.fichas.textContent = contarFichas();
+
+        const minutos = Math.floor(segundosRestantes / 60).toString().padStart(2, "0");
+        const segundos = (segundosRestantes % 60).toString().padStart(2, "0");
+        elementos.tiempo.textContent = minutos + ":" + segundos;
     }
 
-    // Redibuja el tablero y sincroniza los contadores.
-    function renderBoard() {
-        updateStats();
-        drawBoard();
+    /**
+     * Redibuja el tablero y actualiza sus estadísticas.
+     */
+    function actualizarJuego() {
+        actualizarEstadisticas();
+        dibujarTablero();
     }
 
-    // Inicia el contador regresivo de la partida.
-    function startTimer() {
-        clearInterval(timerId);
-        timerId = setInterval(() => {
-            if (!started || finished) return;
-            secondsLeft--;
-            updateStats();
-            if (secondsLeft <= 0) endGame(false, "Se terminó el tiempo. ¡Probá otra vez!");
+    /**
+     * Inicia el temporizador regresivo de la partida.
+     */
+    function iniciarTemporizador() {
+        clearInterval(temporizador);
+        temporizador = setInterval(() => {
+            if (!partidaIniciada || partidaTerminada) return;
+            segundosRestantes--;
+            actualizarEstadisticas();
+
+            if (segundosRestantes <= 0) {
+                finalizarPartida(false, "Se terminó el tiempo. ¡Probá otra vez!");
+            }
         }, 1000);
     }
 
-    // Prepara una partida nueva y activa el temporizador.
-    function startGame() {
-        if (selectedPieceIndex === null) {
-            messageElement.textContent = "Primero elegí el diseño de tus fichas.";
+    /**
+     * Prepara la partida y comienza a contar el tiempo.
+     */
+    function comenzarPartida() {
+        if (fichaElegida === null) {
+            elementos.mensaje.textContent = "Primero elegí el diseño de tus fichas.";
             return;
         }
-        board = createInitialBoard();
-        selected = null;
-        moves = 0;
-        secondsLeft = timeLimit;
-        started = true;
-        finished = false;
-        hintMove = null;
-        hintButton.disabled = false;
-        restartButton.disabled = false;
-        clearTimeout(hintTimeout);
-        modalElement.classList.remove("show");
-        messageElement.textContent = "Arrastrá una ficha hasta un hueco válido para empezar a jugar.";
-        renderBoard();
-        startTimer();
+
+        tablero = crearTableroInicial();
+        fichaElegida = Number(elementos.selectorFichas.value);
+        movimientos = 0;
+        segundosRestantes = TIEMPO_LIMITE;
+        partidaIniciada = true;
+        partidaTerminada = false;
+        elementos.pista.disabled = false;
+        elementos.reiniciar.disabled = false;
+        elementos.modal.classList.remove("show");
+        limpiarPista();
+        elementos.mensaje.textContent = "Arrastrá una ficha hasta un hueco válido para jugar.";
+        actualizarJuego();
+        iniciarTemporizador();
     }
 
-    // Verifica que el salto sea recto, de dos casillas y sobre otra ficha.
-    function isLegalMove(from, to) {
-        if (!from || !to) return false;
-        const rowDistance = to.row - from.row;
-        const colDistance = to.col - from.col;
-        const straightJump = (Math.abs(rowDistance) === 2 && colDistance === 0) ||
-            (Math.abs(colDistance) === 2 && rowDistance === 0);
-        if (!straightJump || !isValidPosition(to.row, to.col)) return false;
-        const middleRow = from.row + rowDistance / 2;
-        const middleCol = from.col + colDistance / 2;
-        return board[key(from.row, from.col)] &&
-            board[key(middleRow, middleCol)] &&
-            !board[key(to.row, to.col)];
+    /**
+     * Comprueba si el movimiento entre dos casillas respeta las reglas.
+     */
+    function esMovimientoValido(origen, destino) {
+        if (!origen || !destino) return false;
+
+        const df = destino.fila - origen.fila;
+        const dc = destino.columna - origen.columna;
+        const saltoRecto = Math.abs(df) === 2 && dc === 0 ||
+            Math.abs(dc) === 2 && df === 0;
+
+        if (!saltoRecto || !esPosicionValida(destino.fila, destino.columna)) return false;
+
+        const medio = { fila: origen.fila + df / 2, columna: origen.columna + dc / 2 };
+        return tablero[clave(origen.fila, origen.columna)] &&
+            tablero[clave(medio.fila, medio.columna)] &&
+            !tablero[clave(destino.fila, destino.columna)];
     }
 
-    // Ejecuta el salto, elimina la ficha intermedia y comprueba el final del juego.
-    function makeMove(from, to) {
-        if (!started || finished || !isLegalMove(from, to)) return false;
-        const middleRow = (from.row + to.row) / 2;
-        const middleCol = (from.col + to.col) / 2;
-        board[key(from.row, from.col)] = false;
-        board[key(middleRow, middleCol)] = false;
-        board[key(to.row, to.col)] = true;
-        selected = null;
-        moves++;
-        hintMove = null;
-        clearTimeout(hintTimeout);
-        cancelAnimationFrame(hintAnimationFrame);
-        hintAnimationFrame = null;
-        renderBoard();
-        checkGameState();
+    /**
+     * Realiza un salto válido, elimina la ficha intermedia y revisa el final.
+     */
+    function moverFicha(origen, destino) {
+        if (!partidaIniciada || partidaTerminada || !esMovimientoValido(origen, destino)) {
+            return false;
+        }
+
+        const medio = {
+            fila: (origen.fila + destino.fila) / 2,
+            columna: (origen.columna + destino.columna) / 2
+        };
+
+        tablero[clave(origen.fila, origen.columna)] = false;
+        tablero[clave(medio.fila, medio.columna)] = false;
+        tablero[clave(destino.fila, destino.columna)] = true;
+
+        limpiarPista();
+        actualizarJuego();
+        comprobarFinal();
         return true;
     }
 
-    // Gestiona el inicio del puntero sobre una ficha.
-    function handlePointerDown(event) {
-        if (finished) return;
-        const cell = getCellFromPointer(event);
-        if (!cell || !board[key(cell.row, cell.col)]) return;
-        // La primera ficha arrastrada inicia la partida y pone en marcha el temporizador.
-        if (!started) {
-            if (selectedPieceIndex === null) {
-                messageElement.textContent = "Primero elegí el diseño de tus fichas.";
+    /**
+     * Inicia el arrastre de una ficha y, si es la primera, comienza la partida.
+     */
+    function alPresionarPuntero(evento) {
+        if (partidaTerminada) return;
+
+        const casilla = obtenerCasilla(evento);
+        if (!casilla || !tablero[clave(casilla.fila, casilla.columna)]) return;
+
+        if (!partidaIniciada) {
+            if (fichaElegida === null) {
+                elementos.mensaje.textContent = "Primero elegí el diseño de tus fichas.";
                 return;
             }
-            startGame();
+            comenzarPartida();
         }
-        pointerStart = cell;
-        pointerPosition = { x: event.clientX - canvas.getBoundingClientRect().left,
-            y: event.clientY - canvas.getBoundingClientRect().top };
-        isDragging = true;
-        canvas.setPointerCapture(event.pointerId);
-        renderBoard();
+
+        origenArrastre = casilla;
+        const rect = canvas.getBoundingClientRect();
+        posicionPuntero = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
+        arrastrando = true;
+        canvas.setPointerCapture(evento.pointerId);
+        dibujarTablero();
     }
 
-    // Actualiza la posición visual de la ficha mientras se arrastra.
-    function handlePointerMove(event) {
-        if (!isDragging || !pointerStart) return;
+    /**
+     * Mueve visualmente la ficha mientras se arrastra.
+     */
+    function alMoverPuntero(evento) {
+        if (!arrastrando) return;
+
         const rect = canvas.getBoundingClientRect();
-        pointerPosition = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-        drawBoard();
+        posicionPuntero = { x: evento.clientX - rect.left, y: evento.clientY - rect.top };
+        dibujarTablero();
     }
 
-    // Suelta la ficha en el destino, o conserva la selección si fue un clic.
-    function handlePointerUp(event) {
-        if (!isDragging || !pointerStart) return;
-        const target = getCellFromPointer(event);
-        const rect = canvas.getBoundingClientRect();
-        const endX = event.clientX - rect.left;
-        const endY = event.clientY - rect.top;
-        const startX = boardOffsetX + (pointerStart.col + 0.5) * cellSize;
-        const startY = boardOffsetY + (pointerStart.row + 0.5) * cellSize;
-        const distance = Math.hypot(endX - startX, endY - startY);
-        const origin = pointerStart;
-        suppressNextClick = true;
-        isDragging = false;
-        pointerStart = null;
-        pointerPosition = null;
+    /**
+     * Suelta la ficha: ejecuta el salto o deja la ficha en su lugar.
+     */
+    function alSoltarPuntero(evento) {
+        if (!arrastrando || !origenArrastre) return;
 
-        if (distance < 8) {
-            selected = origin;
-            messageElement.textContent = "Ahora soltá la ficha en un hueco válido o elegí el destino con otro clic.";
-        } else if (target && makeMove(origin, target)) {
-            messageElement.textContent = "¡Buen movimiento!";
+        const destino = obtenerCasilla(evento);
+        const rect = canvas.getBoundingClientRect();
+        const x = evento.clientX - rect.left;
+        const y = evento.clientY - rect.top;
+        const inicioX = desplazamientoX + (origenArrastre.columna + 0.5) * tamanioCelda;
+        const inicioY = desplazamientoY + (origenArrastre.fila + 0.5) * tamanioCelda;
+        const distancia = Math.hypot(x - inicioX, y - inicioY);
+        const origen = origenArrastre;
+
+        ignorarProximoClic = true;
+        arrastrando = false;
+        origenArrastre = null;
+        posicionPuntero = null;
+
+        if (distancia < 8) {
+            fichaElegida = Number(elementos.selectorFichas.value);
+            // Un clic selecciona la ficha para elegir el destino con otro clic.
+            seleccion = origen;
+            elementos.mensaje.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
+        } else if (destino && moverFicha(origen, destino)) {
+            elementos.mensaje.textContent = "¡Buen movimiento!";
         } else {
-            messageElement.textContent = "Ese movimiento no es válido. La ficha volvió a su lugar.";
+            elementos.mensaje.textContent = "Ese movimiento no es válido. La ficha volvió a su lugar.";
         }
-        renderBoard();
+
+        actualizarJuego();
     }
 
-    // Permite completar un movimiento haciendo clic en la ficha y luego en el destino.
-    function handleCanvasClick(event) {
-        if (suppressNextClick) {
-            suppressNextClick = false;
+    /**
+     * Permite mover una ficha seleccionándola y luego haciendo clic en el destino.
+     */
+    function alHacerClic(evento) {
+        if (ignorarProximoClic) {
+            ignorarProximoClic = false;
             return;
         }
-        if (!started || finished || isDragging) return;
-        const cell = getCellFromPointer(event);
-        if (!cell) return;
-        if (board[key(cell.row, cell.col)]) {
-            selected = cell;
-            messageElement.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
-        } else if (selected && makeMove(selected, cell)) {
-            messageElement.textContent = "¡Buen movimiento!";
-        } else if (selected) {
-            messageElement.textContent = "Ese movimiento no es válido.";
+        if (!partidaIniciada || partidaTerminada || arrastrando) return;
+
+        const casilla = obtenerCasilla(evento);
+        if (!casilla) return;
+
+        if (tablero[clave(casilla.fila, casilla.columna)]) {
+            seleccion = casilla;
+            elementos.mensaje.textContent = "Ahora elegí un hueco vacío a dos posiciones.";
+        } else if (seleccion && moverFicha(seleccion, casilla)) {
+            seleccion = null;
+            elementos.mensaje.textContent = "¡Buen movimiento!";
+        } else if (seleccion) {
+            elementos.mensaje.textContent = "Ese movimiento no es válido.";
         }
-        renderBoard();
+
+        actualizarJuego();
     }
 
-    // Comprueba si queda una ficha o si ya no existen saltos disponibles.
-    function checkGameState() {
-        const remaining = Object.values(board).filter(Boolean).length;
-        if (remaining === 1) {
-            endGame(true, "¡Excelente! Lograste dejar una sola ficha.");
-        } else if (getValidMoves(board).length === 0) {
-            endGame(false, "No quedan movimientos posibles. Te quedaron " + remaining + " fichas.");
+    /**
+     * Comprueba si se ganó o si ya no quedan movimientos posibles.
+     */
+    function comprobarFinal() {
+        const restantes = contarFichas();
+
+        if (restantes === 1) {
+            finalizarPartida(true, "¡Excelente! Lograste dejar una sola ficha.");
+        } else if (obtenerMovimientosValidos().length === 0) {
+            finalizarPartida(false, "No quedan movimientos posibles. Te quedaron " + restantes + " fichas.");
         }
     }
 
-    // Detiene el temporizador y muestra el resultado de la partida.
-    function endGame(won, message) {
-        finished = true;
-        started = false;
-        clearInterval(timerId);
-        hintButton.disabled = true;
-        clearTimeout(hintTimeout);
-        cancelAnimationFrame(hintAnimationFrame);
-        hintAnimationFrame = null;
-        hintMove = null;
-        modalTitle.textContent = won ? "¡Lo lograste!" : "Fin de la partida";
-        modalText.textContent = message;
-        modalElement.classList.add("show");
-        messageElement.textContent = message;
-        renderBoard();
+    /**
+     * Detiene la partida y muestra el resultado.
+     */
+    function finalizarPartida gano(mensaje) {
+        partidaTerminada = true;
+        partidaIniciada = false;
+        clearInterval(temporizador);
+        limpiarPista();
+        elementos.pista.disabled = true;
+        elementos.tituloModal.textContent = gano ? "¡Lo lograste!" : "Fin de la partida";
+        elementos.textoModal.textContent = mensaje;
+        elementos.modal.classList.add("show");
+        elementos.mensaje.textContent = mensaje;
+        actualizarJuego();
     }
 
-    // Resalta temporalmente el origen y el destino de un salto posible.
-    function showHint() {
-        if (!started || finished) return;
-        const availableMoves = getValidMoves(board);
-        if (!availableMoves.length) {
-            checkGameState();
+    /**
+     * Muestra una pista animada con un movimiento válido al azar.
+     */
+    function mostrarPista() {
+        if (!partidaIniciada || partidaTerminada) return;
+
+        const movimientosValidos = obtenerMovimientosValidos();
+        if (!movimientosValidos.length) {
+            comprobarFinal();
             return;
         }
-        clearTimeout(hintTimeout);
-        cancelAnimationFrame(hintAnimationFrame);
-        hintMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        hintAnimationStart = performance.now();
-        messageElement.textContent = "Pista: mové la ficha resaltada hacia el círculo marcado.";
-        animateHint();
-        hintTimeout = setTimeout(() => {
-            hintMove = null;
-            cancelAnimationFrame(hintAnimationFrame);
-            hintAnimationFrame = null;
-            drawBoard();
-        }, 3000);
+
+        limpiarPista();
+        movimientoPista = movimientosValidos[Math.floor(Math.random() * movimientosValidos.length)];
+        elementos.mensaje.textContent = "Pista: mové la ficha resaltada hacia el círculo marcado.";
+        animarPista();
+        temporizadorPista = setTimeout(limpiarPista, 3000);
     }
 
-    // Reinicia el juego desde el estado inicial si ya se eligió un diseño.
-    function restartGame() {
-        clearInterval(timerId);
-        clearTimeout(hintTimeout);
-        cancelAnimationFrame(hintAnimationFrame);
-        hintAnimationFrame = null;
-        board = createInitialBoard();
-        selected = null;
-        moves = 0;
-        secondsLeft = timeLimit;
-        started = false;
-        finished = false;
-        hintMove = null;
-        isDragging = false;
-        pointerStart = null;
-        pointerPosition = null;
-        hintButton.disabled = true;
-        restartButton.disabled = selectedPieceIndex === null;
-        modalElement.classList.remove("show");
-        messageElement.textContent = selectedPieceIndex === null
+    /**
+     * Mantiene activa la animación de la pista hasta que se oculta.
+     */
+    function animarPista() {
+        if (!movimientoPista) return;
+        dibujarTablero();
+        animacionPista = requestAnimationFrame(animarPista);
+    }
+
+    /**
+     * Cancela la pista actual y libera su temporizador y animación.
+     */
+    function limpiarPista() {
+        clearTimeout(temporizadorPista);
+        cancelAnimationFrame(animacionPista);
+        temporizadorPista = null;
+        animacionPista = null;
+        movimientoPista = null;
+        dibujarTablero();
+    }
+
+    /**
+     * Vuelve al estado inicial y deja el temporizador detenido.
+     */
+    function reiniciarPartida() {
+        clearInterval(temporizador);
+        limpiarPista();
+
+        tablero = crearTableroInicial();
+        seleccion = null;
+        movimientos = 0;
+        segundosRestantes = TIEMPO_LIMITE;
+        partidaIniciada = false;
+        partidaTerminada = false;
+        arrastrando = false;
+        origenArrastre = null;
+        posicionPuntero = null;
+
+        elementos.pista.disabled = true;
+        elementos.reiniciar.disabled = fichaElegida === null;
+        elementos.modal.classList.remove("show");
+        elementos.mensaje.textContent = fichaElegida === null
             ? "Elegí un diseño de ficha para comenzar."
             : "Arrastrá una ficha para comenzar la partida.";
-        renderBoard();
+
+        actualizarJuego();
     }
 
-    // Aplica a todas las posiciones el diseño seleccionado en el menú.
-    function changePieceDesign() {
-        selectedPieceIndex = Number(pieceChoice.value);
-        if (!started) {
-            board = createInitialBoard();
-            selected = null;
-            renderBoard();
-            restartButton.disabled = false;
-            messageElement.textContent = "Diseño seleccionado. Arrastrá una ficha para comenzar.";
-        } else {
-            renderBoard();
-            messageElement.textContent = "Cambiaste el diseño de las fichas.";
+    /**
+     * Aplica el diseño elegido a todas las fichas del tablero.
+     */
+    function cambiarDisenoFichas() {
+        fichaElegida = elementos.selectorFichas.value === ""
+            ? null
+            : Number(elementos.selectorFichas.value);
+
+        if (!partidaIniciada) {
+            elementos.reiniciar.disabled = fichaElegida === null;
+            elementos.mensaje.textContent = fichaElegida === null
+                ? "Elegí un diseño de ficha para comenzar."
+                : "Diseño seleccionado. Arrastrá una ficha para comenzar.";
         }
+
+        dibujarTablero();
     }
 
-    // Conecta el selector de diseño con el tablero.
-    pieceChoice.addEventListener("change", changePieceDesign);
+    // Conecta los controles y los eventos del canvas.
+    elementos.selectorFichas.addEventListener("change", cambiarDisenoFichas);
+    elementos.reiniciar.addEventListener("click", reiniciarPartida);
+    elementos.reiniciarModal.addEventListener("click", reiniciarPartida);
+    elementos.pista.addEventListener("click", mostrarPista);
+    canvas.addEventListener("pointerdown", alPresionarPuntero);
+    canvas.addEventListener("pointermove", alMoverPuntero);
+    canvas.addEventListener("pointerup", alSoltarPuntero);
+    canvas.addEventListener("pointercancel", alSoltarPuntero);
+    canvas.addEventListener("click", alHacerClic);
+    window.addEventListener("resize", ajustarCanvas);
 
-    // Conecta botones, eventos del canvas y ajuste de tamaño.
+    // Desplaza la página hasta el tablero desde el botón de acceso.
     document.getElementById("peg-play-online").addEventListener("click", () => {
         canvas.scrollIntoView({ behavior: "smooth", block: "center" });
     });
-    restartButton.addEventListener("click", restartGame);
-    hintButton.addEventListener("click", showHint);
-    modalRestartButton.addEventListener("click", restartGame);
-    canvas.addEventListener("pointerdown", handlePointerDown);
-    canvas.addEventListener("pointermove", handlePointerMove);
-    canvas.addEventListener("pointerup", handlePointerUp);
-    canvas.addEventListener("pointercancel", handlePointerUp);
-    canvas.addEventListener("click", handleCanvasClick);
-    window.addEventListener("resize", resizeCanvas);
 
-    // Muestra el tablero inicial; el temporizador comienza con el primer arrastre.
-    board = createInitialBoard();
-    hintButton.disabled = true;
-    restartButton.disabled = true;
-    resizeCanvas();
-    renderBoard();
+    // Inicia el tablero sin comenzar todavía el temporizador.
+    elementos.pista.disabled = true;
+    elementos.reiniciar.disabled = true;
+    actualizarEstadisticas();
+    ajustarCanvas();
 })();
