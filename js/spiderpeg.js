@@ -39,13 +39,13 @@
 
     // Guarda las 33 casillas que forman la cruz del tablero.
     const posiciones = [];
-    const posicionesValidas = new Set();
+
 
     for (let fila = 0; fila < TAMANIO_TABLERO; fila++) {
         for (let columna = 0; columna < TAMANIO_TABLERO; columna++) {
             if (fila >= 2 && fila <= 4 || columna >= 2 && columna <= 4) {
                 posiciones.push({ fila, columna });
-                posicionesValidas.add(clave(fila, columna));
+
             }
         }
     }
@@ -89,35 +89,41 @@
     }
 
     /**
-     * Devuelve una clave única para identificar una casilla.
-     */
-    function clave(fila, columna) {
-        return fila + "-" + columna;
-    }
-
-    /**
-     * Comprueba si una posición pertenece a la cruz del tablero.
+     * Comprueba si una posición existe dentro de la cruz del tablero.
+     * Las casillas externas están marcadas con -1 en la matriz.
      */
     function esPosicionValida(fila, columna) {
-        return posicionesValidas.has(clave(fila, columna));
+        return fila >= 0 && fila < TAMANIO_TABLERO &&
+            columna >= 0 && columna < TAMANIO_TABLERO &&
+            tablero[fila][columna] !== -1;
     }
 
     /**
-     * Crea el tablero inicial con el centro vacío y las demás casillas ocupadas.
+     * Crea la matriz inicial: -1 = fuera, 1 = ficha y 0 = hueco vacío.
      */
     function crearTableroInicial() {
-        const nuevoTablero = {};
-        posiciones.forEach(({ fila, columna }) => {
-            nuevoTablero[clave(fila, columna)] = !(fila === 3 && columna === 3);
-        });
-        return nuevoTablero;
+        return [
+            [-1, -1, 1, 1, 1, -1, -1],
+            [-1, -1, 1, 1, 1, -1, -1],
+            [ 1,  1, 1, 1, 1,  1,  1],
+            [ 1,  1, 1, 0, 1,  1,  1],
+            [ 1,  1, 1, 1, 1,  1,  1],
+            [-1, -1, 1, 1, 1, -1, -1],
+            [-1, -1, 1, 1, 1, -1, -1]
+        ];
     }
 
     /**
-     * Devuelve la cantidad de fichas que siguen en el tablero.
+     * Cuenta las fichas que siguen en el tablero (casillas con valor 1).
      */
     function contarFichas() {
-        return Object.values(tablero).filter(Boolean).length;
+        let cantidad = 0;
+        tablero.forEach(fila => {
+            fila.forEach(casilla => {
+                if (casilla === 1) cantidad++;
+            });
+        });
+        return cantidad;
     }
 
     /**
@@ -183,7 +189,7 @@
 
             // Dibuja las fichas que no están siendo arrastradas.
             const esFichaArrastrada = arrastrando && coincide(origenArrastre, fila, columna);
-            if (tablero[clave(fila, columna)] && !esFichaArrastrada) {
+            if (tablero[fila][columna] === 1 && !esFichaArrastrada) {
                 dibujarFicha(x, y, tamanioCelda * 0.76);
             }
         });
@@ -290,15 +296,15 @@
         const disponibles = [];
 
         posiciones.forEach(({ fila, columna }) => {
-            if (!tablero[clave(fila, columna)]) return;
+            if (tablero[fila][columna] !== 1) return;
 
             DIRECCIONES.forEach(([df, dc]) => {
                 const destino = { fila: fila + df * 2, columna: columna + dc * 2 };
                 const medio = { fila: fila + df, columna: columna + dc };
 
                 if (esPosicionValida(destino.fila, destino.columna) &&
-                    tablero[clave(medio.fila, medio.columna)] &&
-                    !tablero[clave(destino.fila, destino.columna)]) {
+                    tablero[medio.fila][medio.columna] === 1 &&
+                    tablero[destino.fila][destino.columna] === 0) {
                     disponibles.push({ origen: { fila, columna }, destino });
                 }
             });
@@ -382,9 +388,9 @@
         if (!saltoRecto || !esPosicionValida(destino.fila, destino.columna)) return false;
 
         const medio = { fila: origen.fila + df / 2, columna: origen.columna + dc / 2 };
-        return tablero[clave(origen.fila, origen.columna)] &&
-            tablero[clave(medio.fila, medio.columna)] &&
-            !tablero[clave(destino.fila, destino.columna)];
+        return tablero[origen.fila][origen.columna] === 1 &&
+            tablero[medio.fila][medio.columna] === 1 &&
+            tablero[destino.fila][destino.columna] === 0;
     }
 
     /**
@@ -400,9 +406,9 @@
             columna: (origen.columna + destino.columna) / 2
         };
 
-        tablero[clave(origen.fila, origen.columna)] = false;
-        tablero[clave(medio.fila, medio.columna)] = false;
-        tablero[clave(destino.fila, destino.columna)] = true;
+        tablero[origen.fila][origen.columna] = 0;
+        tablero[medio.fila][medio.columna] = 0;
+        tablero[destino.fila][destino.columna] = 1;
         movimientos++;
         seleccion = null;
 
@@ -419,7 +425,7 @@
         if (partidaTerminada) return;
 
         const casilla = obtenerCasilla(evento);
-        if (!casilla || !tablero[clave(casilla.fila, casilla.columna)]) return;
+        if (!casilla || tablero[casilla.fila][casilla.columna] !== 1) return;
 
         if (!partidaIniciada) {
             if (fichaElegida === null) {
