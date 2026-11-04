@@ -92,8 +92,12 @@
                         <button class="primary reiniciar-btn" id="spiderpeg-reiniciar" type="button">Reiniciar</button>
                         <p class="spiderpeg-mensaje" id="spiderpeg-mensaje"></p>
                     </div>
-                    <!-- Tablero del juego (700x700: no cambiar, el código calcula el tablero con ese tamaño) -->
-                    <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
+                    <!-- Tablero del juego (700x700: no cambiar, el código calcula el tablero con ese tamaño).
+                         El botón "Comenzar" va encima del canvas, dentro de este div. -->
+                    <div class="spiderpeg-tablero">
+                        <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
+                        <button class="secondary" id="spiderpeg-comenzar" type="button" style="display: none;">Comenzar</button>
+                    </div>
                 </div>
                 <article id="como-jugar" class="how-to-play">
                     <h2>¿Cómo jugar?</h2>

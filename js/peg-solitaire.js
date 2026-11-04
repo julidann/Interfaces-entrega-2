@@ -69,7 +69,7 @@ class PegSolitaire {
 
   /**
    * @param {HTMLCanvasElement} canvas - canvas donde se dibuja todo (700x700)
-   * @param {Object} ui - elementos del DOM: {timer, fichas, mensaje}
+   * @param {Object} ui - elementos del DOM: {timer, fichas, mensaje, comenzar}
    */
   constructor(canvas, ui) {
     this.canvas = canvas;
@@ -83,7 +83,7 @@ class PegSolitaire {
     // Estado de la partida (se completa en reiniciar())
     this.tablero = [];        // matriz con -1 / 0 / 1
     this.tipos = [];          // matriz con el tipo de imagen de cada ficha
-    this.estado = 'jugando';  // 'jugando' | 'ganado' | 'perdido'
+    this.estado = 'inicio';    // 'inicio' | 'jugando' | 'ganado' | 'perdido'
     this.textoFinal = '';     // mensaje que muestra el cartel de fin de partida
     this.tiempoRestante = TIEMPO_LIMITE;
     this.intervalo = null;    // id del setInterval del timer
@@ -109,12 +109,39 @@ class PegSolitaire {
     }
 
     this.listo = true;
+    this.mostrarInicio();
+  }
+
+  /**
+   * Muestra la pantalla de inicio: tablero vacío (sin fichas) con el botón
+   * "Comenzar" encima. El timer todavía no corre.
+   */
+  mostrarInicio() {
+    clearInterval(this.intervalo);
+    this.tablero = TABLERO_INICIAL.map(function (fila) { return fila.slice(); });
+    this.estado = 'inicio';
+    this.tiempoRestante = TIEMPO_LIMITE;
+    this.actualizarUI();
+
+    // Si la página no tiene el botón, la partida arranca directamente
+    if (!this.ui.comenzar) { this.reiniciar(); return; }
+    this.ui.comenzar.style.display = ''; // vuelve a mostrar el botón
+    this.canvas.classList.add('spiderpeg-inicio'); // el CSS le aplica el blur
+    this.dibujar();
+  }
+
+  /**
+   * Se llama al apretar "Comenzar": oculta el botón y arranca la partida
+   * (con ella, el timer).
+   */
+  comenzar() {
+    if (!this.listo || this.estado !== 'inicio') return;
     this.reiniciar();
   }
 
   /**
    * Deja el juego como al principio: tablero inicial, tipos de ficha al azar,
-   * timer en el máximo y estado "jugando". Redibuja el canvas.
+   * timer en el máximo y estado "jugando" (el timer arranca acá). Redibuja el canvas.
    */
   reiniciar() {
     // Copia profunda del tablero inicial para no modificar la constante
@@ -132,6 +159,8 @@ class PegSolitaire {
     this.textoFinal = '';
     if (this.ui.mensaje) this.ui.mensaje.textContent = '';
     this.canvas.style.cursor = 'default';
+    if (this.ui.comenzar) this.ui.comenzar.style.display = 'none'; // oculta "Comenzar"
+    this.canvas.classList.remove('spiderpeg-inicio');              // saca el blur
     this.actualizarUI();
 
     // Reinicia el timer (si había uno corriendo lo frena primero)
@@ -411,6 +440,7 @@ class PegSolitaire {
     const g = this.g;
     g.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.dibujarTablero();
+    if (this.estado === 'inicio') return; // pantalla de inicio: solo el tablero vacío
 
     // Fichas quietas (la que se está arrastrando se dibuja aparte, al final)
     for (let f = 0; f < 7; f++) {
