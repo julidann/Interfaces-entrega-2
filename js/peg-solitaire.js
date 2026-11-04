@@ -12,7 +12,7 @@
 // Rutas de las imágenes (relativas a la página HTML).
 // El tablero tiene que ser de 700x700 con los agujeros alineados a la grilla.
 const IMAGENES = {
-  tablero: '../assets/img/tablero.svg',
+  tablero: '../assets/img/tablero.png',
   fichas: [
     '../assets/img/ficha1.png',
     '../assets/img/ficha2.png',
@@ -21,9 +21,9 @@ const IMAGENES = {
 };
 
 const TIEMPO_LIMITE = 300;     // segundos de la partida (5 minutos)
-const TAMANIO_CASILLA = 90;    // px de cada casillero
-const MARGEN = 35;             // px de margen del tablero dentro del canvas (canvas de 700x700)
-const RADIO_FICHA = 34;        // px de radio de cada ficha
+const TAMANIO_CASILLA = 100;    // px de cada casillero
+const MARGEN = .5;             // px de margen del tablero dentro del canvas (canvas de 700x700)
+const RADIO_FICHA = 40;        // px de radio de cada ficha
 
 // Mapa del tablero: -1 = no existe, 0 = hueco, 1 = ficha
 const TABLERO_INICIAL = [
