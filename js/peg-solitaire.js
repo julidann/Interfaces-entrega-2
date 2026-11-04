@@ -3,15 +3,26 @@
    Tablero en cruz de 7x7 (33 casilleros válidos), arranca con el centro vacío.
    Se juega saltando una ficha sobre otra (en línea recta) hacia un hueco;
    la ficha saltada se elimina. Se gana quedando 1 sola ficha.
+
+   El canvas se redibuja solo cuando algo cambia (movimiento, reinicio, fin
+   de partida). Mientras se arrastra una ficha se usa requestAnimationFrame
+   para animar los hints, y se frena apenas se suelta.
    ===================================================================== */
+
+// Rutas de las imágenes (relativas a la página HTML).
+// El tablero tiene que ser de 700x700 con los agujeros alineados a la grilla.
 const IMAGENES = {
-  tablero: '', 
-  fichas: ['', '', '']
+  tablero: '../assets/img/tablero.svg',
+  fichas: [
+    '../assets/img/ficha1.png',
+    '../assets/img/ficha2.png',
+    '../assets/img/ficha3.png'
+  ]
 };
 
 const TIEMPO_LIMITE = 300;     // segundos de la partida (5 minutos)
 const TAMANIO_CASILLA = 90;    // px de cada casillero
-const MARGEN = 35;             // px de margen del tablero dentro del canvas
+const MARGEN = 35;             // px de margen del tablero dentro del canvas (canvas de 700x700)
 const RADIO_FICHA = 34;        // px de radio de cada ficha
 
 // Mapa del tablero: -1 = no existe, 0 = hueco, 1 = ficha
@@ -29,169 +40,26 @@ const TABLERO_INICIAL = [
 const DIRECCIONES = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 
-/* ---------------- FUNCIONES PARA CREAR IMÁGENES ---------------- */
+/* ---------------- CARGA DE IMÁGENES ---------------- */
 
 /**
- * Carga una imagen desde una ruta. Si la ruta está vacía o falla la carga,
- * usa la imagen de respaldo generada por código.
- * @param {string} ruta - ruta del archivo de imagen ('' si no hay)
- * @param {Function} crearRespaldo - función que devuelve un canvas con la imagen de respaldo
- * @returns {Promise<HTMLImageElement>} imagen lista para dibujar
+ * Carga una imagen desde una ruta y espera a que termine (bien o mal).
+ * Deja en la propiedad "cargada" si se pudo cargar o no, y si falla
+ * avisa por consola qué ruta no se encontró.
+ * @param {string} ruta - ruta del archivo de imagen
+ * @returns {Promise<HTMLImageElement>} imagen (revisar img.cargada antes de dibujarla)
  */
-function cargarImagen(ruta, crearRespaldo) {
+function cargarImagen(ruta) {
   return new Promise(function (resolver) {
     const img = new Image();
-    // Convierte el canvas de respaldo en una imagen normal
-    function usarRespaldo() {
-      const respaldo = new Image();
-      respaldo.onload = function () { resolver(respaldo); };
-      respaldo.src = crearRespaldo().toDataURL();
-    }
-    if (!ruta) { usarRespaldo(); return; }
-    img.onload = function () { resolver(img); };
-    img.onerror = usarRespaldo;
+    img.cargada = false;
+    img.onload = function () { img.cargada = true; resolver(img); };
+    img.onerror = function () {
+      console.error('No se pudo cargar la imagen: ' + ruta);
+      resolver(img);
+    };
     img.src = ruta;
   });
-}
-
-/**
- * Dibuja una telaraña (rayos + anillos curvos) centrada en un punto.
- * Se usa tanto en el tablero como en las fichas.
- * @param {CanvasRenderingContext2D} g - contexto donde dibujar
- * @param {number} cx - centro x de la telaraña
- * @param {number} cy - centro y de la telaraña
- * @param {number} radio - radio máximo
- * @param {number} rayos - cantidad de rayos
- * @param {number} anillos - cantidad de anillos
- */
-function dibujarTelarania(g, cx, cy, radio, rayos, anillos) {
-  const paso = (Math.PI * 2) / rayos;
-  g.beginPath();
-  // Rayos que salen del centro
-  for (let i = 0; i < rayos; i++) {
-    g.moveTo(cx, cy);
-    g.lineTo(cx + Math.cos(i * paso) * radio, cy + Math.sin(i * paso) * radio);
-  }
-  // Anillos: entre cada par de rayos se dibuja una curva hacia adentro
-  for (let a = 1; a <= anillos; a++) {
-    const r = (radio / anillos) * a;
-    for (let i = 0; i < rayos; i++) {
-      const a1 = i * paso, a2 = (i + 1) * paso, medio = a1 + paso / 2;
-      g.moveTo(cx + Math.cos(a1) * r, cy + Math.sin(a1) * r);
-      g.quadraticCurveTo(
-        cx + Math.cos(medio) * r * 0.82, cy + Math.sin(medio) * r * 0.82,
-        cx + Math.cos(a2) * r, cy + Math.sin(a2) * r);
-    }
-  }
-  g.stroke();
-}
-
-/**
- * Genera por código la imagen del tablero: cruz oscura con telaraña,
- * borde fucsia y un hueco por cada casillero.
- * @returns {HTMLCanvasElement} canvas con el tablero dibujado
- */
-function crearTableroRespaldo() {
-  const lienzo = document.createElement('canvas');
-  lienzo.width = 700; lienzo.height = 700;
-  const g = lienzo.getContext('2d');
-
-  // Fondo
-  g.fillStyle = '#05050a';
-  g.fillRect(0, 0, 700, 700);
-
-  // Forma de cruz: dos rectángulos (vertical y horizontal)
-  const a = MARGEN - 15, corto = TAMANIO_CASILLA * 3 + 30, largo = TAMANIO_CASILLA * 7 + 30;
-  const inicio = MARGEN + TAMANIO_CASILLA * 2 - 15;
-  g.beginPath();
-  g.roundRect(inicio, a, corto, largo, 24);
-  g.roundRect(a, inicio, largo, corto, 24);
-
-  // Relleno degradé azul oscuro
-  const grad = g.createLinearGradient(0, 0, 700, 700);
-  grad.addColorStop(0, '#1d2347');
-  grad.addColorStop(1, '#0a0b1c');
-  g.fillStyle = grad;
-  g.fill();
-
-  // Telaraña de fondo, recortada para que quede solo dentro de la cruz
-  g.save();
-  g.clip();
-  g.strokeStyle = 'rgba(255, 255, 255, 0.10)';
-  g.lineWidth = 2;
-  dibujarTelarania(g, 350, 350, 520, 16, 9);
-  g.restore();
-
-  // Borde fucsia de la cruz
-  g.beginPath();
-  g.roundRect(inicio, a, corto, largo, 24);
-  g.roundRect(a, inicio, largo, corto, 24);
-  g.strokeStyle = '#D6006A';
-  g.lineWidth = 5;
-  g.stroke();
-
-  // Huecos de cada casillero válido
-  for (let f = 0; f < 7; f++) {
-    for (let c = 0; c < 7; c++) {
-      if (TABLERO_INICIAL[f][c] === -1) continue;
-      const x = MARGEN + c * TAMANIO_CASILLA + TAMANIO_CASILLA / 2;
-      const y = MARGEN + f * TAMANIO_CASILLA + TAMANIO_CASILLA / 2;
-      g.beginPath();
-      g.arc(x, y, RADIO_FICHA - 4, 0, Math.PI * 2);
-      g.fillStyle = '#030308';
-      g.fill();
-      g.lineWidth = 2;
-      g.strokeStyle = 'rgba(214, 0, 106, 0.55)';
-      g.stroke();
-    }
-  }
-  return lienzo;
-}
-
-/**
- * Genera por código una ficha esférica con telaraña (3 estilos distintos).
- * @param {string} claro - color del brillo
- * @param {string} oscuro - color del borde de la esfera
- * @param {string} colorTela - color de las líneas de la telaraña
- * @returns {Function} función que al llamarla devuelve el canvas de la ficha
- */
-function crearFichaRespaldo(claro, oscuro, colorTela) {
-  return function () {
-    const lienzo = document.createElement('canvas');
-    lienzo.width = 80; lienzo.height = 80;
-    const g = lienzo.getContext('2d');
-
-    // Esfera con degradé radial
-    const grad = g.createRadialGradient(28, 26, 4, 40, 40, 38);
-    grad.addColorStop(0, claro);
-    grad.addColorStop(1, oscuro);
-    g.beginPath();
-    g.arc(40, 40, 37, 0, Math.PI * 2);
-    g.fillStyle = grad;
-    g.fill();
-
-    // Telaraña recortada dentro de la esfera
-    g.save();
-    g.clip();
-    g.strokeStyle = colorTela;
-    g.lineWidth = 1.6;
-    dibujarTelarania(g, 40, 40, 38, 8, 3);
-    g.restore();
-
-    // Brillo arriba a la izquierda
-    g.beginPath();
-    g.ellipse(28, 24, 12, 7, -0.6, 0, Math.PI * 2);
-    g.fillStyle = 'rgba(255, 255, 255, 0.3)';
-    g.fill();
-
-    // Borde oscuro
-    g.beginPath();
-    g.arc(40, 40, 37, 0, Math.PI * 2);
-    g.lineWidth = 3;
-    g.strokeStyle = 'rgba(0, 0, 0, 0.65)';
-    g.stroke();
-    return lienzo;
-  };
 }
 
 
@@ -200,7 +68,7 @@ function crearFichaRespaldo(claro, oscuro, colorTela) {
 class PegSolitaire {
 
   /**
-   * @param {HTMLCanvasElement} canvas - canvas donde se dibuja todo
+   * @param {HTMLCanvasElement} canvas - canvas donde se dibuja todo (700x700)
    * @param {Object} ui - elementos del DOM: {timer, fichas, mensaje}
    */
   constructor(canvas, ui) {
@@ -210,16 +78,19 @@ class PegSolitaire {
 
     this.imgTablero = null;   // imagen de fondo del tablero
     this.imgFichas = [];      // imágenes de los distintos tipos de ficha
+    this.listo = false;       // true cuando las imágenes ya cargaron
 
     // Estado de la partida (se completa en reiniciar())
     this.tablero = [];        // matriz con -1 / 0 / 1
     this.tipos = [];          // matriz con el tipo de imagen de cada ficha
     this.estado = 'jugando';  // 'jugando' | 'ganado' | 'perdido'
+    this.textoFinal = '';     // mensaje que muestra el cartel de fin de partida
     this.tiempoRestante = TIEMPO_LIMITE;
     this.intervalo = null;    // id del setInterval del timer
 
     // Estado del arrastre
     this.arrastrando = false;
+    this.animando = false;    // true mientras corre la animación de hints
     this.fichaOrigen = null;  // {f, c} de la ficha agarrada
     this.destinos = [];       // destinos válidos de la ficha agarrada
     this.mouse = { x: 0, y: 0 };
@@ -228,29 +99,22 @@ class PegSolitaire {
   }
 
   /**
-   * Carga todas las imágenes y arranca el juego + el ciclo de dibujo.
+   * Carga todas las imágenes y arranca la partida.
    * Se llama una sola vez desde afuera.
    */
   async iniciar() {
-    this.imgTablero = await cargarImagen(IMAGENES.tablero, crearTableroRespaldo);
-
-    // Tres estilos de ficha (rojo, azul y negro con telaraña roja). Reemplazables por tus imágenes.
-    const respaldos = [
-      crearFichaRespaldo('#ff6b6b', '#8f0000', 'rgba(255,255,255,0.55)'),
-      crearFichaRespaldo('#7fb2ff', '#0a2a7a', 'rgba(255,255,255,0.55)'),
-      crearFichaRespaldo('#555566', '#050508', 'rgba(255,40,70,0.85)')
-    ];
-    for (let i = 0; i < 3; i++) {
-      this.imgFichas.push(await cargarImagen(IMAGENES.fichas[i], respaldos[i]));
+    this.imgTablero = await cargarImagen(IMAGENES.tablero);
+    for (const ruta of IMAGENES.fichas) {
+      this.imgFichas.push(await cargarImagen(ruta));
     }
 
+    this.listo = true;
     this.reiniciar();
-    this.bucleDibujo();
   }
 
   /**
    * Deja el juego como al principio: tablero inicial, tipos de ficha al azar,
-   * timer en el máximo y estado "jugando".
+   * timer en el máximo y estado "jugando". Redibuja el canvas.
    */
   reiniciar() {
     // Copia profunda del tablero inicial para no modificar la constante
@@ -265,13 +129,17 @@ class PegSolitaire {
     this.arrastrando = false;
     this.destinos = [];
     this.tiempoRestante = TIEMPO_LIMITE;
-    this.ui.mensaje.textContent = '';
+    this.textoFinal = '';
+    if (this.ui.mensaje) this.ui.mensaje.textContent = '';
+    this.canvas.style.cursor = 'default';
     this.actualizarUI();
 
     // Reinicia el timer (si había uno corriendo lo frena primero)
     clearInterval(this.intervalo);
     const juego = this;
     this.intervalo = setInterval(function () { juego.pasarSegundo(); }, 1000);
+
+    this.dibujar();
   }
 
   /**
@@ -288,17 +156,7 @@ class PegSolitaire {
   }
 
   /**
-   * Frena el timer sin cambiar el tablero. Se usa cuando el jugador cierra
-   * el juego y vuelve a la imagen, para que no siga corriendo el tiempo.
-   */
-  detener() {
-    clearInterval(this.intervalo);
-    this.arrastrando = false;
-    this.destinos = [];
-  }
-
-  /**
-   * Cierra la partida: frena el timer y muestra el mensaje final.
+   * Cierra la partida: frena el timer, muestra el cartel final y redibuja.
    * @param {string} resultado - 'ganado' o 'perdido'
    * @param {string} texto - mensaje a mostrar
    */
@@ -306,8 +164,10 @@ class PegSolitaire {
     this.estado = resultado;
     this.arrastrando = false;
     this.destinos = [];
+    this.textoFinal = texto;
     clearInterval(this.intervalo);
-    this.ui.mensaje.textContent = texto;
+    if (this.ui.mensaje) this.ui.mensaje.textContent = texto;
+    this.dibujar();
   }
 
   /**
@@ -358,7 +218,7 @@ class PegSolitaire {
     const lista = [];
     if (this.tablero[f][c] !== 1) return lista;
     for (const d of DIRECCIONES) {
-      const medioF = f + d[0], medioC = c + d[1];   // ficha que se comería
+      const medioF = f + d[0], medioC = c + d[1];       // ficha que se comería
       const destF = f + d[0] * 2, destC = c + d[1] * 2; // hueco donde cae
       if (this.existe(medioF, medioC) && this.existe(destF, destC) &&
           this.tablero[medioF][medioC] === 1 && this.tablero[destF][destC] === 0) {
@@ -392,6 +252,7 @@ class PegSolitaire {
     this.tablero[destino.medioF][destino.medioC] = 0;
     this.tablero[destino.f][destino.c] = 1;
     this.tipos[destino.f][destino.c] = tipo; // la ficha conserva su imagen
+    this.actualizarUI();
 
     // Verificación de fin de juego después de CADA movimiento
     const quedan = this.contarFichas();
@@ -400,7 +261,6 @@ class PegSolitaire {
     } else if (!this.hayMovimientos()) {
       this.terminar('perdido', 'Sin movimientos posibles. Quedaron ' + quedan + ' fichas.');
     }
-    this.actualizarUI();
   }
 
 
@@ -457,11 +317,12 @@ class PegSolitaire {
   }
 
   /**
-   * Click del mouse: si se hizo sobre una ficha que se puede mover, empieza el arrastre.
+   * Click del mouse: si se hizo sobre una ficha que se puede mover, empieza
+   * el arrastre y arranca la animación de los hints.
    * @param {MouseEvent} e - evento del mouse
    */
   alApretar(e) {
-    if (this.estado !== 'jugando') return;
+    if (!this.listo || this.estado !== 'jugando') return;
     this.mouse = this.posicionMouse(e);
     const cas = this.casilleroEn(this.mouse.x, this.mouse.y);
     if (!this.existe(cas.f, cas.c)) return;
@@ -472,18 +333,20 @@ class PegSolitaire {
     this.arrastrando = true;
     this.fichaOrigen = cas;
     this.destinos = movs; // estos son los lugares donde se muestran los hints
+    this.canvas.style.cursor = 'grabbing';
+    this.iniciarAnimacion();
   }
 
   /**
    * Movimiento del mouse: guarda la posición y cambia el cursor.
+   * Mientras se arrastra, el dibujo lo actualiza la animación.
    * @param {MouseEvent} e - evento del mouse
    */
   alMover(e) {
+    if (!this.listo) return;
     this.mouse = this.posicionMouse(e);
-    if (this.arrastrando) {
-      this.canvas.style.cursor = 'grabbing';
-      return;
-    }
+    if (this.arrastrando) return;
+
     // Cursor "mano" si está sobre una ficha jugable
     const cas = this.casilleroEn(this.mouse.x, this.mouse.y);
     const jugable = this.estado === 'jugando' && this.existe(cas.f, cas.c) &&
@@ -512,29 +375,42 @@ class PegSolitaire {
     this.destinos = [];
     this.canvas.style.cursor = 'default';
     if (elegido) this.mover(origen, elegido);
+    this.dibujar(); // último cuadro: sin hints y con la ficha ya en su lugar
   }
 
 
   /* ------------ DIBUJO ------------ */
 
   /**
-   * Ciclo de dibujo: se llama ~60 veces por segundo para que las animaciones
-   * de los hints se vean fluidas.
+   * Anima los hints mientras se arrastra una ficha. Usa requestAnimationFrame
+   * y se detiene solo cuando se suelta la ficha (no queda ningún bucle corriendo).
    */
-  bucleDibujo() {
+  iniciarAnimacion() {
+    if (this.animando) return;
+    this.animando = true;
     const juego = this;
-    this.dibujar(performance.now());
-    requestAnimationFrame(function () { juego.bucleDibujo(); });
+    function cuadro(ahora) {
+      juego.dibujar(ahora);
+      if (juego.arrastrando) {
+        requestAnimationFrame(cuadro);
+      } else {
+        juego.animando = false;
+      }
+    }
+    requestAnimationFrame(cuadro);
   }
 
   /**
    * Dibuja un cuadro completo: tablero, fichas, hints y ficha arrastrada.
-   * @param {number} ahora - tiempo actual en ms (para las animaciones)
+   * @param {number} [ahora] - tiempo actual en ms (para las animaciones)
    */
   dibujar(ahora) {
+    if (!this.listo) return;
+    if (ahora === undefined) ahora = performance.now();
+
     const g = this.g;
     g.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    g.drawImage(this.imgTablero, 0, 0, this.canvas.width, this.canvas.height);
+    this.dibujarTablero();
 
     // Fichas quietas (la que se está arrastrando se dibuja aparte, al final)
     for (let f = 0; f < 7; f++) {
@@ -570,6 +446,24 @@ class PegSolitaire {
   }
 
   /**
+   * Dibuja la imagen de fondo del tablero. Si no se pudo cargar, muestra
+   * un aviso en el canvas con la ruta que falló.
+   */
+  dibujarTablero() {
+    const g = this.g;
+    if (this.imgTablero.cargada) {
+      g.drawImage(this.imgTablero, 0, 0, this.canvas.width, this.canvas.height);
+    } else {
+      g.fillStyle = '#111';
+      g.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      g.fillStyle = '#fff';
+      g.font = '20px sans-serif';
+      g.textAlign = 'center';
+      g.fillText('No se encontró ' + IMAGENES.tablero, this.canvas.width / 2, this.canvas.height / 2);
+    }
+  }
+
+  /**
    * Dibuja una ficha usando su imagen.
    * @param {number} tipo - índice de la imagen (0, 1 o 2)
    * @param {number} x - centro x
@@ -577,8 +471,10 @@ class PegSolitaire {
    * @param {number} [escala=1] - factor de tamaño (se usa para agrandarla al arrastrar)
    */
   dibujarFicha(tipo, x, y, escala) {
+    const img = this.imgFichas[tipo];
+    if (!img.cargada) return; // imagen faltante: ya se avisó por consola
     const r = RADIO_FICHA * (escala || 1);
-    this.g.drawImage(this.imgFichas[tipo], x - r, y - r, r * 2, r * 2);
+    this.g.drawImage(img, x - r, y - r, r * 2, r * 2);
   }
 
   /**
@@ -627,6 +523,6 @@ class PegSolitaire {
     g.fillText(this.estado === 'ganado' ? '¡VICTORIA!' : 'FIN DEL JUEGO', w / 2, h / 2 - 5);
     g.fillStyle = '#fff';
     g.font = '22px sans-serif';
-    g.fillText(this.ui.mensaje.textContent, w / 2, h / 2 + 35);
+    g.fillText(this.textoFinal, w / 2, h / 2 + 35);
   }
 }

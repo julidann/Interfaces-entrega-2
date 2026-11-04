@@ -462,3 +462,24 @@ img.img-game {
     z-index: 1000;
     
 }
+
+/* Pegar al final de css/game/game.css */
+.peg-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.peg-container .game-header {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.peg-container canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}

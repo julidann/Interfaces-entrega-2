@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
-    <!-- NUEVO: estilos del juego Peg Solitaire -->
+    <!-- Estilos del juego Peg Solitaire -->
     <link rel="stylesheet" href="../css/spiderpeg.css">
 
 </head>
@@ -92,7 +92,7 @@
                         <button class="primary reiniciar-btn" id="spiderpeg-reiniciar" type="button">Reiniciar</button>
                         <p class="spiderpeg-mensaje" id="spiderpeg-mensaje"></p>
                     </div>
-                    <!-- Tablero del juego -->
+                    <!-- Tablero del juego (700x700: no cambiar, el código calcula el tablero con ese tamaño) -->
                     <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
                 </div>
                 <article id="como-jugar" class="how-to-play">
@@ -116,6 +116,21 @@
                 <button class="secondary">Jugar Online</button>
                 <button class="secondary">Descargar</button>
                 <button class="secondary">Compartir</button>
+            </div>
+        </section>
+
+        <!-- Imágenes del juego (la consigna pide descripción e imágenes) -->
+        <section class="gallery">
+            <div class="gallery-thumbs">
+                <article>
+                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
+                </article>
+                <article>
+                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="Spider-Peg - imagen 2">
+                </article>
+                <article>
+                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="Spider-Peg - imagen 3">
+                </article>
             </div>
         </section>
 
@@ -179,7 +194,6 @@
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
-
                 </p>
                 <p>Un puzzle rápido y entretenido.</p>
                 <small>June, 2025</small>
@@ -248,14 +262,11 @@
             <h2>Los usuarios también jugaron</h2>
 
             <article class="also-played-card">
-                <div class="also-played-card-img">
-                    <img src="../assets/img/allgames-fc27.jpg" alt="">
-                    <div class="also-played-info">
-                        <h3>EA Sports FC 27</h3>
-                        <strong>GRATIS</strong>
-                        <a class="accent" href="">Jugar ahora</a>
-                    </div>
-                </div>
+                <img src="../assets/img/allgames-fc27.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>EA Sports FC 27</h3>
+                    <strong>GRATIS</strong>
+                    <a class="accent" href="">Jugar ahora</a>
                 </div>
             </article>
 
@@ -266,8 +277,6 @@
                     <strong>BASIC</strong>
                     <a class="accent" href="">Jugar ahora</a>
                 </div>
-                </div>
-                </div>
             </article>
 
             <article class="also-played-card">
@@ -276,8 +285,6 @@
                     <h3>Little Nightmares III</h3>
                     <strong>GRATIS</strong>
                     <a class="accent" href="">Jugar ahora</a>
-                </div>
-                </div>
                 </div>
             </article>
 
@@ -288,8 +295,6 @@
                     <strong>PRO-GAMER</strong>
                     <a class="accent" href="">Jugar ahora</a>
                 </div>
-                </div>
-                </div>
             </article>
         </section>
 
@@ -299,7 +304,7 @@
 
     <script src="../js/menu.js"></script>
     <script src="../js/footer.js"></script>
-    <!-- NUEVO: el juego (primero la lógica, después la conexión con la página) -->
+    <!-- El juego (primero la lógica, después la conexión con la página) -->
     <script src="../js/peg-solitaire.js"></script>
     <script src="../js/spiderpeg.js"></script>
 
