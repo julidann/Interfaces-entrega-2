@@ -77,13 +77,8 @@
 
         <section class="landing-main">
             <p class="spiderpeg-ruta"><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
-            <!-- El juego vive directamente en este div (antes tenía la imagen SpiderPeg-1.jpg) -->
             <div class="spiderpeg-contenedor">
                 <div class="spiderpeg-juego" id="spiderpeg-juego">
-
-                    <!-- Tablero del juego -->
-                    <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
-
                     <!-- Panel al costado: tiempo, fichas, reiniciar y mensaje final -->
                     <div class="spiderpeg-panel">
                         <div class="spiderpeg-dato">
@@ -97,8 +92,23 @@
                         <button class="primary reiniciar-btn" id="spiderpeg-reiniciar" type="button">Reiniciar</button>
                         <p class="spiderpeg-mensaje" id="spiderpeg-mensaje"></p>
                     </div>
-
+                    <!-- Tablero del juego -->
+                    <canvas id="spiderpeg-canvas" width="700" height="700"></canvas>
                 </div>
+                <article id="como-jugar" class="how-to-play">
+                    <h2>¿Cómo jugar?</h2>
+                    <p>
+                        El objetivo es eliminar la mayor cantidad de bolitas
+                        posible hasta dejar una sola en el tablero.
+                    </p>
+                    <ol>
+                        <li>Elegí una bolita que tenga otra bolita pegada al lado.</li>
+                        <li>Saltá por encima de ella hacia un espacio vacío.</li>
+                        <li>La bolita que fue saltada se elimina.</li>
+                        <li>Repetí los movimientos y planeá tu estrategia.</li>
+                        <li>¡Ganás si lográs terminar con una única bolita!</li>
+                    </ol>
+                </article>
             </div>
 
             <div class="tags">
@@ -106,20 +116,6 @@
                 <button class="secondary">Jugar Online</button>
                 <button class="secondary">Descargar</button>
                 <button class="secondary">Compartir</button>
-            </div>
-        </section>
-
-        <section class="gallery">
-            <div class="gallery-thumbs">
-                <article>
-                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
-                </article>
-                <article>
-                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="Spider-Peg - imagen 2">
-                </article>
-                <article>
-                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="Spider-Peg - imagen 3">
-                </article>
             </div>
         </section>
 
@@ -152,21 +148,6 @@
                     <dt>Estado</dt>
                     <dd>Gratis</dd>
                 </dl>
-            </article>
-
-            <article id="como-jugar" class="how-to-play">
-                <h2>¿Cómo jugar?</h2>
-                <p>
-                    El objetivo es eliminar la mayor cantidad de bolitas
-                    posible hasta dejar una sola en el tablero.
-                </p>
-                <ol>
-                    <li>Elegí una bolita que tenga otra bolita pegada al lado.</li>
-                    <li>Saltá por encima de ella hacia un espacio vacío.</li>
-                    <li>La bolita que fue saltada se elimina.</li>
-                    <li>Repetí los movimientos y planeá tu estrategia.</li>
-                    <li>¡Ganás si lográs terminar con una única bolita!</li>
-                </ol>
             </article>
         </section>
 

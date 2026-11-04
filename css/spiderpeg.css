@@ -1,29 +1,16 @@
-/* =====================================================
-   SPIDERPEG - estilos del juego dentro de la página
-   (clases directas, sin variables ni selectores avanzados)
-   Se arma primero para celular (todo en columna) y
-   después se acomoda para pantallas grandes.
-   ===================================================== */
-
-/* Contenedor del juego (el div que antes tenía la imagen):
-   ocupa el ancho disponible y el juego nunca se sale de él */
 .spiderpeg-contenedor {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* flex: 1 hace que el div crezca y ocupe todo el alto libre de la sección */
     flex: 1;
-    /* el juego queda pegado arriba del div (sin espacio vacío arriba) */
     align-items: flex-start;
+    gap: 40px;
 }
 
-/* Texto "Inicio / Juegos / ..." de arriba: le sacamos el margen de abajo
-   para que no quede espacio entre el texto y el juego */
 .spiderpeg-ruta {
     margin-bottom: 0;
 }
 
-/* Juego: el tablero y el panel, uno abajo del otro (en celular) */
 .spiderpeg-juego {
     max-width: 100%;
     display: flex;
@@ -93,14 +80,13 @@
     .spiderpeg-juego {
         flex-direction: row;
         align-items: flex-start;
-        gap: 24px;
+        gap: 40px;
         align-items: center;
     }
 
-    /* El tablero se mide según el alto de la pantalla, así entra
-       completo en Full HD sin scroll. Puede achicarse si falta ancho */
+    /* El tablero se mide según el alto de la pantalla, así entra completo en Full HD sin scroll*/
     #spiderpeg-canvas {
-        width: 75vh;
+        width: 80vh;
         max-width: 700px;
         min-width: 0;
     }

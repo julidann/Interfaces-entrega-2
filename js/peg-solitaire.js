@@ -1,17 +1,12 @@
 /* =====================================================================
-   PEG SOLITAIRE - Lógica + dibujo en canvas
+   PEG SOLITAIRE
    Tablero en cruz de 7x7 (33 casilleros válidos), arranca con el centro vacío.
    Se juega saltando una ficha sobre otra (en línea recta) hacia un hueco;
    la ficha saltada se elimina. Se gana quedando 1 sola ficha.
    ===================================================================== */
-
-/* ---------------- CONFIGURACIÓN (lo que más vas a tocar) ---------------- */
-
-// Si ponés rutas a tus imágenes se usan esas. Si queda en '' se usa una
-// imagen generada por código (así funciona aunque todavía no tengas las tuyas).
 const IMAGENES = {
-  tablero: '',                 // ej: '../assets/img/tablero-spider.png' (700x700 recomendado)
-  fichas: ['', '', '']         // ej: ['../assets/img/ficha1.png', ...]
+  tablero: '', 
+  fichas: ['', '', '']
 };
 
 const TIEMPO_LIMITE = 300;     // segundos de la partida (5 minutos)
