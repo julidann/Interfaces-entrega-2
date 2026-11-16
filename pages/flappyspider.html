@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="../assets/logo/LOGOPAGE.png">
+    <title>GAMEZONE | Flappy Spider</title>
+    <link rel="stylesheet" href="../css/game/game.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/landing/landing.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/nav-user.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <!-- Estilos específicos del juego Flappy Scroller -->
+    <link rel="stylesheet" href="../css/flappyspider.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="nav-user">
+            <button class="menu-button" type="button" aria-label="Abrir menú">☰</button>
+
+            <aside class="hamburger-menu" id="hamburger-menu">
+                <a href="#trending"><span class="menu-icon"><img src="../assets/icons/trending.svg" alt=""></span>
+                    Tendencias</a>
+                <a href="#juegos"><span class="menu-icon free-icon"><img src="../assets/icons/freetoplay.svg"
+                            alt=""></span> Free to Play</a>
+                <a class="cloud-link" href="#juegos"><img src="../assets/icons/cloud.svg" alt=""> Cloud Games</a>
+                <div class="menu-categories">
+                    <p><img src="../assets/icons/tag.svg" alt=""> Categorías +</p>
+                    <a href="#juegos">Conducción</a>
+                    <a href="#juegos">Estrategia</a>
+                    <a href="#juegos">Deportes</a>
+                    <a href="#juegos">Disparos</a>
+                    <a href="#juegos">Simuladores</a>
+                    <a href="#juegos">Ver más...</a>
+                </div>
+            </aside>
+
+            <a class="nav-logo" href="home.html">
+                <img src="../assets/logo/LOGOPAGE.png" alt="GAMEZONE">
+                <img src="../assets/logo/GAMEZONE.png" alt="GAMEZONE">
+            </a>
+
+            <div class="nav-links">
+                <a href="home.html">Inicio</a>
+                <a href="home.html#juegos">Juegos</a>
+                <a href="#">Mi biblioteca</a>
+            </div>
+
+            <input type="search" placeholder="Buscar">
+
+            <button class="user-button" type="button" aria-label="Abrir perfil">
+                <img src="../assets/img/avatar.jpg" alt="Avatar">
+            </button>
+
+            <aside class="profile-menu" id="profile-menu">
+                <div class="profile-header">
+                    <img src="../assets/img/avatar.jpg" alt="Avatar">
+                    <span>avatar_name</span>
+                </div>
+
+                <a href="#"><span><img src="../assets/icons/user.svg" alt=""></span> Ver Perfil</a>
+                <a href="#"><span><img src="../assets/icons/settings.svg" alt=""></span> Configuración</a>
+                <a href="#"><span><img src="../assets/icons/suscriptions.svg" alt=""></span> Mis Suscripciones</a>
+                <a href="#"><span><img src="../assets/icons/suport.png" alt=""></span> Soporte</a>
+
+                <a class="logout-link" href="../index.html">Cerrar Sesión</a>
+            </aside>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="landing-main">
+            <p class="spiderpeg-ruta"><a href="home.html">Inicio</a> / Juegos / Free to Play / Flappy Spider</p>
+            
+            <div class="spiderpeg-contenedor">
+                <!-- Contenedor principal del juego scroller -->
+                <div class="spiderpeg-juego" id="game-container">
+                    
+                    <!-- Pantalla de Inicio / Instrucciones superpuesta -->
+                    <div id="start-screen" class="game-screen active">
+                        <h2>Flappy Spider</h2>
+                        <p class="subtitle">Ejercicio Entregable Nº5</p>
+                        <button id="start-btn" class="btn primary">¡Comenzar Partida!</button>
+                    </div>
+
+                    <!-- Escenario interactivo (Parallax + Canvas o capas DOM) -->
+                    <div id="game-canvas-container">
+                        <!-- 4 Capas de Parallax requeridas -->
+                        <div class="parallax-layer layer-sky"></div>
+                        <div class="parallax-layer layer-mountains"></div>
+                        <div class="parallax-layer layer-hills"></div>
+                        <div class="parallax-layer layer-ground"></div>
+
+                        <!-- Mundo / Obstáculos / Coleccionables -->
+                        <div id="world"></div>
+
+                        <!-- Avatar del jugador -->
+                        <div id="player" class="player"></div>
+
+                        <!-- HUD / Marcador Superior (Puntaje y Vidas) -->
+                        <div id="hud">
+                            <div class="hud-item">Puntaje: <span id="score-val">0</span></div>
+                            <div class="hud-item">Vidas: <span id="lives-val">❤️❤️❤️</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Pantalla de Fin de Juego (Game Over) -->
+                    <div id="gameover-screen" class="game-screen">
+                        <h2>¡Game Over!</h2>
+                        <p>Te quedaste sin vidas en el recorrido.</p>
+                        <div class="final-stats">
+                            <p>Puntaje final: <span id="final-score">0</span></p>
+                        </div>
+                        <button id="restart-btn" class="btn primary">Jugar de Nuevo</button>
+                    </div>
+
+                </div>
+
+                <!-- Sección de instrucciones ("¿Cómo jugar?") adaptada a la consigna -->
+                <article id="como-jugar" class="how-to-play">
+                    <h2>¿Cómo jugar?</h2>
+                    <p>
+                        Guía a tu personaje a lo largo de escenarios con desplazamiento horizontal constante esquivando los obstáculos.
+                    </p>
+                    <ol>
+                        <li>Presiona la barra <strong>Espacio</strong> o haz <strong>clic</strong> para aplicar impulso hacia arriba y mantener el vuelo.</li>
+                        <li>Pasa a través de las tuberías y columnas variadas.</li>
+                        <li>Recolecta ítems especiales para sumar puntos y evita los obstáculos animados secundarios (como medusas o enemigos) que restan vidas.</li>
+                        <li>¡Supera tu propio récord manteniendo el vuelo el mayor tiempo posible!</li>
+                    </ol>
+                </article>
+            </div>
+
+            <div class="tags">
+                <button class="secondary">Añadir a la lista de favoritos</button>
+                <button class="secondary">Jugar Online</button>
+                <button class="secondary">Descargar</button>
+                <button class="secondary">Compartir</button>
+            </div>
+        </section>
+
+        <!-- Imágenes de la galería del juego -->
+        <section class="gallery">
+            <div class="gallery-thumbs">
+                <article>
+                    <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Flappy Spider - imagen 1">
+                </article>
+                <article>
+                    <img class="img-game" src="../assets/img/Spidergame-2.png" alt="Flappy Spider - imagen 2">
+                </article>
+                <article>
+                    <img class="img-game" src="../assets/img/Spidergame-3.png" alt="Flappy Spider - imagen 3">
+                </article>
+            </div>
+        </section>
+
+        <section id="info" class="info">
+            <article class="about">
+                <h2>Acerca de Flappy Spider:</h2>
+                <p>
+                    Sumergite en este dinámico videojuego horizontal scroller desarrollado con animaciones CSS3 keyframes, 
+                    paralaje de múltiples capas y obstáculos procedurales. Poné a prueba tus reflejos, gestiona tus vidas 
+                    y supera los desafíos que cambian en cada partida.
+                </p>
+            </article>
+
+            <article class="specs">
+                <h2>Información:</h2>
+                <dl>
+                    <dt>Género</dt>
+                    <dd>Arcade / Scroller</dd>
+                    <dt>Modalidad</dt>
+                    <dd>Un jugador</dd>
+                    <dt>Plataforma</dt>
+                    <dd>Web - Online</dd>
+                    <dt>Edad</dt>
+                    <dd>+7</dd>
+                    <dt>Idioma</dt>
+                    <dd>Español</dd>
+                    <dt>Estado</dt>
+                    <dd>Gratis</dd>
+                </dl>
+            </article>
+        </section>
+
+        <!-- Secciones de calificaciones, reseñas y usuarios que también jugaron (Intactas) -->
+        <section class="ratings">
+            <h2>Mejores calificaciones</h2>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 1.jpeg" alt="Avatar">
+                    <strong>Martina</strong>
+                </div>
+                <p>
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                </p>
+                <p>Muy fluido el movimiento y excelente el efecto de paralaje en las capas.</p>
+                <small>May, 2024</small>
+            </article>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 8.jpeg" alt="Avatar">
+                    <strong>Lucas</strong>
+                </div>
+                <p>
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                </p>
+                <p>Un desafío clásico muy bien implementado para la web.</p>
+                <small>June, 2025</small>
+            </article>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 3.jpeg" alt="Avatar">
+                    <strong>Sofía</strong>
+                </div>
+                <p>
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                </p>
+                <p>Muy buena estética y animaciones cuidadas.</p>
+                <small>September, 2026</small>
+            </article>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 5.jpeg" alt="Avatar">
+                    <strong>Tomás</strong>
+                </div>
+                <p>
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                    <img src="../assets/icons/stars.svg" alt="">
+                </p>
+                <p>Ideal para partidas rápidas y competitivas.</p>
+                <small>Last week</small>
+            </article>
+        </section>
+
+        <section class="reviews">
+            <h2>Reseña de usuarios</h2>
+
+            <div class="comment-box">
+                <img src="../assets/img/avatar.jpg" alt="Avatar">
+                <input class="comment-input" type="text" placeholder="Agregar un comentario...">
+                <img class="send-button" src="../assets/icons/send.svg" alt="Enviar">
+            </div>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 6.jpg" alt="Avatar">
+                    <strong>Camila</strong>
+                </div>
+                <small>21/09/2026</small>
+                <p>Me encanto cómo funcionan las colisiones y las animaciones keyframe.</p>
+            </article>
+
+            <article>
+                <div class="rating-user">
+                    <img src="../assets/img/avatar-user 2.jpg" alt="Avatar">
+                    <strong>Agustina</strong>
+                </div>
+                <small>20/09/2026</small>
+                <p>Muy divertido para superar tu propio puntaje.</p>
+            </article>
+        </section>
+
+        <section class="also-played">
+            <h2>Los usuarios también jugaron</h2>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-fc27.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>EA Sports FC 27</h3>
+                    <strong>GRATIS</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
+            </article>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-legacy.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>Hogwarts Legacy</h3>
+                    <strong>BASIC</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
+            </article>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-littlenightmares.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>Little Nightmares III</h3>
+                    <strong>GRATIS</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
+            </article>
+
+            <article class="also-played-card">
+                <img src="../assets/img/allgames-battlefield.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>Battlefield 6</h3>
+                    <strong>PRO-GAMER</strong>
+                    <a class="accent" href="">Jugar ahora</a>
+                </div>
+            </article>
+        </section>
+
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script src="../js/menu.js"></script>
+    <script src="../js/footer.js"></script>
+    <!-- Script principal del juego Flappy Scroller -->
+    <script src="../js/flappyspider.js"></script>
+
+</body>
+
+</html>
