@@ -1,230 +1,161 @@
-:root {
-    --primary-fuchsia: #D6006A;
-    --secondary-green: #06D606;
-    --dark-bg: #111827;
-    --glass-bg: rgba(17, 24, 39, 0.85);
-}
-
-/* Contenedor general del juego (similiar a Spider-Peg) */
-.spiderpeg-juego {
+/* ===== CONTENEDOR PRINCIPAL DEL JUEGO ===== */
+#game-container {
     position: relative;
-    width: 700px;
-    height: 700px;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
     margin: 0 auto;
-    border: 4px solid var(--primary-fuchsia);
+    overflow: hidden;
     border-radius: 12px;
-    overflow: hidden;
-    background-color: var(--dark-bg);
-    box-shadow: 0 10px 30px rgba(214, 0, 106, 0.3);
+    background: #87ceeb;
 }
 
-/* Pantallas modales (Inicio y Game Over) */
-.game-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--glass-bg);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 50;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-    padding: 2rem;
-    text-align: center;
-}
-
-.game-screen.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.game-screen h2 {
-    color: var(--secondary-green);
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
-
-.game-screen .subtitle {
-    color: #9ca3af;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-/* Área interna del canvas / juego scroller */
 #game-canvas-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
 }
 
-/* Capas de Parallax utilizando tu estructura de assets/background/ */
+/* ===== SISTEMA DE PARALLAX ===== */
+/* Capas borrosas antes de empezar la partida */
+#game-container .parallax-layer {
+    filter: blur(3px);
+    transition: filter 0.6s ease;
+}
+
+/* Al empezar, se enfocan */
+#game-container.playing .parallax-layer {
+    filter: none;
+}
+
+.lives-val {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+}
+
 .parallax-layer {
     position: absolute;
-    top: 0;
     left: 0;
+    bottom: 0;
     width: 200%;
     height: 100%;
     background-repeat: repeat-x;
-    background-size: auto 100%;
+    background-size: 50% 100%;
+    animation: scroll linear infinite;
 }
 
-/* Capa 1: Cielo / Fondo base estático o muy lento */
-.layer-sky {
-    background-image: url('../assets/background/background.png');
-    width: 100%;
-    z-index: 1;
-}
+.layer-background { background-image: url("../assets/background/background.png"); animation-duration: 120s; z-index: 1; }
+.layer-city1       { background-image: url("../assets/background/city1plan.png");   animation-duration: 60s;  z-index: 2; }
+.layer-city2       { background-image: url("../assets/background/city2plan.png");   animation-duration: 30s;  z-index: 3; }
+.layer-city3       { background-image: url("../assets/background/city3plan.png");   animation-duration: 12s;  z-index: 4; }
+.layer-city4       { background-image: url("../assets/background/city4plan.png");   animation-duration: 8s;   z-index: 5; }
 
-/* Capa 2: Edificios lejanos (Plan 1) */
-.layer-mountains {
-    background-image: url('../assets/background/city1plan.png');
-    z-index: 2;
-    animation: scrollLayer 30s linear infinite;
-}
-
-/* Capa 3: Edificios intermedios (Plan 2) */
-.layer-hills {
-    background-image: url('../assets/background/city2plan.png');
-    z-index: 3;
-    animation: scrollLayer 18s linear infinite;
-}
-
-/* Capa 4: Edificios cercanos / Primer plano (Plan 3 y 4) */
-.layer-ground {
-    background-image: url('../assets/background/city3plan.png');
-    z-index: 4;
-    animation: scrollLayer 8s linear infinite;
-}
-
-@keyframes scrollLayer {
+@keyframes scroll {
     from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    to   { transform: translateX(-50%); }
 }
 
-/* Contenedor del mundo (obstáculos y coleccionables) */
+/* ===== MUNDO Y OBSTÁCULOS (TUBERÍAS / CONDUCTOS) ===== */
 #world {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-}
-
-/* Avatar del Jugador (La Araña) */
-.player {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background-color: var(--secondary-green);
-    border-radius: 50%;
-    left: 100px;
-    top: 300px;
-    z-index: 20;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 28px;
-    box-shadow: 0 0 12px var(--secondary-green);
-}
-
-/* Animaciones Keyframe requeridas */
-@keyframes flap {
-    0% { transform: scale(1) rotate(-15deg); }
-    50% { transform: scale(1.15) rotate(15deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-
-@keyframes damage {
-    0% { filter: hue-rotate(0deg); background-color: var(--primary-fuchsia); }
-    50% { filter: hue-rotate(90deg); transform: scale(0.8); }
-    100% { filter: hue-rotate(0deg); background-color: var(--secondary-green); }
-}
-
-.player.flap-anim {
-    animation: flap 0.3s ease;
-}
-
-.player.damage-anim {
-    animation: damage 0.4s ease;
-}
-
-/* Obstáculos (Edificios / Columnas) */
-.pipe-container {
-    position: absolute;
-    width: 70px;
-    height: 100%;
-    z-index: 15;
+    inset: 0;
+    z-index: 5;
 }
 
 .pipe {
+  position: absolute;
+  left: 0;
+  box-sizing: border-box;
+  background-image: url("../assets/img/metal_tile.svg");
+  background-repeat: repeat-y;   /* repite la imagen hacia abajo, sin estirarla */
+  background-size: 100% auto;    /* ancho de la tubería, alto proporcional */
+}
+
+.pipe-top {
+  top: 0;
+  transform: scaleY(-1);
+}
+
+/* ===== JUGADOR (ARAÑA) Y ANIMACIÓN DE DAÑO ===== */
+.player {
     position: absolute;
-    width: 70px;
-    background: linear-gradient(90deg, #1f2937, #374151, #1f2937);
-    border: 2px solid var(--secondary-green);
+    left: 15%;
+    top: 40%;
+    width: 60px;
+    height: 60px;
+    z-index: 6;
+    will-change: transform;
+    background-image: url("../assets/img/spiderface.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-.pipe.top {
-    top: 0;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+/* Animación de daño limpia (solo filtros y opacidad para no romper la posición de JS) */
+@keyframes damageFlash {
+    0% { filter: brightness(1); opacity: 1; }
+    20% { filter: drop-shadow(0 0 12px red) brightness(2.5) sepia(1); opacity: 0.4; }
+    40% { filter: brightness(1); opacity: 1; }
+    60% { filter: drop-shadow(0 0 12px red) brightness(2.5) sepia(1); opacity: 0.4; }
+    80% { filter: brightness(1); opacity: 1; }
+    100% { filter: brightness(1); opacity: 1; }
 }
 
-.pipe.bottom {
-    bottom: 0;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+.player.damage-anim {
+    animation: damageFlash 0.6s ease;
 }
 
-/* Elementos Animados Secundarios (Coleccionables / Enemigos) */
-.collectible-item {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    z-index: 16;
-    font-size: 30px;
-    animation: floatItem 1.2s ease-in-out infinite alternate;
-}
-
-.obstacle-item {
-    position: absolute;
-    width: 45px;
-    height: 45px;
-    z-index: 16;
-    font-size: 32px;
-    animation: floatItem 0.8s ease-in-out infinite alternate;
-}
-
-@keyframes floatItem {
-    0% { transform: translateY(0px); }
-    100% { transform: translateY(-12px); }
-}
-
-/* HUD / Marcador Superior (Puntaje y Vidas) */
+/* ===== HUD (PUNTAJE Y VIDAS) ===== */
 #hud {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
+    top: 12px;
+    left: 16px;
+    right: 16px;
     display: flex;
     justify-content: space-between;
-    z-index: 30;
-    font-weight: 600;
-    font-size: 1.2rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    pointer-events: none;
+    z-index: 7;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,.5);
 }
 
-.hud-item {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 0.4rem 1.2rem;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+/* ===== PANTALLAS (INICIO Y GAME OVER) ===== */
+.game-screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(10, 15, 35, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    color: #fff;
 }
+
+.game-screen.active {
+    display: flex;
+}
+
+/* Overlay liviano para inicio y game over para que se vea el fondo borroso */
+#start-screen,
+#gameover-screen {
+    background: rgba(10, 15, 35, 0.25);
+    backdrop-filter: none;
+}
+
+#start-screen h2 {
+    font-size: clamp(2.0rem, 6vw, 3.5rem);
+    margin: 0;
+    text-shadow: 0 4px 12px rgba(0,0,0,.6);
+}
+
+#start-screen .subtitle {
+    opacity: .8;
+    margin: 0;
+}
+

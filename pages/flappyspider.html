@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
-    <!-- Estilos específicos del juego Flappy Scroller -->
+
     <link rel="stylesheet" href="../css/flappyspider.css">
+    
 </head>
 
 <body>
@@ -84,17 +85,18 @@
                     <!-- Pantalla de Inicio / Instrucciones superpuesta -->
                     <div id="start-screen" class="game-screen active">
                         <h2>Flappy Spider</h2>
-                        <p class="subtitle">Ejercicio Entregable Nº5</p>
+                        <p>¡Guía a la araña a través de los obstáculos y recolecta ítems para sumar puntos!</p>
                         <button id="start-btn" class="btn primary">¡Comenzar Partida!</button>
                     </div>
 
                     <!-- Escenario interactivo (Parallax + Canvas o capas DOM) -->
                     <div id="game-canvas-container">
-                        <!-- 4 Capas de Parallax requeridas -->
-                        <div class="parallax-layer layer-sky"></div>
-                        <div class="parallax-layer layer-mountains"></div>
-                        <div class="parallax-layer layer-hills"></div>
-                        <div class="parallax-layer layer-ground"></div>
+                        <!-- 5 Capas de Parallax requeridas -->
+                        <div class="parallax-layer layer-background"></div>
+                        <div class="parallax-layer layer-city1"></div>
+                        <div class="parallax-layer layer-city2"></div>
+                        <div class="parallax-layer layer-city3"></div>
+                        <div class="parallax-layer layer-city4"></div>
 
                         <!-- Mundo / Obstáculos / Coleccionables -->
                         <div id="world"></div>
@@ -105,7 +107,7 @@
                         <!-- HUD / Marcador Superior (Puntaje y Vidas) -->
                         <div id="hud">
                             <div class="hud-item">Puntaje: <span id="score-val">0</span></div>
-                            <div class="hud-item">Vidas: <span id="lives-val">❤️❤️❤️</span></div>
+                            <div class="hud-item">Vidas: <span id="lives-val" class="lives-val">🕸️🕸️🕸️</span></div>
                         </div>
                     </div>
 
