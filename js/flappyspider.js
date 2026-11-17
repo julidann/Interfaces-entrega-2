@@ -1,213 +1,378 @@
 (() => {
-  const container = document.getElementById('game-canvas-container');
-  const world = document.getElementById('world');
-  const player = document.getElementById('player');
-  const startScreen = document.getElementById('start-screen');
-  const gameoverScreen = document.getElementById('gameover-screen');
-  const startBtn = document.getElementById('start-btn');
-  const restartBtn = document.getElementById('restart-btn');
-  const scoreEl = document.getElementById('score-val');
-  const livesEl = document.getElementById('lives-val');
-  const finalScoreEl = document.getElementById('final-score');
 
-  const CFG = {
-    gravity: 0.45,
-    flapForce: -8,
-    maxFallSpeed: 10,
-    speed: 3,            // px por frame (a 60 fps)
-    pipeWidth: 70,
-    pipeGap: 0.3,        // fracción de la altura del juego
-    pipeEvery: 1800,     // ms entre tuberías/conductos
-    maxLives: 3,
-    invulnMs: 1200,      // tiempo sin recibir daño tras un golpe
-    playerSize: 50,
-    hitInset: 8          // margen para colisión justa
-  };
+  const contenedorJuego = document.getElementById('game-canvas-container');
+  const mundo = document.getElementById('world');
+  const jugador = document.getElementById('player');
 
-  let W, H, PX;
-  let bird, obstacles, score, lives;
-  let invulnUntil, lastTime, rafId, running = false;
-  let pipeTimer = 0;
+  const pantallaInicio = document.getElementById('start-screen');
+  const pantallaFinal = document.getElementById('gameover-screen');
 
-  function measure() {
-    W = container.clientWidth;
-    H = container.clientHeight;
-    PX = W * 0.15;
+  const botonInicio = document.getElementById('start-btn');
+  const botonReiniciar = document.getElementById('restart-btn');
+
+  const puntajeHTML = document.getElementById('score-val');
+  const vidasHTML = document.getElementById('lives-val');
+  const puntajeFinalHTML = document.getElementById('final-score');
+
+  // CONFIGURACION DEL JUEGO
+const CONFIGURACION = {
+  gravedad: 0.45,
+  fuerzaSalto: -6,
+  velocidadCaida: 8,
+  velocidadJuego: 2,
+  anchoObstaculo: 60,
+  espacioObstaculos: 0.35,
+  tiempoObstaculos: 1800,
+  vidasMaximas: 3,
+  tiempoProteccion: 1200,
+  tamañoJugador: 50,
+  margenColision: 8
+};
+
+  // VARIABLES DEL JUEGO
+
+  let anchoJuego;
+  let altoJuego;
+  let posicionJugador;
+
+  let jugadorDatos;
+  let obstaculos;
+  let puntaje;
+  let vidas;
+
+  let tiempoProteccion;
+  let tiempoAnterior;
+  let tiempoUltimoObstaculo = 0;
+
+  let animacion;
+  let jugando = false;
+
+  // MEDIR EL TAMAÑO DEL ESCENARIO
+
+  function medirJuego() {
+    anchoJuego = contenedorJuego.clientWidth;
+    altoJuego = contenedorJuego.clientHeight;
+
+    posicionJugador = anchoJuego * 0.15;
   }
 
-  function updateHUD() {
-    scoreEl.textContent = score;
-    // Muestra las vidas con telarañas como tenías en tu HUD
-    livesEl.textContent = '🕸️'.repeat(Math.max(lives, 0));
+  function actualizarMarcador() {
+    puntajeHTML.textContent = puntaje;
+    vidasHTML.textContent = '🕸️'.repeat(Math.max(vidas, 0));
   }
 
-  function reset() {
-    measure();
-    world.innerHTML = '';
-    obstacles = [];
-    score = 0;
-    lives = CFG.maxLives;
-    bird = { y: H * 0.4, vy: 0 };
-    invulnUntil = 0;
-    pipeTimer = 0;
+  function reiniciarJuego() {
+    medirJuego();
 
-    player.style.left = '0px';
-    player.style.top = '0px';
-    updateHUD();
+    mundo.innerHTML = '';
+
+    obstaculos = [];
+    puntaje = 0;
+    vidas = CONFIGURACION.vidasMaximas;
+
+    jugadorDatos = {
+      y: altoJuego * 0.4,
+      velocidad: 0
+    };
+
+    tiempoProteccion = 0;
+    tiempoUltimoObstaculo = 0;
+
+    jugador.style.left = '0px';
+    jugador.style.top = '0px';
+    jugador.style.transform = 'translate(0px, 0px)';
+
+    jugador.classList.remove('damage-anim', 'flap-anim');
+
+    actualizarMarcador();
   }
 
-  // Generación de conductos (obstáculos adaptados a tus texturas)
-  function spawnPipe() {
-    const gapH = H * CFG.pipeGap;
-    const margin = 40;
-    const gapTop = margin + Math.random() * (H - gapH - margin * 2);
-    const gapBottom = gapTop + gapH;
 
-    // Alternar entre textura larga o corta aleatoriamente
-    const isLong = Math.random() > 0.5;
+  function crearObstaculo() {
+    const espacio = altoJuego * CONFIGURACION.espacioObstaculos;
+    const margen = 40;
 
-    // Arriba (Conducto superior)
-    const top = document.createElement('div');
-    top.className = 'pipe top ' + (isLong ? 'texture-long' : 'texture-short');
-    top.style.width = CFG.pipeWidth + 'px';
-    top.style.height = gapTop + 'px';
+    const posicionEspacio = margen +
+      Math.random() * (altoJuego - espacio - margen * 2);
 
-    // Abajo (Conducto inferior)
-    const bottom = document.createElement('div');
-    bottom.className = 'pipe bottom ' + (isLong ? 'texture-short' : 'texture-long');
-    bottom.style.width = CFG.pipeWidth + 'px';
-    bottom.style.top = gapBottom + 'px';
-    bottom.style.height = (H - gapBottom) + 'px';
+    const espacioInferior = posicionEspacio + espacio;
+    const esLargo = Math.random() > 0.5;
+    const obstaculoArriba = document.createElement('div');
 
-    world.append(top, bottom);
-    obstacles.push({ x: W, gapTop, gapBottom, passed: false, els: [top, bottom] });
+    obstaculoArriba.className =
+      'pipe top ' + (esLargo ? 'texture-long' : 'texture-short');
+
+    obstaculoArriba.style.width = CONFIGURACION.anchoObstaculo + 'px';
+    obstaculoArriba.style.height = posicionEspacio + 'px';
+
+    const obstaculoAbajo = document.createElement('div');
+
+    obstaculoAbajo.className =
+      'pipe bottom ' + (esLargo ? 'texture-short' : 'texture-long');
+
+    obstaculoAbajo.style.width = CONFIGURACION.anchoObstaculo + 'px';
+    obstaculoAbajo.style.top = espacioInferior + 'px';
+    obstaculoAbajo.style.height = (altoJuego - espacioInferior) + 'px';
+
+    mundo.append(obstaculoArriba, obstaculoAbajo);
+
+    obstaculos.push({
+      x: anchoJuego,
+      arriba: posicionEspacio,
+      abajo: espacioInferior,
+      puntosSumados: false,
+      elementos: [obstaculoArriba, obstaculoAbajo]
+    });
   }
 
-  function overlaps(ax, ay, aw, ah, bx, by, bw, bh) {
-    return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+  function hayColision(x1, y1, ancho1, alto1, x2, y2, ancho2, alto2) {
+    return (
+      x1 < x2 + ancho2 &&
+      x1 + ancho1 > x2 &&
+      y1 < y2 + alto2 &&
+      y1 + alto1 > y2
+    );
   }
 
-  function hit() {
-    const now = performance.now();
-    if (now < invulnUntil) return;
-    invulnUntil = now + CFG.invulnMs;
-    
-    lives--;
-    updateHUD();
+  function recibirGolpe() {
+    const ahora = performance.now();
 
-    // --- EFECTO VISUAL DE GOLPE EN EL MUÑEQUITO ---
-    player.classList.remove('damage-anim');
-    void player.offsetWidth; // Forzar reflow para reiniciar la animación
-    player.classList.add('damage-anim');
-
-    if (lives <= 0) gameOver();
-  }
-
-  function flap() {
-    if (!running) return;
-    bird.vy = CFG.flapForce;
-
-    // Activar animación keyframe de salto / aleteo
-    player.classList.remove('flap-anim');
-    void player.offsetWidth;
-    player.classList.add('flap-anim');
-  }
-
-  function update(dt) {
-    const ms = dt * 16.67;
-
-    // Física de caída de la araña
-    bird.vy = Math.min(bird.vy + CFG.gravity * dt, CFG.maxFallSpeed);
-    bird.y += bird.vy * dt;
-
-    if (bird.y < 0) {
-      bird.y = 0;
-      bird.vy = 0;
+    if (!jugando || ahora < tiempoProteccion) {
+      return;
     }
-    if (bird.y + CFG.playerSize > H) {
-      bird.y = H - CFG.playerSize;
-      bird.vy = CFG.flapForce * 0.5;   // rebote suave al tocar el suelo
-      hit();
+
+    tiempoProteccion = ahora + CONFIGURACION.tiempoProteccion;
+
+    vidas--;
+
+    actualizarMarcador();
+
+    jugador.classList.remove('damage-anim');
+    void jugador.offsetWidth;
+    jugador.classList.add('damage-anim');
+
+    if (vidas <= 0) {
+      terminarJuego();
+    }
+  }
+
+  function saltar() {
+    if (!jugando) {
+      return;
     }
 
-    // Spawn de conductos
-    pipeTimer += ms;
-    if (pipeTimer >= CFG.pipeEvery) { 
-      pipeTimer = 0; 
-      spawnPipe(); 
+    jugadorDatos.velocidad = CONFIGURACION.fuerzaSalto;
+
+    jugador.classList.remove('flap-anim');
+    void jugador.offsetWidth;
+    jugador.classList.add('flap-anim');
+  }
+
+  function actualizarJugador(tiempo) {
+    jugadorDatos.velocidad += CONFIGURACION.gravedad * tiempo;
+
+    jugadorDatos.velocidad = Math.min(
+      jugadorDatos.velocidad,
+      CONFIGURACION.velocidadCaida
+    );
+
+    jugadorDatos.y += jugadorDatos.velocidad * tiempo;
+
+    // Evitar que salga por arriba
+
+    if (jugadorDatos.y < 0) {
+      jugadorDatos.y = 0;
+      jugadorDatos.velocidad = 0;
     }
 
-    const move = CFG.speed * dt;
-    const hb = CFG.hitInset;
-    const bx = PX + hb, by = bird.y + hb;
-    const bw = CFG.playerSize - hb * 2, bh = CFG.playerSize - hb * 2;
 
-    // Actualización de obstáculos (Conductos)
-    obstacles = obstacles.filter(p => {
-      p.x -= move;
-      p.els.forEach(el => el.style.left = p.x + 'px');
+    // Comprobar si toca el suelo
 
-      // Sumar puntos al superar el conducto
-      if (!p.passed && p.x + CFG.pipeWidth < PX) {
-        p.passed = true;
-        score += 10;
-        updateHUD();
+    if (jugadorDatos.y + CONFIGURACION.tamañoJugador > altoJuego) {
+      jugadorDatos.y = altoJuego - CONFIGURACION.tamañoJugador;
+      jugadorDatos.velocidad = CONFIGURACION.fuerzaSalto * 0.5;
+
+      recibirGolpe();
+    }
+  }
+
+  function actualizarObstaculos(tiempo) {
+    const movimiento = CONFIGURACION.velocidadJuego * tiempo;
+    const margen = CONFIGURACION.margenColision;
+
+    const xJugador = posicionJugador + margen;
+    const yJugador = jugadorDatos.y + margen;
+
+    const tamañoJugador = CONFIGURACION.tamañoJugador - margen * 2;
+
+    obstaculos = obstaculos.filter(obstaculo => {
+
+      // Mover obstaculo hacia la izquierda
+
+      obstaculo.x -= movimiento;
+
+      obstaculo.elementos.forEach(elemento => {
+        elemento.style.left = obstaculo.x + 'px';
+      });
+
+      if (
+        !obstaculo.puntosSumados && obstaculo.x +
+        CONFIGURACION.anchoObstaculo < posicionJugador
+      ) {
+        obstaculo.puntosSumados = true;
+
+        puntaje += 10;
+
+        actualizarMarcador();
       }
 
-      // Colisiones
-      const hitTop = overlaps(bx, by, bw, bh, p.x, 0, CFG.pipeWidth, p.gapTop);
-      const hitBottom = overlaps(bx, by, bw, bh, p.x, p.gapBottom, CFG.pipeWidth, H - p.gapBottom);
-      if (hitTop || hitBottom) hit();
+      const choqueArriba = hayColision(
+        xJugador, yJugador,
+        tamañoJugador, tamañoJugador,
+        obstaculo.x, 0,
+        CONFIGURACION.anchoObstaculo, obstaculo.arriba
+      );
 
-      // Limpiar obstáculos fuera de pantalla
-      if (p.x + CFG.pipeWidth < 0) {
-        p.els.forEach(el => el.remove());
+      const choqueAbajo = hayColision(
+        xJugador, yJugador,
+        tamañoJugador, tamañoJugador,
+        obstaculo.x, obstaculo.abajo,
+        CONFIGURACION.anchoObstaculo,
+        altoJuego - obstaculo.abajo
+      );
+
+
+      if (choqueArriba || choqueAbajo) {
+        recibirGolpe();
+      }
+
+      // Eliminar obstaculos que salen de pantalla
+
+      if (obstaculo.x + CONFIGURACION.anchoObstaculo < 0) {
+        obstaculo.elementos.forEach(elemento => elemento.remove());
+
         return false;
       }
+
       return true;
     });
-
-    player.style.transform = `translate(${PX}px, ${bird.y}px)`;
   }
 
-  function loop(now) {
-    const dt = Math.min((now - lastTime) / 16.67, 3);
-    lastTime = now;
-    update(dt);
-    if (running) rafId = requestAnimationFrame(loop);
-  }
+  function actualizarJuego(tiempo, milisegundos) {
 
-  function startGame() {
-    reset();
-    startScreen.classList.remove('active');
-    gameoverScreen.classList.remove('active');
-    container.classList.add('playing'); 
-    running = true;
-    lastTime = performance.now();
-    rafId = requestAnimationFrame(loop);
-  }
+    actualizarJugador(tiempo);
 
-  function gameOver() {
-    running = false;
-    cancelAnimationFrame(rafId);
-    container.classList.remove('playing');
-    finalScoreEl.textContent = score;
-    gameoverScreen.classList.add('active');
-  }
-
-  // Eventos de control
-  startBtn.addEventListener('click', startGame);
-  restartBtn.addEventListener('click', startGame);
-  container.addEventListener('click', flap);
-  
-  document.addEventListener('keydown', e => {
-    if (e.code === 'Space') {
-      e.preventDefault();
-      flap();
+    if (!jugando) {
+      return;
     }
+
+    tiempoUltimoObstaculo += milisegundos;
+
+    if (tiempoUltimoObstaculo >= CONFIGURACION.tiempoObstaculos) {
+      tiempoUltimoObstaculo = 0;
+      crearObstaculo();
+    }
+
+    actualizarObstaculos(tiempo);
+
+    // Actualizar posicion del jugador
+
+    jugador.style.transform =
+      `translate(${posicionJugador}px, ${jugadorDatos.y}px)`;
+  }
+
+
+  // BUCLE PRINCIPAL DEL JUEGO
+
+  function bucleJuego(ahora) {
+
+    const milisegundos = ahora - tiempoAnterior;
+
+    const tiempo = Math.min(milisegundos / 16.67, 3);
+
+    tiempoAnterior = ahora;
+
+    actualizarJuego(tiempo, milisegundos);
+
+    if (jugando) {
+      animacion = requestAnimationFrame(bucleJuego);
+    }
+  }
+
+  function comenzarJuego() {
+
+    cancelAnimationFrame(animacion);
+
+    jugando = false;
+
+    reiniciarJuego();
+
+    pantallaInicio.classList.remove('active');
+    pantallaFinal.classList.remove('active');
+
+    contenedorJuego.classList.add('playing');
+
+    jugando = true;
+
+    tiempoAnterior = performance.now();
+
+    animacion = requestAnimationFrame(bucleJuego);
+  }
+
+
+  // TERMINAR PARTIDA
+
+  function terminarJuego() {
+
+    jugando = false;
+
+    cancelAnimationFrame(animacion);
+
+    contenedorJuego.classList.remove('playing');
+
+    puntajeFinalHTML.textContent = puntaje;
+
+    pantallaFinal.classList.add('active');
+  }
+
+
+  // EVENTOS DE LOS BOTONES
+
+  botonInicio.addEventListener('click', function (evento) {
+    evento.stopPropagation();
+    comenzarJuego();
   });
 
-  window.addEventListener('resize', measure);
+  botonReiniciar.addEventListener('click', function (evento) {
+    evento.stopPropagation();
+    comenzarJuego();
+  });
 
-  reset();
+
+  // SALTAR CON CLIC
+
+  contenedorJuego.addEventListener('click', saltar);
+
+
+  // SALTAR CON BARRA ESPACIADORA
+
+  document.addEventListener('keydown', function (evento) {
+
+    if (evento.code === 'Space') {
+      evento.preventDefault();
+      saltar();
+    }
+
+  });
+
+
+  // ADAPTAR EL JUEGO AL CAMBIAR EL TAMAÑO DE VENTANA
+
+  window.addEventListener('resize', medirJuego);
+
+
+  // PREPARAR EL JUEGO AL CARGAR LA PAGINA
+
+  reiniciarJuego();
+
 })();

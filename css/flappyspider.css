@@ -1,4 +1,4 @@
-/* ===== CONTENEDOR PRINCIPAL DEL JUEGO ===== */
+/* ===== CONTENEDOR PRINCIPAL ===== */
 #game-container {
     position: relative;
     width: 100%;
@@ -10,28 +10,24 @@
     background: #87ceeb;
 }
 
+/* Escenario: por debajo de las pantallas de inicio y game over */
 #game-canvas-container {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    z-index: 1;
 }
 
-/* ===== SISTEMA DE PARALLAX ===== */
+/* ===== PARALLAX ===== */
 /* Capas borrosas antes de empezar la partida */
 #game-container .parallax-layer {
-    filter: blur(3px);
+    filter: blur(1px);
     transition: filter 0.6s ease;
 }
 
 /* Al empezar, se enfocan */
 #game-container.playing .parallax-layer {
     filter: none;
-}
-
-.lives-val {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.3rem;
 }
 
 .parallax-layer {
@@ -43,70 +39,79 @@
     background-repeat: repeat-x;
     background-size: 50% 100%;
     animation: scroll linear infinite;
+    pointer-events: none;
 }
 
-.layer-background { background-image: url("../assets/background/background.png"); animation-duration: 120s; z-index: 1; }
-.layer-city1       { background-image: url("../assets/background/city1plan.png");   animation-duration: 60s;  z-index: 2; }
-.layer-city2       { background-image: url("../assets/background/city2plan.png");   animation-duration: 30s;  z-index: 3; }
-.layer-city3       { background-image: url("../assets/background/city3plan.png");   animation-duration: 12s;  z-index: 4; }
-.layer-city4       { background-image: url("../assets/background/city4plan.png");   animation-duration: 8s;   z-index: 5; }
+.layer-background { background-image: url("../assets/background/background.png"); animation-duration: 150s; z-index: 1; }
+.layer-sun        { background-image: url("../assets/background/sun.png");        animation-duration: 150s; z-index: 2; }
+.layer-city4      { background-image: url("../assets/background/city4plan.png");  animation-duration: 120s; z-index: 3; }
+.layer-city3      { background-image: url("../assets/background/city3plan.png");  animation-duration: 90s;  z-index: 4; }
+.layer-city2      { background-image: url("../assets/background/city2plan.png");  animation-duration: 65s;  z-index: 5; }
+.layer-light      { background-image: url("../assets/background/light.png");      animation-duration: 50s;  z-index: 6; }
+.layer-city1      { background-image: url("../assets/background/city1plan.png");  animation-duration: 35s;  z-index: 7; }
+.layer-smog2      { background-image: url("../assets/background/smog2.png");      animation-duration: 22s;  z-index: 8; }
+.layer-smog1      { background-image: url("../assets/background/smog1.png");      animation-duration: 16s;  z-index: 9; }
 
 @keyframes scroll {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
 }
 
-/* ===== MUNDO Y OBSTÁCULOS (TUBERÍAS / CONDUCTOS) ===== */
+/* ===== MUNDO: TUBERÍAS (por encima del parallax) ===== */
 #world {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .pipe {
-  position: absolute;
-  left: 0;
-  box-sizing: border-box;
-  background-image: url("../assets/img/metal_tile.svg");
-  background-repeat: repeat-y;   /* repite la imagen hacia abajo, sin estirarla */
-  background-size: 100% auto;    /* ancho de la tubería, alto proporcional */
+    position: absolute;
+    left: 0;
+    box-sizing: border-box;
+    background-image: url("../assets/img/marco_ventana_tile.svg");
+    background-repeat: repeat-y;
+    background-size: 100% auto;
 }
 
 .pipe-top {
-  top: 0;
-  transform: scaleY(-1);
+    top: 0;
+    transform: scaleY(-1);
 }
 
-/* ===== JUGADOR (ARAÑA) Y ANIMACIÓN DE DAÑO ===== */
+/* ===== JUGADOR (ARAÑA) ===== */
 .player {
     position: absolute;
     left: 15%;
     top: 40%;
     width: 60px;
     height: 60px;
-    z-index: 6;
+    z-index: 11;
     will-change: transform;
+    pointer-events: none;
     background-image: url("../assets/img/spiderface.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
 
-/* Animación de daño limpia (solo filtros y opacidad para no romper la posición de JS) */
+/* Destello rojo al recibir daño */
 @keyframes damageFlash {
-    0% { filter: brightness(1); opacity: 1; }
-    20% { filter: drop-shadow(0 0 12px red) brightness(2.5) sepia(1); opacity: 0.4; }
-    40% { filter: brightness(1); opacity: 1; }
-    60% { filter: drop-shadow(0 0 12px red) brightness(2.5) sepia(1); opacity: 0.4; }
-    80% { filter: brightness(1); opacity: 1; }
-    100% { filter: brightness(1); opacity: 1; }
+    0%, 40%, 80%, 100% {
+        filter: brightness(1);
+        opacity: 1;
+    }
+    20%, 60% {
+        filter: brightness(1.8) sepia(1) saturate(8) hue-rotate(-50deg) drop-shadow(0 0 15px red);
+        opacity: 0.5;
+    }
 }
 
 .player.damage-anim {
     animation: damageFlash 0.6s ease;
 }
 
-/* ===== HUD (PUNTAJE Y VIDAS) ===== */
+/* ===== HUD ===== */
 #hud {
     position: absolute;
     top: 12px;
@@ -114,10 +119,17 @@
     right: 16px;
     display: flex;
     justify-content: space-between;
-    z-index: 7;
+    z-index: 12;
     font-weight: bold;
     color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    pointer-events: none;
+}
+
+.lives-val {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
 }
 
 /* ===== PANTALLAS (INICIO Y GAME OVER) ===== */
@@ -131,8 +143,7 @@
     gap: 1rem;
     padding: 2rem;
     text-align: center;
-    background: rgba(10, 15, 35, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(10, 15, 35, 0.25);
     z-index: 10;
     color: #fff;
 }
@@ -141,21 +152,8 @@
     display: flex;
 }
 
-/* Overlay liviano para inicio y game over para que se vea el fondo borroso */
-#start-screen,
-#gameover-screen {
-    background: rgba(10, 15, 35, 0.25);
-    backdrop-filter: none;
-}
-
 #start-screen h2 {
-    font-size: clamp(2.0rem, 6vw, 3.5rem);
+    font-size: clamp(2rem, 6vw, 3.5rem);
     margin: 0;
-    text-shadow: 0 4px 12px rgba(0,0,0,.6);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, .6);
 }
-
-#start-screen .subtitle {
-    opacity: .8;
-    margin: 0;
-}
-
