@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="assets/logo/LOGOPAGE.png">
+    <link rel="icon" type="image/png" href="../assets/logo/LOGOPAGE.png">
     <title>GAMEZONE | Spider-Peg</title>
     <link rel="stylesheet" href="../css/game/game.css">
     <link rel="stylesheet" href="../css/general.css">
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../css/buttons.css">
     <link rel="stylesheet" href="../css/nav-user.css">
     <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/game/spiderpeg.css">
 
 </head>
 
@@ -74,37 +73,10 @@
 
     <main>
 
-        <section class="landing-main peg-landing" id="jugar">
+        <section class="landing-main">
             <p><a href="home.html">Inicio</a> / Juegos / Free to Play / Spider-Peg</p>
-            
-            <div class="peg-game-shell">
-                <div class="peg-game-topbar">
-                    <label class="peg-piece-picker" for="peg-piece-choice">
-                        Elegí tus fichas
-                        <select id="peg-piece-choice">
-                            <option value="" selected disabled>Seleccionar diseño</option>
-                            <option value="0">Spider Red</option>
-                            <option value="1">Spider Black</option>
-                            <option value="2">Spider Pink
-                            </option>
-                        </select>
-                    </label>
-                    <div class="peg-stats">
-                        <div class="peg-stat"><span>Tiempo</span><strong id="peg-timer">05:00</strong></div>
-                        <div class="peg-stat"><span>Movimientos</span><strong id="peg-moves">0</strong></div>
-                        <div class="peg-stat"><span>Fichas</span><strong id="peg-remaining">32</strong></div>
-                    </div>
-                </div>
-                <div class="peg-canvas-wrap">
-                    <canvas id="peg-canvas" aria-label="Tablero interactivo de Spider-Peg" role="img"></canvas>
-                </div>
-                <div class="peg-game-bottombar">
-                    <div class="peg-controls">
-                        <button class="secondary" id="peg-hint" type="button" disabled>Ver pista</button>
-                        <button class="primary" id="peg-restart" type="button" disabled>Reiniciar</button>
-                    </div>
-                    <p class="peg-message" id="peg-message" aria-live="polite">Elegí un diseño y arrastrá una ficha para comenzar.</p>
-                </div>
+            <div>
+                <img class="game-image" id="gallery-main-image" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg">
             </div>
             <div class="tags">
                 <button class="secondary">Añadir a la lista de favoritos</button>
@@ -114,19 +86,7 @@
             </div>
         </section>
 
-
-        <div class="peg-modal" id="peg-modal" role="dialog" aria-modal="true" aria-labelledby="peg-modal-title">
-            <div class="peg-modal-card">
-                <h2 id="peg-modal-title">Fin de la partida</h2>
-                <p id="peg-modal-text"></p>
-                <div class="peg-modal-actions">
-                    <button class="accent" id="peg-modal-restart" type="button">Jugar de nuevo</button>
-                    <a class="secondary" href="home.html">Salir</a>
-                </div>
-            </div>
-        </div>
-
-        <section class="gallery" id="galeria">
+        <section class="gallery">
             <div class="gallery-thumbs">
                 <article>
                     <img class="img-game" src="../assets/img/SpiderPeg-1.jpg" alt="Spider-Peg - imagen 1">
@@ -170,21 +130,6 @@
                     <dd>Gratis</dd>
                 </dl>
             </article>
-
-            <article id="como-jugar" class="how-to-play">
-                <h2>¿Cómo jugar?</h2>
-                <p>
-                    El objetivo es eliminar la mayor cantidad de bolitas
-                    posible hasta dejar una sola en el tablero.
-                </p>
-                <ol>
-                    <li>Elegí una bolita que tenga otra bolita pegada al lado.</li>
-                    <li>Saltá por encima de ella hacia un espacio vacío.</li>
-                    <li>La bolita que fue saltada se elimina.</li>
-                    <li>Repetí los movimientos y planeá tu estrategia.</li>
-                    <li>¡Ganás si lográs terminar con una única bolita!</li>
-                </ol>
-            </article>
         </section>
 
         <section class="ratings">
@@ -215,7 +160,6 @@
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
                     <img src="../assets/icons/stars.svg" alt="">
-
                 </p>
                 <p>Un puzzle rápido y entretenido.</p>
                 <small>June, 2025</small>
@@ -284,14 +228,11 @@
             <h2>Los usuarios también jugaron</h2>
 
             <article class="also-played-card">
-                <div class="also-played-card-img">
-                    <img src="../assets/img/allgames-fc27.jpg" alt="">
-                    <div class="also-played-info">
-                        <h3>EA Sports FC 27</h3>
-                        <strong>GRATIS</strong>
-                        <a class="accent" href="">Jugar ahora</a>
-                    </div>
-                </div>
+                <img src="../assets/img/allgames-fc27.jpg" alt="">
+                <div class="also-played-info">
+                    <h3>EA Sports FC 27</h3>
+                    <strong>GRATIS</strong>
+                    <a class="accent" href="">Jugar ahora</a>
                 </div>
             </article>
 
@@ -302,8 +243,6 @@
                     <strong>BASIC</strong>
                     <a class="accent" href="">Jugar ahora</a>
                 </div>
-                </div>
-                </div>
             </article>
 
             <article class="also-played-card">
@@ -312,8 +251,6 @@
                     <h3>Little Nightmares III</h3>
                     <strong>GRATIS</strong>
                     <a class="accent" href="">Jugar ahora</a>
-                </div>
-                </div>
                 </div>
             </article>
 
@@ -324,8 +261,6 @@
                     <strong>PRO-GAMER</strong>
                     <a class="accent" href="">Jugar ahora</a>
                 </div>
-                </div>
-                </div>
             </article>
         </section>
 
@@ -333,9 +268,14 @@
 
     <footer class="site-footer"></footer>
 
+    <script src="../js/menu.js"></script>
+    <script src="../js/footer.js"></script>
+    <!-- El juego (primero la lógica, después la conexión con la página) -->
+    <script src="../js/peg-solitaire.js"></script>
+    <script src="../js/spiderpeg.js"></script>
+
 </body>
 <script src="../js/menu.js"></script>
 <script src="../js/footer.js"></script>
-<script src="../js/spiderpeg.js"></script>
 
 </html>

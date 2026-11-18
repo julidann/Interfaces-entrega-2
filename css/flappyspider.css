@@ -1,0 +1,160 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
+#game-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #87ceeb;
+}
+
+/* Escenario: por debajo de las pantallas de inicio y game over */
+#game-canvas-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* ===== PARALLAX ===== */
+/* Capas borrosas antes de empezar la partida */
+#game-container .parallax-layer {
+    filter: blur(1px);
+    transition: filter 0.6s ease;
+}
+
+/* Al empezar, se enfocan */
+#game-container.playing .parallax-layer {
+    filter: none;
+}
+
+.parallax-layer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    animation: scroll linear infinite;
+    pointer-events: none;
+}
+
+.layer-background { background-image: url("../assets/background/background.png"); animation-duration: 150s; z-index: 1; }
+.layer-sun        { background-image: url("../assets/background/sun.png");        animation-duration: 150s; z-index: 2; }
+.layer-city4      { background-image: url("../assets/background/city4plan.png");  animation-duration: 120s; z-index: 3; }
+.layer-city3      { background-image: url("../assets/background/city3plan.png");  animation-duration: 90s;  z-index: 4; }
+.layer-city2      { background-image: url("../assets/background/city2plan.png");  animation-duration: 65s;  z-index: 5; }
+.layer-light      { background-image: url("../assets/background/light.png");      animation-duration: 50s;  z-index: 6; }
+.layer-city1      { background-image: url("../assets/background/city1plan.png");  animation-duration: 35s;  z-index: 7; }
+.layer-smog2      { background-image: url("../assets/background/smog2.png");      animation-duration: 22s;  z-index: 8; }
+.layer-smog1      { background-image: url("../assets/background/smog1.png");      animation-duration: 16s;  z-index: 9; }
+
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ===== MUNDO: TUBERÍAS (por encima del parallax) ===== */
+#world {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.pipe {
+    position: absolute;
+    left: 0;
+    box-sizing: border-box;
+    background-image: url("../assets/img/marco_ventana_tile.svg");
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+}
+
+.pipe-top {
+    top: 0;
+    transform: scaleY(-1);
+}
+
+/* ===== JUGADOR (ARAÑA) ===== */
+.player {
+    position: absolute;
+    left: 15%;
+    top: 40%;
+    width: 60px;
+    height: 60px;
+    z-index: 11;
+    will-change: transform;
+    pointer-events: none;
+    background-image: url("../assets/img/spiderface.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Destello rojo al recibir daño */
+@keyframes damageFlash {
+    0%, 40%, 80%, 100% {
+        filter: brightness(1);
+        opacity: 1;
+    }
+    20%, 60% {
+        filter: brightness(1.8) sepia(1) saturate(8) hue-rotate(-50deg) drop-shadow(0 0 15px red);
+        opacity: 0.5;
+    }
+}
+
+.player.damage-anim {
+    animation: damageFlash 0.6s ease;
+}
+
+/* ===== HUD ===== */
+#hud {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 12;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+    pointer-events: none;
+}
+
+.lives-val {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+}
+
+/* ===== PANTALLAS (INICIO Y GAME OVER) ===== */
+.game-screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(10, 15, 35, 0.25);
+    z-index: 10;
+    color: #fff;
+}
+
+.game-screen.active {
+    display: flex;
+}
+
+#start-screen h2 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin: 0;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, .6);
+}
+
