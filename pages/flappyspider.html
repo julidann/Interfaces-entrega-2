@@ -83,24 +83,25 @@
 
                     <!-- Pantalla de Inicio -->
 <div id="start-screen" class="game-screen active">
+    <div class="game-panel">
 
-    <p>
-        ¡Esquivá los obstáculos y dominá
-        los cielos de la ciudad!
-    </p>
+        <h2>Flappy Spider</h2>
 
-    <button id="start-btn" class="btn primary">
-        ¡Jugar ahora!
-    </button>
+        <p>¡Esquivá los obstáculos y dominá los cielos de la ciudad!</p>
 
-    <div class="game-controls">
-        <span>Presioná</span>
-        <button class="btn disabled" disabled>ESPACIO</button>
-        <span>o</span>
-        <button class="btn disabled" disabled>CLIC</button>
-        <span>para volar</span>
+        <button id="start-btn" class="btn primary">
+            ¡Comenzar Partida!
+        </button>
+
+        <div class="game-controls">
+            Presioná
+            <button class="btn disabled" disabled>ESPACIO</button>
+            o
+            <button class="btn disabled" disabled>CLIC</button>
+            para volar
+        </div>
+
     </div>
-
 </div>
 
                     <!-- Escenario: parallax, mundo, jugador y HUD -->
@@ -131,15 +132,22 @@
 
                     <!-- Pantalla de Game Over -->
                     <div id="gameover-screen" class="game-screen">
-                        <h2>¡Game Over!</h2>
-                        <p>Te quedaste sin vidas en el recorrido.</p>
-                        <div class="final-stats">
-                            <p>Puntaje final: <span id="final-score">0</span></p>
-                        </div>
-                        <button id="restart-btn" class="btn primary">Jugar de Nuevo</button>
-                    </div>
+    <div class="game-panel">
 
-                </div>
+        <h2>¡Game Over!</h2>
+
+        <p>Te quedaste sin vidas en el recorrido.</p>
+
+        <div class="final-stats">
+            <p>Puntaje final: <span id="final-score">0</span></p>
+        </div>
+
+        <button id="restart-btn" class="btn primary">
+            Jugar de Nuevo
+        </button>
+
+    </div>
+</div>
 
                 <!-- Sección de instrucciones -->
                 <article id="como-jugar" class="how-to-play">

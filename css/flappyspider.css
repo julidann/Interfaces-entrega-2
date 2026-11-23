@@ -205,3 +205,49 @@
         transform: translateY(-8px);
     }
 }
+
+/* ===== PANEL DE INICIO Y GAME OVER ===== */
+
+.game-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+
+    width: 80%;
+    max-width: 500px;
+    padding: 2rem;
+    box-sizing: border-box;
+
+    background: rgba(15, 15, 20, 0.85);
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.game-panel h2,
+.game-panel p {
+    margin: 0;
+}
+
+.game-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.final-stats {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 15px 30px;
+    border-radius: 8px;
+}
+
+#final-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
