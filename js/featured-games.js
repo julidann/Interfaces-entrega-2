@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
     ];
 
+    featuredGames.push({title: "FlappySpider", image: imgRoute + "FlappySpider.jpg", description: "¡Esquivá los obstáculos y dominá los cielos de la ciudad!", alt: "FlappySpider"});
+
     let currentIndex = 1;
 
     carouselContainer.innerHTML = `
@@ -66,8 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCarouselClasses() {
         cards.forEach((card, index) => {
             let position =
-                (index - currentIndex + featuredGames.length) %
-                featuredGames.length;
+                (index + 2) % 3;
 
             card.classList.remove(
                 "left",
@@ -79,13 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const btn = card.querySelector("button");
             btn.className = "";
+            btn.onclick = null;
 
             if (position === 0) {
                 card.classList.add("center", "featured");
                 btn.classList.add("primary");
-                btn.addEventListener("click", () => {
-                window.location.href = "game.html";
-    });
+                btn.onclick = () => {
+                    const game = featuredGames[currentIndex];
+                    window.location.href = (isPageInSubfolder ? "" : "pages/") + (game.title === "FlappySpider" ? "flappyspider.html" : "game.html");
+                };
             } else if (position === 1) {
                 card.classList.add("right");
                 btn.classList.add("accent");
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cards.forEach((card, index) => {
             fillCard(
                 card,
-                featuredGames[index],
+                featuredGames[(currentIndex + index - 1 + featuredGames.length) % featuredGames.length],
                 "accent"
             );
         });
@@ -113,12 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
             (currentIndex + 1 + featuredGames.length) %
             featuredGames.length;
 
-        updateCarouselClasses();
+        renderCards();
     });
 
     prevBtn.addEventListener("click", () => {
         currentIndex =
-            (currentIndex - 1) %
+            (currentIndex - 1 + featuredGames.length) %
             featuredGames.length;
 
         updateCarouselClasses();
