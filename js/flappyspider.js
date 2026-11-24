@@ -31,7 +31,13 @@
     espacioMinimo: 0.3,
     reduccionEspacio: 0.01,     // cuánto se achica por cada tubería
     tiempoMinObstaculos: 1500,
-    tiempoMaxObstaculos: 2600
+    tiempoMaxObstaculos: 2600,
+    tamañoMedusa: 60,
+    tamañoGema: 40,
+    tiempoMinMedusa: 3500,
+    tiempoMaxMedusa: 6000,
+    probabilidadGema: 0.5,
+    puntosGema: 20
   };
 
   // VARIABLES DEL JUEGO
@@ -54,6 +60,10 @@
   let animacion;
   let jugando = false;
 
+  let criaturas;
+  let tiempoUltimaMedusa = 0;
+  let proximaMedusa;
+
   // MEDIR EL TAMAÑO DEL ESCENARIO
 
   function medirJuego() {
@@ -68,6 +78,12 @@
     vidasHTML.textContent = '🕸️'.repeat(Math.max(vidas, 0));
   }
 
+  function animarPuntaje() {
+    puntajeHTML.classList.remove('score-pop');
+    void puntajeHTML.offsetWidth;   // reinicia la animación
+    puntajeHTML.classList.add('score-pop');
+  }
+
   function reiniciarJuego() {
     medirJuego();
 
@@ -78,6 +94,9 @@
     vidas = CONFIGURACION.vidasMaximas;
     cantidadCreados = 0;
     proximoObstaculo = CONFIGURACION.tiempoMinObstaculos;
+    criaturas = [];
+    tiempoUltimaMedusa = 0;
+    proximaMedusa = CONFIGURACION.tiempoMinMedusa;
 
     jugadorDatos = {
       y: altoJuego * 0.4,
@@ -91,7 +110,7 @@
     jugador.style.top = '0px';
     jugador.style.transform = 'translate(0px, 0px)';
 
-    jugador.classList.remove('damage-anim', 'flap-anim');
+    jugador.classList.remove('damage-anim', 'flap-anim', 'dead-anim');
 
     actualizarMarcador();
   }
@@ -136,6 +155,47 @@
       abajo: espacioInferior,
       puntosSumados: false,
       elementos: [obstaculoArriba, obstaculoAbajo]
+    });
+    
+    if (Math.random() < CONFIGURACION.probabilidadGema) {
+      crearGema(
+        anchoJuego + CONFIGURACION.anchoObstaculo / 2 - CONFIGURACION.tamañoGema / 2,
+        posicionEspacio + espacio / 2 - CONFIGURACION.tamañoGema / 2
+      );
+    }
+  }
+
+    function crearMedusa() {
+    const tamaño = CONFIGURACION.tamañoMedusa;
+    const elemento = document.createElement('div');
+    elemento.className = 'criatura medusa';
+
+    mundo.appendChild(elemento);
+
+    criaturas.push({
+      tipo: 'medusa',
+      x: anchoJuego,
+      y: 0,
+      yBase: 50 + Math.random() * (altoJuego - tamaño - 100),
+      fase: Math.random() * Math.PI * 2,
+      tamaño: tamaño,
+      elemento: elemento
+    });
+  }
+
+  function crearGema(x, y) {
+    const tamaño = CONFIGURACION.tamañoGema;
+    const elemento = document.createElement('div');
+    elemento.className = 'criatura gema';
+
+    mundo.appendChild(elemento);
+
+    criaturas.push({
+      tipo: 'gema',
+      x: x,
+      y: y,
+      tamaño: tamaño,
+      elemento: elemento
     });
   }
 
@@ -238,6 +298,7 @@
         puntaje += 10;
 
         actualizarMarcador();
+        animarPuntaje();
       }
 
       const choqueArriba = hayColision(
@@ -272,6 +333,60 @@
     });
   }
 
+  function actualizarCriaturas(tiempo) {
+    const margen = CONFIGURACION.margenColision;
+
+    const xJugador = posicionJugador + margen;
+    const yJugador = jugadorDatos.y + margen;
+    const tamañoJugador = CONFIGURACION.tamañoJugador - margen * 2;
+
+    criaturas = criaturas.filter(criatura => {
+
+      // La medusa va un poco más rápido y flota hacia arriba y abajo
+      const velocidad = criatura.tipo === 'medusa'
+        ? CONFIGURACION.velocidadJuego * 1.2
+        : CONFIGURACION.velocidadJuego;
+
+      criatura.x -= velocidad * tiempo;
+
+      if (criatura.tipo === 'medusa') {
+        criatura.fase += 0.05 * tiempo;
+        criatura.y = criatura.yBase + Math.sin(criatura.fase) * 30;
+      }
+
+      criatura.elemento.style.transform =
+        `translate(${criatura.x}px, ${criatura.y}px)`;
+
+      // Caja de colisión un poco más chica que el dibujo
+      const choque = hayColision(
+        xJugador, yJugador,
+        tamañoJugador, tamañoJugador,
+        criatura.x + 8, criatura.y + 8,
+        criatura.tamaño - 16, criatura.tamaño - 16
+      );
+
+      if (choque) {
+        if (criatura.tipo === 'medusa') {
+          recibirGolpe();       // resta una vida, el juego sigue
+        } else {
+          puntaje += CONFIGURACION.puntosGema;
+          actualizarMarcador();
+          animarPuntaje();
+          criatura.elemento.remove();
+          return false;
+        }
+      }
+
+      // Eliminar las que salen de pantalla
+      if (criatura.x + criatura.tamaño < 0) {
+        criatura.elemento.remove();
+        return false;
+      }
+
+      return true;
+    });
+  }
+
   function actualizarJuego(tiempo, milisegundos) {
 
     actualizarJugador(tiempo);
@@ -289,12 +404,22 @@
       crearObstaculo();
     }
 
+    tiempoUltimaMedusa += milisegundos;
+
+    if (tiempoUltimaMedusa >= proximaMedusa) {
+      tiempoUltimaMedusa = 0;
+      proximaMedusa = CONFIGURACION.tiempoMinMedusa +
+        Math.random() * (CONFIGURACION.tiempoMaxMedusa - CONFIGURACION.tiempoMinMedusa);
+      crearMedusa();
+    }
+
     actualizarObstaculos(tiempo);
+    actualizarCriaturas(tiempo);
 
     // Actualizar posicion del jugador
-
     jugador.style.transform =
       `translate(${posicionJugador}px, ${jugadorDatos.y}px)`;
+
   }
 
 
@@ -335,10 +460,19 @@
     animacion = requestAnimationFrame(bucleJuego);
   }
 
+  function crearExplosion() {
+    const explosion = document.createElement('div');
+    explosion.className = 'explosion';
+
+    explosion.style.left = (posicionJugador + CONFIGURACION.tamañoJugador / 2) + 'px';
+    explosion.style.top = (jugadorDatos.y + CONFIGURACION.tamañoJugador / 2) + 'px';
+
+    mundo.appendChild(explosion);
+  }
 
   // TERMINAR PARTIDA
 
-  function terminarJuego() {
+    function terminarJuego() {
 
     jugando = false;
 
@@ -346,9 +480,15 @@
 
     contenedorJuego.classList.remove('playing');
 
+    jugador.classList.remove('damage-anim');
+    jugador.classList.add('dead-anim');
+    crearExplosion();
+
     puntajeFinalHTML.textContent = puntaje;
 
-    pantallaFinal.classList.add('active');
+    setTimeout(function () {
+      pantallaFinal.classList.add('active');
+    }, 800);
   }
 
 
