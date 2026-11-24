@@ -32,12 +32,12 @@
     reduccionEspacio: 0.01,     // cuánto se achica por cada tubería
     tiempoMinObstaculos: 1500,
     tiempoMaxObstaculos: 2600,
-    tamañoMedusa: 60,
-    tamañoGema: 40,
-    tiempoMinMedusa: 3500,
-    tiempoMaxMedusa: 6000,
-    probabilidadGema: 0.5,
-    puntosGema: 20
+    tamañoMurcielago: 60,
+    tamañoTelarana: 40,
+    tiempoMinMurcielago: 3500,
+    tiempoMaxMurcielago: 6000,
+    probabilidadTelarana: 0.5,
+    puntosTelarana: 20
   };
 
   // VARIABLES DEL JUEGO
@@ -61,8 +61,8 @@
   let jugando = false;
 
   let criaturas;
-  let tiempoUltimaMedusa = 0;
-  let proximaMedusa;
+  let tiempoUltimaMurcielago = 0;
+  let proximaMurcielago;
 
   // MEDIR EL TAMAÑO DEL ESCENARIO
 
@@ -95,8 +95,8 @@
     cantidadCreados = 0;
     proximoObstaculo = CONFIGURACION.tiempoMinObstaculos;
     criaturas = [];
-    tiempoUltimaMedusa = 0;
-    proximaMedusa = CONFIGURACION.tiempoMinMedusa;
+    tiempoUltimaMurcielago = 0;
+    proximaMurcielago = CONFIGURACION.tiempoMinMurcielago;
 
     jugadorDatos = {
       y: altoJuego * 0.4,
@@ -157,23 +157,23 @@
       elementos: [obstaculoArriba, obstaculoAbajo]
     });
     
-    if (Math.random() < CONFIGURACION.probabilidadGema) {
-      crearGema(
-        anchoJuego + CONFIGURACION.anchoObstaculo / 2 - CONFIGURACION.tamañoGema / 2,
-        posicionEspacio + espacio / 2 - CONFIGURACION.tamañoGema / 2
+    if (Math.random() < CONFIGURACION.probabilidadTelarana) {
+      crearTelarana(
+        anchoJuego + CONFIGURACION.anchoObstaculo / 2 - CONFIGURACION.tamañoTelarana / 2,
+        posicionEspacio + espacio / 2 - CONFIGURACION.tamañoTelarana / 2
       );
     }
   }
 
-    function crearMedusa() {
-    const tamaño = CONFIGURACION.tamañoMedusa;
+    function crearMurcielago() {
+    const tamaño = CONFIGURACION.tamañoMurcielago;
     const elemento = document.createElement('div');
-    elemento.className = 'criatura medusa';
+    elemento.className = 'criatura murcielago';
 
     mundo.appendChild(elemento);
 
     criaturas.push({
-      tipo: 'medusa',
+      tipo: 'murcielago',
       x: anchoJuego,
       y: 0,
       yBase: 50 + Math.random() * (altoJuego - tamaño - 100),
@@ -183,15 +183,15 @@
     });
   }
 
-  function crearGema(x, y) {
-    const tamaño = CONFIGURACION.tamañoGema;
+  function crearTelarana(x, y) {
+    const tamaño = CONFIGURACION.tamañoTelarana;
     const elemento = document.createElement('div');
-    elemento.className = 'criatura gema';
+    elemento.className = 'criatura telarana';
 
     mundo.appendChild(elemento);
 
     criaturas.push({
-      tipo: 'gema',
+      tipo: 'telarana',
       x: x,
       y: y,
       tamaño: tamaño,
@@ -342,14 +342,14 @@
 
     criaturas = criaturas.filter(criatura => {
 
-      // La medusa va un poco más rápido y flota hacia arriba y abajo
-      const velocidad = criatura.tipo === 'medusa'
+      // La murcielago va un poco más rápido y flota hacia arriba y abajo
+      const velocidad = criatura.tipo === 'murcielago'
         ? CONFIGURACION.velocidadJuego * 1.2
         : CONFIGURACION.velocidadJuego;
 
       criatura.x -= velocidad * tiempo;
 
-      if (criatura.tipo === 'medusa') {
+      if (criatura.tipo === 'murcielago') {
         criatura.fase += 0.05 * tiempo;
         criatura.y = criatura.yBase + Math.sin(criatura.fase) * 30;
       }
@@ -366,10 +366,10 @@
       );
 
       if (choque) {
-        if (criatura.tipo === 'medusa') {
+        if (criatura.tipo === 'murcielago') {
           recibirGolpe();       // resta una vida, el juego sigue
         } else {
-          puntaje += CONFIGURACION.puntosGema;
+          puntaje += CONFIGURACION.puntosTelarana;
           actualizarMarcador();
           animarPuntaje();
           criatura.elemento.remove();
@@ -404,13 +404,13 @@
       crearObstaculo();
     }
 
-    tiempoUltimaMedusa += milisegundos;
+    tiempoUltimaMurcielago += milisegundos;
 
-    if (tiempoUltimaMedusa >= proximaMedusa) {
-      tiempoUltimaMedusa = 0;
-      proximaMedusa = CONFIGURACION.tiempoMinMedusa +
-        Math.random() * (CONFIGURACION.tiempoMaxMedusa - CONFIGURACION.tiempoMinMedusa);
-      crearMedusa();
+    if (tiempoUltimaMurcielago >= proximaMurcielago) {
+      tiempoUltimaMurcielago = 0;
+      proximaMurcielago = CONFIGURACION.tiempoMinMurcielago +
+        Math.random() * (CONFIGURACION.tiempoMaxMurcielago - CONFIGURACION.tiempoMinMurcielago);
+      crearMurcielago();
     }
 
     actualizarObstaculos(tiempo);
